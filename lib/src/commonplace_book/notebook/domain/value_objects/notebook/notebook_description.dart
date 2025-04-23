@@ -13,9 +13,9 @@ import 'package:commonplace_book/src/shared/core/result.dart';
 /// NotebookDescription: Objeto de valor que representa la descripción de un `Notebook`.
 /// - Valida que la descripción no exceda la longitud máxima permitida.
 class NotebookDescription {
-  const NotebookDescription._(this.description);
+  const NotebookDescription._(this.value);
   
-  final String description;  
+  final String value;  
   
   /// Método que valida `NotebookDescription`
   static Result<NotebookDescription, List<DomainFailure>> validate(String? description) {

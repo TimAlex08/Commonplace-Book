@@ -13,8 +13,8 @@ import 'package:commonplace_book/src/shared/core/result.dart';
 /// NotebookName: Objeto de valor que representa el nombre de un `Notebook`.
 /// - Valida que el nombre no esté vacío, no exceda la longitud máxima y contenga solo caracteres permitidos.
 class NotebookName {
-  const NotebookName._(this.name);
-  final String name;
+  const NotebookName._(this.value);
+  final String value;
   
   /// Método que valida `NotebookName`
   static Result<NotebookName, List<DomainFailure>> validate(String? name) {
