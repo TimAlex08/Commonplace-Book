@@ -83,6 +83,22 @@ class NotebookDTO {
       isLocked: Value(isLocked)
     );
   }
+  
+  factory NotebookDTO.fromData(NotebookItem data) {
+    return NotebookDTO(
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      createdAt: data.createdAt.toIso8601String(),
+      updatedAt: data.updatedAt.toIso8601String(),
+      color: data.color,
+      coverImagePath: data.coverImagePath,
+      backCoverImagePath: data.backCoverImagePath,
+      isFavorite: data.isFavorite,
+      isArchived: data.isArchived,
+      isLocked: data.isLocked
+    );
+  }
 }
 
 

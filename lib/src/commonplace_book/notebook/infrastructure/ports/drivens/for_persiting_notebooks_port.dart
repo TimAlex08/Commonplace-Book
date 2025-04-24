@@ -2,6 +2,12 @@
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
 
+// Failures
+import 'package:commonplace_book/src/shared/core/failures.dart';
+
+// Result
+import 'package:commonplace_book/src/shared/core/result.dart';
+
 
 
 abstract class ForPersitingNotebooksPort {
@@ -11,17 +17,17 @@ abstract class ForPersitingNotebooksPort {
 }
 
 abstract class NotebookPersistenceCommands {
-  Future<int> createNotebook(Notebook notebook);
-  Future<int> updateNotebook(Notebook notebook);
-  Future<int> hardDeleteNotebook(String id);
+  Future<Result<int, Failure>> createNotebook(Notebook notebook);
+  Future<Result<int, Failure>> updateNotebook(Notebook notebook);
+  Future<Result<int, Failure>> hardDeleteNotebook(String id);
 }
 
 abstract class NotebookPersistenceQueries {
-  Future<List<NotebookDTO>> getAllNotebooks();
-  Future<NotebookDTO?> getNotebookById(String id);
+  Future<Result<List<NotebookDTO>?, Failure>> getAllNotebooks();
+  Future<Result<NotebookDTO?, Failure>> getNotebookById(String id);
 }
 
 abstract class NotebookPersistenceObservers {
-  Future<Stream<Notebook>> watchNotebookById(String id);
-  Future<Stream<List<Notebook>>> watchAllNotebooks();
+  Stream<List<NotebookDTO>> watchAllNotebooks();
+  Stream<NotebookDTO> watchNotebookById(String id);
 }
