@@ -5,7 +5,7 @@ class NotebookErrorCode {
   // Prefijos para identificar la capa de error
   static const String _domainPrefix = 'NB_DOM';
   // static const String _applicationPrefix = 'NB_APP';
-  // static const String _infrastructurePrefix = 'NB_INF';
+  static const String _infrastructurePrefix = 'NB_INF';
   
   /// ----- Errores de Dominio ----- ///
   // Validaciones de ID
@@ -34,6 +34,20 @@ class NotebookErrorCode {
   static const String invalidArchivedValue = '${_domainPrefix}_013';
   static const String invalidLockedValue = '${_domainPrefix}_014';
   static const String favoriteAndArchivedConflict = '${_domainPrefix}_015';
+  
+  
+  
+  /// ----- Errores de Infrastructura ----- ///
+  // Errores de conexión
+  static const String dbConnectionFailded = '${_infrastructurePrefix}_001';
+  static const String dbInitializationFailed = '${_infrastructurePrefix}_002';
+  
+  // Errores CRUD
+  static const String insertFailed = '${_infrastructurePrefix}_003';
+  static const String updateFailed = '${_infrastructurePrefix}_004';
+  static const String deleteFailed = '${_infrastructurePrefix}_005';
+  static const String readFailed = '${_infrastructurePrefix}_006';
+  static const String queryFailed = '${_infrastructurePrefix}_007';
 }
 
 class NotebookErrorMessages {
@@ -66,4 +80,3 @@ class NotebookErrorMessages {
     return messages[code] ?? 'Unknown error';
   }
 }
-
