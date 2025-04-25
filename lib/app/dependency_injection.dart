@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 
 // Internal Imports
 import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/drivens/notebook_sql_repository_adapter.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/drivens/notebook_drift_repository_adapter.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persiting_notebooks_port.dart';
 
 final getIt = GetIt.instance;
