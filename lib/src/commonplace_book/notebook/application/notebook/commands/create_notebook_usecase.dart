@@ -8,7 +8,6 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 // Infrastructure
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
-import 'package:commonplace_book/src/shared/infrastructure/failure_logger.dart';
 
 
 
@@ -27,8 +26,6 @@ class CreateNotebookUseCase {
     // Si hay fallos, retorna el resultado fallido.
     if(validateNotebookResult.isFailure) {
       final failures = validateNotebookResult.getFailure();
-      logFailure(failures);
-      
       return Result.failure(failures);
     }
     
