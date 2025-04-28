@@ -1,10 +1,11 @@
+// Failure / Result
+import 'package:commonplace_book/src/shared/core/failures.dart';
+import 'package:commonplace_book/src/shared/core/result.dart';
 
-
+// Infrastructure
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persiting_notebooks_port.dart';
-import 'package:commonplace_book/src/shared/core/failures.dart';
-import 'package:commonplace_book/src/shared/core/result.dart';
 import 'package:commonplace_book/src/shared/infrastructure/failure_logger.dart';
 
 class UpdateNotebookUsecase {

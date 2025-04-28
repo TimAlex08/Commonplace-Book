@@ -1,8 +1,11 @@
-
-
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persiting_notebooks_port.dart';
+// Failure / Result
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
+
+// Infrastructure
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persiting_notebooks_port.dart';
+
+
 
 class HardDeleteNotebookUsecase {
   const HardDeleteNotebookUsecase(this._repository);
