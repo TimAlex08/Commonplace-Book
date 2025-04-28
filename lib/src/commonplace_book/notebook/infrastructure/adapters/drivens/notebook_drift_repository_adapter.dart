@@ -1,21 +1,19 @@
-// Entities
+// External Imports
 import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
+import 'package:drift/native.dart';
 
-// DataBase Helper
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
-
-// Ports
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persiting_notebooks_port.dart';
-
-// Failures
+// Failure / Result
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_infrastructure_failures.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/sqlite_failure_mapper.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
-
-// Result
 import 'package:commonplace_book/src/shared/core/result.dart';
-import 'package:drift/native.dart';
+
+// Domain
+import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
+
+// Infrastructure
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persiting_notebooks_port.dart';
 
 
 
