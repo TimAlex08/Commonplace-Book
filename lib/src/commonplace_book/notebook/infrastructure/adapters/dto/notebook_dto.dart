@@ -34,6 +34,8 @@ class NotebookDTO {
   final bool isArchived;
   final bool isLocked;
 
+  /* ---------- NotebookDTO a Notebook (Entidad) ---------- */
+   
   /// Convierte un objeto `NotebookDTO` a un objeto `NotebookParams`.
   NotebookParams toDomainParams() {
     return NotebookParams(
@@ -50,6 +52,7 @@ class NotebookDTO {
       isLocked: isLocked
     );
   }
+  
   
   /// Convierte un objeto `NotebookDTO` a un objeto `Notebook`.
   factory NotebookDTO.fromDomain(Notebook notebook) {
@@ -68,6 +71,9 @@ class NotebookDTO {
     );
   }
   
+  
+  
+  /// ----- NotebookDTO a Drift ----- ///
   NotebookItemsCompanion toCompanion() {
     return NotebookItemsCompanion(
       id: Value(id),

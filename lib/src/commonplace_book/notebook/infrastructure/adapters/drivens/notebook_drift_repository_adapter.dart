@@ -139,7 +139,7 @@ class NotebookSQLQueries implements NotebookPersistenceQueries {
   
   @override
   /// Obtiene un `Notebook` por su ID de la base de datos. Si no se encuentra, devuelve un error.
-  Future<Result<NotebookDTO?, Failure>> getNotebookById(String id) async{
+  Future<Result<NotebookDTO, Failure>> getNotebookById(String id) async{
     try {
       final query = _dbHelper.select(_dbHelper.notebookItems)
         ..where((tbl) => tbl.id.equals(id));
