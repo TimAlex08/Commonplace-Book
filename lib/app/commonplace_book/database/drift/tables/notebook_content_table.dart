@@ -30,6 +30,6 @@ class NotebookContentTable extends Table {
   // Establece una restricción de chequeo para asegurar que solo uno de `FolderId` o `PageId` sea no nulo.
   @override
   List<String> get customConstraints => [
-    'CHECK ((folderId IS NOT NULL AND pageId IS NULL) OR (folderId IS NULL AND pageId IS NOT NULL))'
+    'CHECK ((folder_Id IS NOT NULL AND page_Id IS NULL) OR (folder_Id IS NULL AND page_Id IS NOT NULL))'
   ];
 }
