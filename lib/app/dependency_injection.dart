@@ -20,6 +20,9 @@ import '../src/commonplace_book/notebook/application/notebook/queries/get_notebo
 import '../src/commonplace_book/notebook/infrastructure/adapters/drivers/notebook_manager_adapter.dart';
 import '../src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_notebooks.dart';
 
+// Blocs
+import 'commonplace_book/frontend/features/05-notebooks/state/bloc/notebook_bloc.dart';
+
 
 
 final getIt = GetIt.instance;
@@ -27,6 +30,7 @@ final getIt = GetIt.instance;
 Future<void> setupDependencies() async {
   try {
    await _setupExternalDependencies();
+   await _setupBlocs();
   } catch (e) {
     log('Error setting up dependencies: $e');
     rethrow;
@@ -63,4 +67,16 @@ Future<void> _setupExternalDependencies() async {
     watchAllNotebooks: getIt<WatchAllNotebooksUsecase>(),
     watchNotebookById: getIt<WatchNotebookByIdUsecase>(),
   ));
+}
+
+Future<void> _setupBlocs() async {
+  // Crear la instancia del NotebookBloc
+  final notebookBloc = NotebookBloc(getIt<ForManagingNotebooks>());
+  
+  // Cargar datos y comenzar observación
+  notebookBloc.add(LoadAllNotebooks());
+  notebookBloc.add(WatchAllNotebooks());
+  
+  // Registrar el NotebookBloc como Factory (nueva instancia cada vez)
+  getIt.registerSingleton<NotebookBloc>(notebookBloc);
 }
