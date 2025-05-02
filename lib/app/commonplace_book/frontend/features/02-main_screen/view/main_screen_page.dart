@@ -9,9 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:commonplace_book/app/commonplace_book/frontend/features/02-main_screen/cubit/main_screen_cubit.dart';
 import 'package:commonplace_book/app/commonplace_book/frontend/features/03-home/view/home_page.dart';
 import 'package:commonplace_book/app/commonplace_book/frontend/features/04-journal/view/journal_page.dart';
-import 'package:commonplace_book/app/commonplace_book/frontend/features/05-notebooks/view/notebook_dashboard_page.dart';
+import 'package:commonplace_book/app/commonplace_book/frontend/features/05-notebooks/pages/notebook_dashboard_page.dart';
 import 'package:commonplace_book/app/commonplace_book/frontend/features/06-task/view/task_page.dart';
-
 
 
 
