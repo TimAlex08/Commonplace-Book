@@ -21,7 +21,7 @@ import '../src/commonplace_book/notebook/infrastructure/adapters/drivers/noteboo
 import '../src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_notebooks.dart';
 
 // Blocs
-import 'commonplace_book/frontend/features/05-notebooks/state/bloc/notebook_bloc.dart';
+import 'commonplace_book/frontend/features/05-notebooks/state/notebook_bloc/notebook_bloc.dart';
 
 
 

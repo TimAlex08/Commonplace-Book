@@ -17,7 +17,6 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 import 'package:commonplace_book/src/shared/infrastructure/failure_logger.dart';
 
 
-// TODO: Crear clase NotebookUiModel e implementarlo en el adapter de forma correcta
 
 class NotebookManagerAdapter implements ForManagingNotebooks {
   const NotebookManagerAdapter({
