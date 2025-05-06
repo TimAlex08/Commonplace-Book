@@ -43,10 +43,10 @@ class NotebookSQLCommands implements NotebookPersistenceCommands {
   /// Crea un nuevo `Notebook` en la base de datos.
   Future<Result<int, Failure>> createNotebook(Notebook notebook) async {
     try {
-      final NotebookDTO dto = NotebookDTO.fromDomain(notebook);
-      final NotebookItemsCompanion companion = dto.toCompanion();
+      final NotebookDTO dto = NotebookDomainMapper.fromDomain(notebook);
+      final NotebookItemsCompanion notebookCompanion = NotebookDriftMapper.toCompanion(dto);
       
-      final int result = await _dbHelper.into(_dbHelper.notebookItems).insert(companion);
+      final int result = await _dbHelper.into(_dbHelper.notebookItems).insert(notebookCompanion);
       
       return Result.success(result);
       
@@ -64,12 +64,12 @@ class NotebookSQLCommands implements NotebookPersistenceCommands {
   /// Actualiza un `Notebook` existente en la base de datos.
   Future<Result<int, Failure>> updateNotebook(Notebook notebook) async {
     try {
-      final NotebookDTO dto = NotebookDTO.fromDomain(notebook);
-      final NotebookItemsCompanion companion = dto.toCompanion();
+      final NotebookDTO dto = NotebookDomainMapper.fromDomain(notebook);
+      final NotebookItemsCompanion notebookCompanion = NotebookDriftMapper.toCompanion(dto);
     
       final int result = await (_dbHelper.update(_dbHelper.notebookItems)
-        ..where((tbl) => tbl.id.equals(dto.id))
-      ).write(companion);
+        ..where((tbl) => tbl.id.equals(dto.id!))
+      ).write(notebookCompanion);
       
       return result > 0 
           ? Result.success(result) 
@@ -122,7 +122,7 @@ class NotebookSQLQueries implements NotebookPersistenceQueries {
       final query = _dbHelper.select(_dbHelper.notebookItems);
       final List<NotebookItem> records = await query.get();
       
-      final List<NotebookDTO> result = records.map((record) => NotebookDTO.fromData(record)).toList();
+      final List<NotebookDTO> result = records.map((records) => NotebookDriftMapper.fromData(records)).toList();
       return Result.success(result);
       
     } on SqliteException catch (e) {
@@ -145,7 +145,7 @@ class NotebookSQLQueries implements NotebookPersistenceQueries {
       final NotebookItem? record = await query.getSingleOrNull();
       
       return record != null 
-          ? Result.success(NotebookDTO.fromData(record)) 
+          ? Result.success(NotebookDriftMapper.fromData(record))
           : Result.failure(NotebookReadFailure(details: 'Notebook not found.'));
           
     } on SqliteException catch (e) {
@@ -172,7 +172,7 @@ class NotebookSQLObservers implements NotebookPersistenceObservers {
     final Stream<List<NotebookItem>> stream = _dbHelper.select(_dbHelper.notebookItems).watch();
     
     return stream.map(
-      (rows) => rows.map(NotebookDTO.fromData).toList(),
+      (rows) => rows.map(NotebookDriftMapper.fromData).toList()
     );
   }
   
@@ -183,6 +183,6 @@ class NotebookSQLObservers implements NotebookPersistenceObservers {
       ..where((tbl) => tbl.id.equals(id));
       
     final Stream<NotebookItem> stream = query.watchSingle();
-    return stream.map(NotebookDTO.fromData);
+    return stream.map(NotebookDriftMapper.fromData);
   }
 }

@@ -15,8 +15,12 @@ class UpdateNotebookUsecase {
   final ForPersitingNotebooksPort _repository;
   
   Future<Result<int, List<Failure>>> execute(NotebookDTO dto) async {
-    /// Recibe un objeto `NotebookDTO` y lo convierte a un objeto `NotebookParams`.
-    final notebook = dto.toDomainParams();
+    /// Genera el ID y las fechas de creación y actualización. Luego genera los NotebookParams
+    /// a partir de DTO completo
+    final completedDto = dto.copyWith(
+      updatedAt: DateTime.now(),
+    );
+    final notebook = NotebookDomainMapper.toParams(completedDto);
     
     /// El método `create` de la clase `Notebook` recibe un objeto `NotebookParams` y devuelve un
     /// `Result<Notebook, List<DomainFailure>>` que contiene el objeto `Notebook` o una lista de fallos.

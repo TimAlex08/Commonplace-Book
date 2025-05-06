@@ -7,102 +7,152 @@ import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/n
 
 
 
+/// Objeto de transferencia de datos (DTO) para la entidad Notebook
 class NotebookDTO {
   NotebookDTO({
-    required this.id, 
-    required this.name, 
-    required this.description, 
-    required this.createdAt, 
-    required this.updatedAt, 
-    required this.color, 
-    required this.coverImagePath, 
-    required this.backCoverImagePath, 
-    required this.isFavorite, 
-    required this.isArchived, 
-    required this.isLocked
+    this.id,
+    required this.name,
+    required this.description,
+    this.createdAt,
+    this.updatedAt,
+    required this.color,
+    required this.coverImagePath,
+    required this.backCoverImagePath,
+    required this.isFavorite,
+    required this.isArchived,
+    required this.isLocked,
   });
   
-  final String id;
+  final String? id;
   final String name;
   final String description;
-  final String createdAt;
-  final String updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final String color;
   final String coverImagePath;
   final String backCoverImagePath;
   final bool isFavorite;
   final bool isArchived;
   final bool isLocked;
+  
+  NotebookDTO copyWith({
+    String? id,
+    String? name,
+    String? description,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? color,
+    String? coverImagePath,
+    String? backCoverImagePath,
+    bool? isFavorite,
+    bool? isArchived,
+    bool? isLocked,
+  }) {
+    return NotebookDTO(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      color: color ?? this.color,
+      coverImagePath: coverImagePath ?? this.coverImagePath,
+      backCoverImagePath: backCoverImagePath ?? this.backCoverImagePath,
+      isFavorite: isFavorite ?? this.isFavorite,
+      isArchived: isArchived ?? this.isArchived,
+      isLocked: isLocked ?? this.isLocked,
+    );
+  }
+}
 
-  /* ---------- NotebookDTO a Notebook (Entidad) ---------- */
-   
-  /// Convierte un objeto `NotebookDTO` a un objeto `NotebookParams`.
-  NotebookParams toDomainParams() {
+
+
+/// Clase de mapeo entre NotebookDTO y las entidades del dominio
+/// 
+/// Responsable de la transformación bidireccional entre los objetos DTO 
+/// y los objetos del dominio (Notebook y NotebookParams)
+class NotebookDomainMapper {
+  static NotebookParams toParams(NotebookDTO dto) {
     return NotebookParams(
-      id: id,
-      name: name,
-      description: description,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-      color: color,
-      coverImagePath: coverImagePath,
-      backCoverImagePath: backCoverImagePath,
-      isFavorite: isFavorite,
-      isArchived: isArchived,
-      isLocked: isLocked
+      id: dto.id,
+      name: dto.name,
+      description: dto.description,
+      createdAt: dto.createdAt,
+      updatedAt: dto.updatedAt,
+      color: dto.color,
+      coverImagePath: dto.coverImagePath,
+      backCoverImagePath: dto.backCoverImagePath,
+      isFavorite: dto.isFavorite,
+      isArchived: dto.isArchived,
+      isLocked: dto.isLocked,
     );
   }
   
-  
-  /// Convierte un objeto `NotebookDTO` a un objeto `Notebook`.
-  factory NotebookDTO.fromDomain(Notebook notebook) {
+  static NotebookDTO fromDomain(Notebook notebook) {
     return NotebookDTO(
       id: notebook.id,
       name: notebook.name.value,
       description: notebook.description.value,
-      createdAt: notebook.timestamp.createdAt.toIso8601String(),
-      updatedAt: notebook.timestamp.updatedAt.toIso8601String(),
+      createdAt: notebook.timestamp.createdAt,
+      updatedAt: notebook.timestamp.updatedAt,
       color: notebook.appearence.color,
       coverImagePath: notebook.appearence.coverImagePath,
       backCoverImagePath: notebook.appearence.backCoverImagePath,
       isFavorite: notebook.state.isFavorite,
       isArchived: notebook.state.isArchived,
-      isLocked: notebook.state.isLocked
+      isLocked: notebook.state.isLocked,
     );
   }
-  
-  
-  
-  /// ----- NotebookDTO a Drift ----- ///
-  NotebookItemsCompanion toCompanion() {
+}
+
+
+
+/// Clase de mapeo entre NotebookDTO y las entidades de la capa de persistencia Drift.
+/// 
+/// Responsable de la transformación bidireccional entre los objetos DTO y los objetos de
+/// la clase de la base de datos (NotebookItemsCompanion y NotebookItem).
+/// Incluye validaciones para asegurar que los datos son apropiados para la persistencia
+class NotebookDriftMapper {
+  static NotebookItemsCompanion toCompanion(NotebookDTO dto) {
+    
+    // Verificar que todos los campos necesarios estén presentes
+    if(dto.id == null) {
+      throw ArgumentError('ID must be present to persist in the database');
+    }
+    if (dto.createdAt == null) {
+      throw ArgumentError('The creation date must be present to persist');
+    }
+    if (dto.updatedAt == null) {
+      throw ArgumentError('The update date must be present to persist');
+    }
+    
     return NotebookItemsCompanion(
-      id: Value(id),
-      name: Value(name),
-      description: Value(description),
-      createdAt: Value(DateTime.parse(createdAt)),
-      updatedAt: Value(DateTime.parse(updatedAt)),
-      color: Value(color),
-      coverImagePath: Value(coverImagePath),
-      backCoverImagePath: Value(backCoverImagePath),
-      isFavorite: Value(isFavorite),
-      isArchived: Value(isArchived),
-      isLocked: Value(isLocked)
+      id: Value(dto.id!),
+      name: Value(dto.name),
+      description: Value(dto.description),
+      createdAt: Value(dto.createdAt!),
+      updatedAt: Value(dto.updatedAt!),
+      color: Value(dto.color),
+      coverImagePath: Value(dto.coverImagePath),
+      backCoverImagePath: Value(dto.backCoverImagePath),
+      isFavorite: Value(dto.isFavorite),
+      isArchived: Value(dto.isArchived),
+      isLocked: Value(dto.isLocked),
     );
   }
   
-  factory NotebookDTO.fromData(NotebookItem data) {
+  static NotebookDTO fromData(NotebookItem data) {
     return NotebookDTO(
       id: data.id,
       name: data.name,
       description: data.description,
-      createdAt: data.createdAt.toIso8601String(),
-      updatedAt: data.updatedAt.toIso8601String(),
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
       color: data.color,
       coverImagePath: data.coverImagePath,
       backCoverImagePath: data.backCoverImagePath,
       isFavorite: data.isFavorite,
       isArchived: data.isArchived,
-      isLocked: data.isLocked
+      isLocked: data.isLocked,
     );
   }
 }

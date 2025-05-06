@@ -21,21 +21,22 @@ class NotebookUiModel {
   final String? id;
   final String name;
   final String description;
-  final String createdAt;
-  final String updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final String color;
-  final String? coverImagePath;
-  final String? backCoverImagePath;
+  final String coverImagePath;
+  final String backCoverImagePath;
   final bool isFavorite;
   final bool isArchived;
   final bool isLocked;
   
   factory NotebookUiModel.empty() {
     return NotebookUiModel(
+      id: '',
       name: '', 
       description: '', 
-      createdAt: '', 
-      updatedAt: '', 
+      createdAt: null, 
+      updatedAt: null, 
       color: '#FFE0E0E0', 
       coverImagePath: '', 
       backCoverImagePath: '', 
@@ -49,8 +50,8 @@ class NotebookUiModel {
     String? id,
     String? name,
     String? description,
-    String? createdAt,
-    String? updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     String? color,
     String? coverImagePath,
     String? backCoverImagePath,
@@ -82,8 +83,8 @@ class NotebookUiModel {
       createdAt: createdAt, 
       updatedAt: updatedAt, 
       color: color, 
-      coverImagePath: coverImagePath ?? '', 
-      backCoverImagePath: backCoverImagePath ?? '', 
+      coverImagePath: coverImagePath, 
+      backCoverImagePath: backCoverImagePath, 
       isFavorite: isFavorite, 
       isArchived: isArchived, 
       isLocked: isLocked,
