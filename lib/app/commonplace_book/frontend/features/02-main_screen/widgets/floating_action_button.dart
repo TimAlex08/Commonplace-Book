@@ -1,5 +1,6 @@
 
 import 'package:commonplace_book/app/commonplace_book/frontend/features/02-main_screen/cubit/main_screen_cubit.dart';
+import 'package:commonplace_book/app/commonplace_book/frontend/features/05-notebooks/pages/notebook_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
@@ -69,7 +70,7 @@ SpeedDialChild _createNotebook(BuildContext context) {
     backgroundColor: Theme.of(context).colorScheme.primaryContainer,
     foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
     child: const Icon(Icons.note),
-    // onTap: () => Navigator.pushNamed(context, AppRoutes.notebookEdit),
+    onTap: () => Navigator.of(context).push(NotebookEditPage.route()),
   );
 }
 
