@@ -15,13 +15,6 @@ class NotebookTimestamp {
   final DateTime createdAt;
   final DateTime updatedAt;
   
-  /// Crea un nuevo `NotebookTimestamp` (`createdAt` y `updatedAt`) válido con la fecha y hora actual.
-  /// - Si ocurre un error durante la creación, se retorna un `Result.failure` con una lista de errores.
-  static Result<NotebookTimestamp, List<DomainFailure>> createValidTimestamp() {
-    final dateTimeNow = DateTime.now();
-    return validate(dateTimeNow, dateTimeNow);
-  }
-  
   /// Valida los valores `NotebookTimestampt` (`CreatedAt `y `UpdatedAt`).
   static Result<NotebookTimestamp, List<DomainFailure>> validate(DateTime? createdAt, DateTime? updatedAt) {
     final failures = <DomainFailure>[];

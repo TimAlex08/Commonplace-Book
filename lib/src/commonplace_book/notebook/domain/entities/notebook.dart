@@ -33,7 +33,7 @@ class Notebook {
     /// ----- Validaciones de parametros ----- ///
     final nameResult = NotebookName.validate(params.name);
     final descriptionResult = NotebookDescription.validate(params.description);
-    final timestamtpResult = NotebookTimestamp.createValidTimestamp();
+    final timestamtpResult = NotebookTimestamp.validate(params.createdAt, params.updatedAt);
     
     final appearenceResult = NotebookAppearence.validate(
       color: params.color ?? NotebookAppearence.defaultAppearance.color,
@@ -61,7 +61,7 @@ class Notebook {
     
     // Si no hay errores, crea el objeto Notebook
     return Result.success(Notebook._(
-      id: params.id,
+      id: params.id!, // TODO: Añadir id valueObject
       name: nameResult.getSuccess(),
       description: descriptionResult.getSuccess(),
       timestamp: timestamtpResult.getSuccess(),
@@ -89,11 +89,11 @@ class NotebookParams{
     required this.isLocked
   });
   
-  final String id;
+  final String? id;
   final String? name;
   final String? description;
-  final String? createdAt;
-  final String? updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final String? color;
   final String? coverImagePath;
   final String? backCoverImagePath;
