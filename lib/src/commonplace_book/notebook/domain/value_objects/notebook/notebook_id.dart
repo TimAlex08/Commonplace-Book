@@ -1,9 +1,14 @@
-
-
-import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_domain_failures.dart';
+// Failures
+import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
+
+// Result
 import 'package:commonplace_book/src/shared/core/result.dart';
 
+
+
+/// NotebookId: Objeto de valor que representa el ID de un `Notebook`.
+/// - Valida que el nombre no esté vacío, no exceda la longitud máxima y contenga solo caracteres permitidos.
 class NotebookId {
   const NotebookId._(this.value);
   final String value;
