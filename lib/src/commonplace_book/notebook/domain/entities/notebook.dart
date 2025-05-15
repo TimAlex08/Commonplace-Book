@@ -1,4 +1,5 @@
 // Failures
+import 'package:commonplace_book/src/commonplace_book/notebook/domain/value_objects/notebook/notebook_id.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 
 // Result
@@ -20,7 +21,7 @@ class Notebook {
     required this.state,
   });
   
-  final String id;
+  final NotebookId id;
   final NotebookName name;
   final NotebookDescription description;
   final NotebookTimestamp timestamp;
@@ -31,6 +32,7 @@ class Notebook {
     final failures = <DomainFailure>[];
     
     /// ----- Validaciones de parametros ----- ///
+    final idResult = NotebookId.validate(params.id);
     final nameResult = NotebookName.validate(params.name);
     final descriptionResult = NotebookDescription.validate(params.description);
     final timestamtpResult = NotebookTimestamp.validate(params.createdAt, params.updatedAt);
@@ -61,7 +63,7 @@ class Notebook {
     
     // Si no hay errores, crea el objeto Notebook
     return Result.success(Notebook._(
-      id: params.id!, // TODO: Añadir id valueObject
+      id: idResult.getSuccess(),
       name: nameResult.getSuccess(),
       description: descriptionResult.getSuccess(),
       timestamp: timestamtpResult.getSuccess(),

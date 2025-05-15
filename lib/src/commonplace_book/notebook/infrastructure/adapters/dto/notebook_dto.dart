@@ -89,7 +89,7 @@ class NotebookDomainMapper {
   
   static NotebookDTO fromDomain(Notebook notebook) {
     return NotebookDTO(
-      id: notebook.id,
+      id: notebook.id.value,
       name: notebook.name.value,
       description: notebook.description.value,
       createdAt: notebook.timestamp.createdAt,
