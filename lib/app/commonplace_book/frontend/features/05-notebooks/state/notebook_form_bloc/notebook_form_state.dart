@@ -15,14 +15,14 @@ final class NotebookFormState extends Equatable {
     this.initialNotebook, 
     this.status = NotebookFormStatus.initial,
     this.isValid = false, 
-    this.errorMessage
+    this.errorMessages
   });
   
   final NotebookUiModel notebook;
   final NotebookUiModel? initialNotebook;
   final NotebookFormStatus status;
   final bool isValid;
-  final String? errorMessage;
+  final Map<String, List<String>>? errorMessages;
   
   bool get isNewNotebook => initialNotebook == null;
   
@@ -31,14 +31,14 @@ final class NotebookFormState extends Equatable {
     NotebookUiModel? initialNotebook,
     NotebookUiModel? notebook,
     bool? isValid,
-    String? errorMessage,
+    Map<String, List<String>>? errorMessages,
   }) {
     return NotebookFormState(
       status: status ?? this.status,
       initialNotebook: initialNotebook ?? this.initialNotebook,
       notebook: notebook ?? this.notebook,
       isValid: isValid ?? this.isValid,
-      errorMessage: errorMessage ?? this.errorMessage,
+      errorMessages: errorMessages,
     );
   }
   
@@ -61,5 +61,5 @@ final class NotebookFormState extends Equatable {
   }
   
   @override
-  List<Object?> get props => [status, initialNotebook, notebook, isValid, errorMessage];
+  List<Object?> get props => [status, initialNotebook, notebook, isValid, errorMessages];
 }

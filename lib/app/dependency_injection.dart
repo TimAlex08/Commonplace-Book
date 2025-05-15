@@ -77,6 +77,6 @@ Future<void> _setupBlocs() async {
   notebookBloc.add(LoadAllNotebooks());
   notebookBloc.add(WatchAllNotebooks());
   
-  // Registrar el NotebookBloc como Factory (nueva instancia cada vez)
+  // Registrar el NotebookBloc como Singleton (nueva instancia cada vez)
   getIt.registerSingleton<NotebookBloc>(notebookBloc);
 }
