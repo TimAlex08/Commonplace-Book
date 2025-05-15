@@ -7,7 +7,7 @@ class NotebookErrorCode {
   // static const String _applicationPrefix = 'NB_APP';
   static const String _infrastructurePrefix = 'NB_INF';
   
-  /// ----- Errores de Dominio ----- ///
+  // ----- Errores de Dominio ----- //
   // Validaciones de ID
   static const String invalidId = '${_domainPrefix}_001';
   
@@ -37,7 +37,7 @@ class NotebookErrorCode {
   
   
   
-  /// ----- Errores de Infrastructura ----- ///
+  // ----- Errores de Infrastructura ----- //
   // Errores de conexión
   static const String dbConnectionFailded = '${_infrastructurePrefix}_001';
   static const String dbInitializationFailed = '${_infrastructurePrefix}_002';
@@ -49,6 +49,8 @@ class NotebookErrorCode {
   static const String readFailed = '${_infrastructurePrefix}_006';
   static const String queryFailed = '${_infrastructurePrefix}_007';
 }
+
+
 
 class NotebookErrorMessages {
   static String getMessage(String code) {

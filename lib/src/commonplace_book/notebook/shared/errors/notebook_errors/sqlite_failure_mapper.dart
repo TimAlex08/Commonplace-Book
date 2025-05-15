@@ -2,7 +2,7 @@
 import 'package:drift/native.dart';
 
 // Failures
-import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_infrastructure_failures.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_infrastructure_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 
 
