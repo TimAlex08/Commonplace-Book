@@ -1,5 +1,5 @@
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
-
+// import 'package:intl/intl.dart';
 
 
 /// NotebookUiModel: Modelo que representa un cuaderno en la interfaz de usuario.
@@ -29,6 +29,9 @@ class NotebookUiModel {
   final bool isFavorite;
   final bool isArchived;
   final bool isLocked;
+  
+  String get formattedCreatedAt => _formatDate(createdAt);
+  String get formattedUpdatedAt => _formatDate(updatedAt);
   
   factory NotebookUiModel.empty() {
     return NotebookUiModel(
@@ -106,5 +109,18 @@ class NotebookUiModel {
       isArchived: dto.isArchived,
       isLocked: dto.isLocked,
     );
-  }  
+  }
+  
+  String _formatDate(DateTime? date) {
+    if (date == null) return 'No disponible';
+    return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+  }
+  
+  // String _formatFullDate(DateTime? date) {
+  //   if (date == null) return 'No disponible';
+  //   
+  //   final formatter = DateFormat("EEEE d 'de' MMMM 'de' y", 'es_ES');
+  //   String formatted = formatter.format(date);
+  //   return formatted[0].toUpperCase() + formatted.substring(1);
+  // }
 }
