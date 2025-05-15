@@ -1,5 +1,5 @@
 // Failures
-import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_domain_failures.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 
 // Result

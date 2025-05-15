@@ -1,0 +1,35 @@
+// External Imports
+import 'package:drift/drift.dart';
+
+
+
+class NotebookContentTable extends Table {
+  // ID de la tabla
+  TextColumn get id => text()();
+  
+  // Claves foráneas, `NotebookId` referencia la tabla `notebook_items` y `parentId` referencia la tabla `notebook_content`
+  TextColumn get notebookId => 
+    text().customConstraint('REFERENCES notebook_items(id) ON DELETE CASCADE')();
+  TextColumn get parentId => 
+    text().nullable().customConstraint('REFERENCES notebook_content(id) ON DELETE CASCADE')();
+  
+  // Columnas de posición y profundidad
+  IntColumn get position => integer()();
+  IntColumn get depth => integer()();
+  
+  // Claves foráneas, `FolderId` referencia a la tabla `FolderItems` y `PageId` referencia a la tabla `PageItems`
+  // Solo puede existir un `FolderId` o un `PageId` a la vez, por lo que se establece una restricción de chequeo
+  TextColumn get folderId => 
+    text().nullable().customConstraint('REFERENCES notebook_content(id) ON DELETE CASCADE')();  
+  TextColumn get pageId => 
+    text().nullable().customConstraint('REFERENCES notebook_content(id) ON DELETE CASCADE')();
+  
+  @override
+  Set<Column<Object>>? get primaryKey => {id};
+  
+  // Establece una restricción de chequeo para asegurar que solo uno de `FolderId` o `PageId` sea no nulo.
+  @override
+  List<String> get customConstraints => [
+    'CHECK ((folder_Id IS NOT NULL AND page_Id IS NULL) OR (folder_Id IS NULL AND page_Id IS NOT NULL))'
+  ];
+}

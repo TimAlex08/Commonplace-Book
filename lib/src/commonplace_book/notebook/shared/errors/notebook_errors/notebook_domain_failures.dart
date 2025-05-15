@@ -1,6 +1,6 @@
 // Failures
 import 'package:commonplace_book/src/shared/core/failures.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_error_codes.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_error_codes.dart';
 
 /// ----- Errores de ID ----- ///
 class NotebookInvalidIdFailure extends DomainFailure {
