@@ -18,9 +18,11 @@ dependencies:
   flutter_bloc: ^9.1.0
   flutter_speed_dial: ^7.0.0
   get_it: ^8.0.3
+  intl: ^0.20.2
   logger: ^2.5.0
   path: ^1.9.0
   path_provider: ^2.1.5
+  pie_menu: ^3.2.7
   sqflite: ^2.4.1
   uuid: ^4.5.1
 
