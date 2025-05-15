@@ -82,6 +82,6 @@ final class NotebookLockedToggled extends NotebookFormEvent {
 
 
 
-final class NotebookSubmitted extends NotebookFormEvent {
-  const NotebookSubmitted();
+class NotebookFormSubmitted extends NotebookFormEvent {
+  const NotebookFormSubmitted();
 }
