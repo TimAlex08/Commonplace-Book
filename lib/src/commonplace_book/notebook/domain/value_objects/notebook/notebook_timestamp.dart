@@ -10,7 +10,10 @@ import 'package:commonplace_book/src/shared/core/failures.dart';
 /// NotebookTimestamp: Objeto de valor que representa las fechas de creación y actualización de un `Notebook`.
 /// - Valida que las fechas no sean nulas yque la fecha de creacion no sea posterior a la de actaualización
 class NotebookTimestamp {
-  const NotebookTimestamp._(this.createdAt, this.updatedAt);
+  const NotebookTimestamp._({
+    required this.createdAt, 
+    required this.updatedAt
+  });
   
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -33,24 +36,24 @@ class NotebookTimestamp {
       ));
     }
     
-    // Valida que ni la fecha de creación ni la de actualización sean nulas
-    // si es así entonces retorna un `Result.failure` con la lista de errores
-    if(createdAt == null || updatedAt == null) {
+    // Si alguna fecha es nula, no podemos hacer más validaciones
+    if (failures.isNotEmpty) {
       return Result.failure(failures);
     }
     
     // Valida que la fecha de creación no sea posterior a la fecha de actualización
-    if(updatedAt.isBefore(createdAt)) {
+    if(updatedAt!.isBefore(createdAt!)) {
       failures.add(NotebookUpdatedBeforeCreatedFailure(
         details: 'Created date: $createdAt, Updated date: $updatedAt'
       ));
-    }
-    
-    // Si hay errores retoramos un `Result.failure` con la lista de errores
-    if(failures.isNotEmpty) {
       return Result.failure(failures);
     }
     
-    return Result.success(NotebookTimestamp._(createdAt, updatedAt,));
+    // Si no hay errores, devuelve el objeto NotebookTimestamp de la libreta como un éxito
+    return Result.success(NotebookTimestamp._(
+        createdAt: createdAt,
+        updatedAt:  updatedAt
+      )
+    );
   }
 }

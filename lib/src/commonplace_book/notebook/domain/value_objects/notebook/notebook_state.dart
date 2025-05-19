@@ -7,6 +7,10 @@ import 'package:commonplace_book/src/shared/core/result.dart';
 
 
 
+/// NotebookState: Objeto de valor que representa el estado de una libreta
+/// - isFavorite: Indica si la libreta es favorita
+/// - isArchived: Indica si la libreta está archivada
+/// - isLocked: Indica si la libreta está protegida con contraseña
 class NotebookState {
   const NotebookState({
     required this.isFavorite, 
@@ -54,10 +58,6 @@ class NotebookState {
       failures.add(NotebookFavoriteAndArchivedConflictFailure(
         details: 'A notebook cannot be both favorite and archived.',
       ));
-    }
-    
-    // Si hay errores, devuelve una lista de fallos
-    if (failures.isNotEmpty) {
       return Result.failure(failures);
     }
     
