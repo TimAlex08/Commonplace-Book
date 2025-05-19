@@ -19,15 +19,17 @@ class NotebookId {
     // Valida que el ID no sea nulo
     if(id == null) {
       failures.add(NotebookInvalidIdFailure(
-        details: 'Id cannot be null'
+        details: 'ID cannot be null'
       ));
       return Result.failure(failures);
     }
     
+    final trimmedId = id.trim();
+    
     // Valida que el ID no sea vacío
-    if(id == '') {
+    if(trimmedId.isEmpty) {
       failures.add(NotebookInvalidIdFailure(
-        details: 'Id cannot be empty'
+        details: 'ID cannot be empty'
       ));
       return Result.failure(failures);
     }
