@@ -9,7 +9,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 class HardDeleteNotebookUsecase {
   const HardDeleteNotebookUsecase(this._repository);
-  final ForPersitingNotebooksPort _repository;
+  final ForPersistingNotebooksPort _repository;
   
   Future<Result<int, List<Failure>>> execute(String notebookId) async {
     // Ejecuta el comando de eliminación dura en el repositorio

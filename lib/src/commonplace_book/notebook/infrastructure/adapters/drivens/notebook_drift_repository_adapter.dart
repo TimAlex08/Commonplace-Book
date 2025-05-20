@@ -18,7 +18,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 
 /// NotebookDriftRepositoryAdapter: Adaptador para la persistencia de `Notebook` en DRIFT (Basado en Sqlite).
-class NotebookDriftRepositoryAdapter implements ForPersitingNotebooksPort{
+class NotebookDriftRepositoryAdapter implements ForPersistingNotebooksPort{
   const NotebookDriftRepositoryAdapter(this._dbHelper);
   final AppDatabase _dbHelper;
   
