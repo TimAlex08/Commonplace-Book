@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:commonplace_book/app/commonplace_book/frontend/features/shared/error_handling/user_error_mapper.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_notebooks.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_notebooks_port.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../shared/models/models.dart';
@@ -12,7 +12,7 @@ part 'notebook_event.dart';
 part 'notebook_state.dart';
 
 class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
-  final ForManagingNotebooks _notebookPort;
+  final ForManagingNotebooksPort _notebookPort;
   StreamSubscription<List<NotebookDTO>>? _notebookSubscription;
   StreamSubscription<NotebookDTO>? _selectedNotebookSubscription;
   
