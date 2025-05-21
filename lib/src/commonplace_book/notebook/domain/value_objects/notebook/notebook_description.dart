@@ -29,10 +29,6 @@ class NotebookDescription {
       failures.add(NotebookDescriptionTooLongFailure(
         details: 'Actual Length: ${trimmedDescription.length}, Max Length: ${NotebookConstants.maxNotebookDescriptionLength}',
       ));
-    }
-    
-    // Si hay errores, devuelve una lista de fallos
-    if (failures.isNotEmpty) {
       return Result.failure(failures);
     }
     

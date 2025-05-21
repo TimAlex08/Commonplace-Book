@@ -7,7 +7,7 @@ import 'package:commonplace_book/src/shared/core/failures.dart';
 
 
 
-class SqliteFailureMapper {
+class NotebookSqliteFailureMapper {
   static Failure map(SqliteException e, Failure baseFailure) {
     switch (e.extendedResultCode) {
       // Constraints violations
@@ -34,7 +34,7 @@ class SqliteFailureMapper {
       case 10: // SQLITE_IOERR_LOCK
         return NotebookDBConnectionFailure(details: "SQLITE(${e.extendedResultCode}): Crash error. ${e.message}");
       case 14: // SQLITE_CANT_OPEN
-        return NotebookDbInitializationFailure(details: "SQLITE(${e.extendedResultCode}): The database cannot be opened. ${e.message}");
+        return NotebookDBInitializationFailure(details: "SQLITE(${e.extendedResultCode}): The database cannot be opened. ${e.message}");
       
       // Permisision / Configuration
       case 8:

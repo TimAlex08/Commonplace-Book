@@ -1,6 +1,8 @@
 // Constants
 import 'package:commonplace_book/src/shared/core/notebook_constants.dart';
 
+
+
 class NotebookErrorCode {
   // Prefijos para identificar la capa de error
   static const String _domainPrefix = 'NB_DOM';
@@ -36,10 +38,9 @@ class NotebookErrorCode {
   static const String favoriteAndArchivedConflict = '${_domainPrefix}_015';
   
   
-  
   // ----- Errores de Infrastructura ----- //
   // Errores de conexión
-  static const String dbConnectionFailded = '${_infrastructurePrefix}_001';
+  static const String dbConnectionFailed = '${_infrastructurePrefix}_001';
   static const String dbInitializationFailed = '${_infrastructurePrefix}_002';
   
   // Errores CRUD
@@ -55,6 +56,7 @@ class NotebookErrorCode {
 class NotebookErrorMessages {
   static String getMessage(String code) {
     final messages = {
+      // ----- Errores de Dominio ----- // 
       // Validaciones básicas
       NotebookErrorCode.invalidId: 'The notebook ID is invalid.',
       NotebookErrorCode.invalidName: 'The notebook name is invalid.',
@@ -77,6 +79,19 @@ class NotebookErrorMessages {
       NotebookErrorCode.invalidArchivedValue: 'The archived value is invalid.',
       NotebookErrorCode.invalidLockedValue: 'The locked value is invalid.',
       NotebookErrorCode.favoriteAndArchivedConflict: 'The notebook cannot be both favorite and archived at the same time.',
+      
+      
+      // ----- Errores de Infrastructura ----- //
+      // Errores de conexión
+      NotebookErrorCode.dbConnectionFailed: 'Failed to connect to the database.',
+      NotebookErrorCode.dbInitializationFailed: 'Failed to initialize the database.',
+      
+      // Errores CRUD
+      NotebookErrorCode.insertFailed: 'Failed to insert the notebook.',
+      NotebookErrorCode.updateFailed: 'Failed to update the notebook.',
+      NotebookErrorCode.deleteFailed: 'Failed to delete the notebook.',
+      NotebookErrorCode.readFailed: 'Failed to read the notebook.',
+      NotebookErrorCode.queryFailed: 'Failed to query the notebook.',
     };
     
     return messages[code] ?? 'Unknown error';

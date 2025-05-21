@@ -31,7 +31,7 @@ class Notebook {
   static Result<Notebook, List<DomainFailure>> create(NotebookParams params) {
     final failures = <DomainFailure>[];
     
-    /// ----- Validaciones de parametros ----- ///
+    // ----- Validaciones de parametros ----- //
     final idResult = NotebookId.validate(params.id);
     final nameResult = NotebookName.validate(params.name);
     final descriptionResult = NotebookDescription.validate(params.description);
@@ -49,19 +49,17 @@ class Notebook {
       isLocked: params.isLocked ?? NotebookState.defaultState.isLocked,
     );
     
-    // Acumular errores si hay fallos en la validaciones
+    // ----- Acumular errores si hay fallos en la validaciones ----- //
     if (nameResult.isFailure) failures.addAll(nameResult.getFailure());
     if (descriptionResult.isFailure) failures.addAll(descriptionResult.getFailure());
     if (timestamtpResult.isFailure) failures.addAll(timestamtpResult.getFailure());
     if (appearenceResult.isFailure) failures.addAll(appearenceResult.getFailure());
     if (stateResult.isFailure) failures.addAll(stateResult.getFailure());
     
-    // Si hay errores, devuelve una lista de fallos
-    if (failures.isNotEmpty) {
-      return Result.failure(failures);
-    }
+    // Si hay errores, devuelve una lista de fallos.
+    if (failures.isNotEmpty) return Result.failure(failures);
     
-    // Si no hay errores, crea el objeto Notebook
+    // Si no hay errores, crea un objeto válido Notebook.
     return Result.success(Notebook._(
       id: idResult.getSuccess(),
       name: nameResult.getSuccess(),
@@ -78,17 +76,17 @@ class Notebook {
 /// NotebookParams: Clase que representa los parámetros necesarios para crear un `Notebook`.
 class NotebookParams{
   const NotebookParams({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.color,
-    required this.coverImagePath,
-    required this.backCoverImagePath,
-    required this.isFavorite,
-    required this.isArchived,
-    required this.isLocked
+    this.id,
+    this.name,
+    this.description,
+    this.createdAt,
+    this.updatedAt,
+    this.color,
+    this.coverImagePath,
+    this.backCoverImagePath,
+    this.isFavorite,
+    this.isArchived,
+    this.isLocked
   });
   
   final String? id;

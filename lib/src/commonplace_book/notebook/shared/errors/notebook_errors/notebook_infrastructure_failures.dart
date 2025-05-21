@@ -1,17 +1,19 @@
 // Failures
-import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_error_codes.dart';
+import 'package:commonplace_book/src/shared/core/failures.dart';
+
+
 
 /// ----- Errores de Conexión ----- ///
 class NotebookDBConnectionFailure extends InfrastructureFailure {
   NotebookDBConnectionFailure({super.details}) : super(
-    code : NotebookErrorCode.dbConnectionFailded,
-    message: NotebookErrorMessages.getMessage(NotebookErrorCode.dbConnectionFailded),
+    code : NotebookErrorCode.dbConnectionFailed,
+    message: NotebookErrorMessages.getMessage(NotebookErrorCode.dbConnectionFailed),
   );
 }
 
-class NotebookDbInitializationFailure extends InfrastructureFailure {
-  NotebookDbInitializationFailure({super.details}) : super(
+class NotebookDBInitializationFailure extends InfrastructureFailure {
+  NotebookDBInitializationFailure({super.details}) : super(
     code: NotebookErrorCode.dbInitializationFailed,
     message: NotebookErrorMessages.getMessage(NotebookErrorCode.dbInitializationFailed),
   );

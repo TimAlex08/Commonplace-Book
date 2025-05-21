@@ -129,7 +129,7 @@ class UserErrorMapper {
   /// MapInfrastructureFailure: Mappea los errores de infrastructura
   static String _mapInfrastructureFailure(InfrastructureFailure failure) {
     switch (failure.code) {
-      case NotebookErrorCode.dbConnectionFailded:
+      case NotebookErrorCode.dbConnectionFailed:
       case NotebookErrorCode.dbInitializationFailed:
         return 'No pudimos acceder a la base de datos. Revisa tu conexión o reinicia la app.';
       case NotebookErrorCode.insertFailed:

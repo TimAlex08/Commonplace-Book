@@ -4,7 +4,7 @@ import 'package:drift/native.dart';
 
 // Failure / Result
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_infrastructure_failures.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/sqlite_failure_mapper.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_sqlite_failure_mapper.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
@@ -51,7 +51,7 @@ class NotebookSQLCommands implements NotebookPersistenceCommands {
       return Result.success(result);
       
     } on SqliteException catch (e) {
-        return Result.failure(SqliteFailureMapper.map(e, NotebookInsertFailure(
+        return Result.failure(NotebookSqliteFailureMapper.map(e, NotebookInsertFailure(
           details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
         )));
         
@@ -76,7 +76,7 @@ class NotebookSQLCommands implements NotebookPersistenceCommands {
           : Result.failure(NotebookUpdateFailure(details: 'Notebook not found to update.'));
           
     } on SqliteException catch (e) {
-        return Result.failure(SqliteFailureMapper.map(e, NotebookUpdateFailure(
+        return Result.failure(NotebookSqliteFailureMapper.map(e, NotebookUpdateFailure(
           details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
         )));
         
@@ -98,7 +98,7 @@ class NotebookSQLCommands implements NotebookPersistenceCommands {
           : Result.failure(NotebookDeleteFailure(details: 'Notebook not found to update.'));
           
     } on SqliteException catch (e) {
-        return Result.failure(SqliteFailureMapper.map(e, NotebookDeleteFailure(
+        return Result.failure(NotebookSqliteFailureMapper.map(e, NotebookDeleteFailure(
           details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
         )));
         
@@ -126,7 +126,7 @@ class NotebookSQLQueries implements NotebookPersistenceQueries {
       return Result.success(result);
       
     } on SqliteException catch (e) {
-        return Result.failure(SqliteFailureMapper.map(e, NotebookReadFailure(
+        return Result.failure(NotebookSqliteFailureMapper.map(e, NotebookReadFailure(
           details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
         )));
         
@@ -149,7 +149,7 @@ class NotebookSQLQueries implements NotebookPersistenceQueries {
           : Result.failure(NotebookReadFailure(details: 'Notebook not found.'));
           
     } on SqliteException catch (e) {
-        return Result.failure(SqliteFailureMapper.map(e, NotebookReadFailure(
+        return Result.failure(NotebookSqliteFailureMapper.map(e, NotebookReadFailure(
           details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
         )));
         

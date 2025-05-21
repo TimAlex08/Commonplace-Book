@@ -64,10 +64,6 @@ class NotebookAppearence {
       failures.add(NotebookColorFormatFailure(
         details: 'Color must be a valid hex color code with a #RRGGBB format.',
       ));
-    }
-    
-    // Si hay errores, devuelve una lista de fallos
-    if (failures.isNotEmpty) {
       return Result.failure(failures);
     }
     
@@ -76,7 +72,7 @@ class NotebookAppearence {
       color: trimmedColor, 
       coverImagePath:  trimmedCoverImageUrl, 
       backCoverImagePath:  trimmedBackCoverImageUrl
-    ));   
+    ));
   }
   
   static final RegExp colorRegex = RegExp(r'^#([A-Fa-f0-9]{2}){3}$');
