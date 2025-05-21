@@ -7,7 +7,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ad
 
 
 
-abstract class ForManagingNotebooks {
+abstract class ForManagingNotebooksPort{
   NotebookManagementCommands get command;
   NotebookManagementQueries get query;
   NotebookManagementObservers get observer;

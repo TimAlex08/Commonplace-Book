@@ -4,8 +4,8 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 
 
-class WatchAllNotebooksUsecase {
-  const WatchAllNotebooksUsecase(this._repository);
+class WatchAllNotebooksUseCase {
+  const WatchAllNotebooksUseCase(this._repository);
   final ForPersistingNotebooksPort _repository;
   
   Stream<List<NotebookDTO>> execute() {

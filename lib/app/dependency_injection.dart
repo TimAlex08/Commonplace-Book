@@ -18,7 +18,7 @@ import '../src/commonplace_book/notebook/application/notebook/observers/watch_no
 import '../src/commonplace_book/notebook/application/notebook/queries/get_all_notebooks_usecase.dart';
 import '../src/commonplace_book/notebook/application/notebook/queries/get_notebook_by_id_usecase.dart';
 import '../src/commonplace_book/notebook/infrastructure/adapters/drivers/notebook_manager_adapter.dart';
-import '../src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_notebooks.dart';
+import '../src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_notebooks_port.dart';
 
 // Blocs
 import 'commonplace_book/frontend/features/05-notebooks/state/notebook_bloc/notebook_bloc.dart';
@@ -46,32 +46,32 @@ Future<void> _setupExternalDependencies() async {
   
   // Casos de uso (Commands)
   getIt.registerLazySingleton(() => CreateNotebookUseCase(getIt<ForPersistingNotebooksPort>()));
-  getIt.registerLazySingleton(() => UpdateNotebookUsecase(getIt<ForPersistingNotebooksPort>()));
-  getIt.registerLazySingleton(() => HardDeleteNotebookUsecase(getIt<ForPersistingNotebooksPort>()));
+  getIt.registerLazySingleton(() => UpdateNotebookUseCase(getIt<ForPersistingNotebooksPort>()));
+  getIt.registerLazySingleton(() => HardDeleteNotebookUseCase(getIt<ForPersistingNotebooksPort>()));
   
   // Casos de uso (Queries)
-  getIt.registerLazySingleton(() => GetAllNotebooksUsecase(getIt<ForPersistingNotebooksPort>()));
+  getIt.registerLazySingleton(() => GetAllNotebooksUseCase(getIt<ForPersistingNotebooksPort>()));
   getIt.registerLazySingleton(() => GetNotebookByIdUseCase(getIt<ForPersistingNotebooksPort>()));
   
   // Casos de uso (Observers)
-  getIt.registerLazySingleton(() => WatchAllNotebooksUsecase(getIt<ForPersistingNotebooksPort>()));
-  getIt.registerLazySingleton(() => WatchNotebookByIdUsecase(getIt<ForPersistingNotebooksPort>()));
+  getIt.registerLazySingleton(() => WatchAllNotebooksUseCase(getIt<ForPersistingNotebooksPort>()));
+  getIt.registerLazySingleton(() => WatchNotebookByIdUseCase(getIt<ForPersistingNotebooksPort>()));
   
   // Adaptador de gestión de Notebooks UI (Driver Port) 
-    getIt.registerLazySingleton<ForManagingNotebooks>(() => NotebookManagerAdapter(
+    getIt.registerLazySingleton<ForManagingNotebooksPort>(() => NotebookManagerAdapter(
     createNotebook: getIt<CreateNotebookUseCase>(),
-    updateNotebook: getIt<UpdateNotebookUsecase>(),
-    hardDeleteNotebook: getIt<HardDeleteNotebookUsecase>(),
-    getAllNotebooks: getIt<GetAllNotebooksUsecase>(),
+    updateNotebook: getIt<UpdateNotebookUseCase>(),
+    hardDeleteNotebook: getIt<HardDeleteNotebookUseCase>(),
+    getAllNotebooks: getIt<GetAllNotebooksUseCase>(),
     getNotebookById: getIt<GetNotebookByIdUseCase>(),
-    watchAllNotebooks: getIt<WatchAllNotebooksUsecase>(),
-    watchNotebookById: getIt<WatchNotebookByIdUsecase>(),
+    watchAllNotebooks: getIt<WatchAllNotebooksUseCase>(),
+    watchNotebookById: getIt<WatchNotebookByIdUseCase>(),
   ));
 }
 
 Future<void> _setupBlocs() async {
   // Crear la instancia del NotebookBloc
-  final notebookBloc = NotebookBloc(getIt<ForManagingNotebooks>());
+  final notebookBloc = NotebookBloc(getIt<ForManagingNotebooksPort>());
   
   // Cargar datos y comenzar observación
   notebookBloc.add(LoadAllNotebooks());
