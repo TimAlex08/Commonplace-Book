@@ -19,7 +19,7 @@ class CreateFolderUseCase {
   final ForPersistingFoldersPort _repository;
   
   Future<Result<int, List<Failure>>> execute (FolderDTO dto) async {
-    /// Genera el ID. Luego genera los FolderParams a partir del DTO completo
+    /// Genera el ID. Luego genera los FolderParams a partir del DTO completo.
     final completedDto = dto.copyWith(
       id: UuidV4().generate(),
     );
@@ -35,7 +35,7 @@ class CreateFolderUseCase {
       return Result.failure(failures);
     }
     
-    // Si el folder es válido, proceder con la creación
+    // Si el folder es válido, proceder con la creación.
     final validFolder = validateFolderResult.getSuccess();
     final result = await _repository.commands.createFolder(validFolder);
     

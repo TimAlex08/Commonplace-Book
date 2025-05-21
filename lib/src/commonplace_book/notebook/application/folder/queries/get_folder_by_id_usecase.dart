@@ -13,7 +13,7 @@ class GetFolderByIdUseCase {
   final ForPersistingFoldersPort _repository;
   
   Future<Result<FolderDTO, List<Failure>>> execute(String folderId) async {
-    /// Obtiene un notebook por su ID de la base de datos.
+    /// Obtiene un folder por su ID de la base de datos.
     final result = await _repository.queries.getFolderById(folderId);
     
     return result.fold(

@@ -51,11 +51,11 @@ class _FolderDriftCommands implements FolderPersistenceCommands {
       
     } on SqliteException catch (e) {
       return Result.failure(FolderSqliteFailureMapper.map(e, FolderInsertFailure(
-        details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
+        details: 'SQLITE(${e.extendedResultCode}): ${e.message}.'
       )));
       
     } catch (e) {
-      return Result.failure(FolderInsertFailure(details: 'UNEXPECTED ERROR ${e.toString()}'));
+      return Result.failure(FolderInsertFailure(details: 'UNEXPECTED ERROR ${e.toString()}.'));
     }
   }
   
@@ -76,11 +76,11 @@ class _FolderDriftCommands implements FolderPersistenceCommands {
           
     } on SqliteException catch (e) {
         return Result.failure(FolderSqliteFailureMapper.map(e, FolderUpdateFailure(
-          details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
+          details: 'SQLITE(${e.extendedResultCode}): ${e.message}.'
         )));
         
     } catch (e) {
-        return Result.failure(FolderUpdateFailure(details: 'UNEXPECTED ERROR ${e.toString()}'));
+        return Result.failure(FolderUpdateFailure(details: 'UNEXPECTED ERROR ${e.toString()}.'));
     }
   }
   
@@ -97,11 +97,11 @@ class _FolderDriftCommands implements FolderPersistenceCommands {
           
     } on SqliteException catch (e) {
         return Result.failure(FolderSqliteFailureMapper.map(e, FolderDeleteFailure(
-          details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
+          details: 'SQLITE(${e.extendedResultCode}): ${e.message}.'
         )));
         
     } catch (e) {
-        return Result.failure(FolderDeleteFailure(details: 'UNEXPECTED ERROR ${e.toString()}'));
+        return Result.failure(FolderDeleteFailure(details: 'UNEXPECTED ERROR ${e.toString()}.'));
     }
   }
 }
@@ -125,15 +125,16 @@ class _FolderDriftQueries implements FolderPersistenceQueries {
       
     } on SqliteException catch (e) {
         return Result.failure(FolderSqliteFailureMapper.map(e, FolderReadFailure(
-          details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
+          details: 'SQLITE(${e.extendedResultCode}): ${e.message}.'
         )));
         
     } catch (e) {
-        return Result.failure(FolderReadFailure(details: 'UNEXPECTED ERROR ${e.toString()}'));
+        return Result.failure(FolderReadFailure(details: 'UNEXPECTED ERROR ${e.toString()}.'));
     }
   }
 
   @override
+  /// GetFolderById: Obtiene un `Folder` por su ID.
   Future<Result<FolderDTO?, Failure>> getFolderById(String id) async{
     try {
       final query = _db.select(_db.folderItems)
@@ -147,11 +148,11 @@ class _FolderDriftQueries implements FolderPersistenceQueries {
           
     } on SqliteException catch (e) {
         return Result.failure(FolderSqliteFailureMapper.map(e, FolderReadFailure(
-          details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
+          details: 'SQLITE(${e.extendedResultCode}): ${e.message}.'
         )));
         
     } catch (e) {
-        return Result.failure(FolderReadFailure(details: 'UNEXPECTED ERROR ${e.toString()}'));
+        return Result.failure(FolderReadFailure(details: 'UNEXPECTED ERROR ${e.toString()}.'));
     }
   }
 }
@@ -164,7 +165,7 @@ class _FolderDriftObservers implements FolderPersistenceObservers {
   final AppDatabase _db;
   
   @override
-  /// Observa todos los `Folder` en la base de datos. Devuelve un `Stream` de listas de `FolderDTO`.
+  /// WatchAllFolders: Observa todos los `Folder` en la base de datos. Devuelve un `Stream` de listas de `FolderDTO`.
   Stream<List<FolderDTO>> watchAllFolders() {
     final Stream<List<FolderItem>> stream = _db.select(_db.folderItems).watch();
     
@@ -174,7 +175,7 @@ class _FolderDriftObservers implements FolderPersistenceObservers {
   }
   
   @override
-  /// Observa un `Notebook` por su ID en la base de datos. Devuelve un `Stream` de `NotebookDTO`.
+  /// WatchFolderById: Observa un `Folder` por su ID en la base de datos. Devuelve un `Stream` de `FolderDTO`.
   Stream<FolderDTO> watchFolderById(String id) {
     final query = _db.select(_db.folderItems)
       ..where((tbl) => tbl.id.equals(id));

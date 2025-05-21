@@ -16,7 +16,7 @@ class UpdateFolderUseCase {
   final ForPersistingFoldersPort _repository;
   
   Future<Result<int, List<Failure>>> execute(FolderDTO dto) async {
-    // Genera los FolderParams a partir del DTO completo
+    // Genera los FolderParams a partir del DTO completo.
     final folder = FolderDomainMapper.toParams(dto);
     
     // TODO: Validar con NotebookStructure
@@ -29,7 +29,7 @@ class UpdateFolderUseCase {
       return Result.failure(failures);
     }
     
-    // Si el notebook es válido, proceder con la creación
+    // Si el folder es válido, proceder con la actualización.
     final validFolder = validateFolderResult.getSuccess();
     final result = await _repository.commands.updateFolder(validFolder);
     

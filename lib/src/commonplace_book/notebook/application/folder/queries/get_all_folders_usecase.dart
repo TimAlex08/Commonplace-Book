@@ -13,7 +13,7 @@ class GetAllFoldersUseCase {
   final ForPersistingFoldersPort _repository;
   
   Future<Result<List<FolderDTO>, List<Failure>>> execute() async {
-    /// Obtiene todos los notebooks de la base de datos.
+    /// Obtiene todos los folders de la base de datos.
     final result = await _repository.queries.getAllFolders();
     
     return result.fold(

@@ -12,7 +12,7 @@ class HardDeleteFolderUseCase {
   final ForPersistingFoldersPort _repository;
   
   Future<Result<int, List<Failure>>> execute(String folderId) async {
-    // Ejecuta el comando de eliminación dura en el repositorio
+    // Ejecuta el comando de eliminación dura en el repositorio.
     final result = await _repository.commands.hardDeleteFolder(folderId);
     
     return result.fold(
