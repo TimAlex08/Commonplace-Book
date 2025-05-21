@@ -1,13 +1,13 @@
 // External Imports
+import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:drift/drift.dart';
 
-// Database Imports
-import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
+// Domain
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/page.dart';
 
 
 
-/// PageDTO: Objeto de transferencia de datos (DTO) para la entidad Page
+/// PageDTO: Objeto de transferencia de datos (DTO) para la entidad Page.
 class PageDTO {
   const PageDTO({
     this.id,
@@ -38,10 +38,10 @@ class PageDTO {
 
 
 
-/// PageDomainMapper: Clase de mapeo entre PageDTO y las entidades del dominio
+/// PageDomainMapper: Clase de mapeo entre PageDTO y las entidades del dominio.
 /// 
 /// Responsable de la transformación bidireccional entre los objetos DTO 
-/// y los objetos del dominio (Page y PageParams)
+/// y los objetos del dominio (Page y PageParams).
 class PageDomainMapper {
   static PageParams toParams(PageDTO dto) {
     return PageParams(
@@ -67,19 +67,19 @@ class PageDomainMapper {
 /// 
 /// Responsable de la transformación bidireccional entre los objetos DTO y los objetos de
 /// la clase de la base de datos (PageItemsCompanion y PageItem).
-/// Incluye validaciones para asegurar que los datos son apropiados para la persistencia
+/// Incluye validaciones para asegurar que los datos son apropiados para la persistencia.
 class PageDriftMapper {
   static PageItemsCompanion toCompanion(PageDTO dto) {
     
-    // Verificar que todos los campos necesarios estén presentes
+    // Verificar que todos los campos necesarios estén presentes.
     if(dto.id == null) {
-      throw ArgumentError('ID must be present to persist in the database');
+      throw ArgumentError('ID must be present to persist in the database.');
     }
     if (dto.createdAt == null) {
-      throw ArgumentError('The creation date must be present to persist');
+      throw ArgumentError('The creation date must be present to persist.');
     }
     if (dto.updatedAt == null) {
-      throw ArgumentError('The update date must be present to persist');
+      throw ArgumentError('The update date must be present to persist.');
     }
     
     return PageItemsCompanion(

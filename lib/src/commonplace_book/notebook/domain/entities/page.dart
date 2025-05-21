@@ -1,7 +1,5 @@
-// Failures
+// Failures / Result
 import 'package:commonplace_book/src/shared/core/failures.dart';
-
-// Result
 import 'package:commonplace_book/src/shared/core/result.dart';
 
 // Value Objects
@@ -9,7 +7,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/domain/value_obje
 
 
 
-/// Page: Representa la entidad de una página dentro de una libreta en la aplicación
+/// Page: Representa la entidad de una página dentro de una libreta en la aplicación.
 class Page {
   const Page._({
     required this.id,

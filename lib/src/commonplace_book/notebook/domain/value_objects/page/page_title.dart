@@ -1,11 +1,9 @@
 // Constants
 import 'package:commonplace_book/src/shared/core/notebook_constants.dart';
 
-// Failures
+// Failures / Result
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/page_errors/page_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
-
-// Result
 import 'package:commonplace_book/src/shared/core/result.dart';
 
 
@@ -16,11 +14,11 @@ class PageTitle {
   const PageTitle._(this.value);
   final String value;
   
-    /// Método que valida `PageTitle`
+  /// Método que valida `PageTitle`.
   static Result<PageTitle, List<DomainFailure>> validate(String? title) {
     final failures = <DomainFailure>[];
     
-    // Valida que el título no sea nulo
+    // Valida que el título no sea nulo.
     if (title == null) {
       failures.add(PageInvalidTitleFailure(
         details: 'Title cannot be null.',
@@ -28,10 +26,10 @@ class PageTitle {
       return Result.failure(failures);
     }
     
-    // Corta los espacios en blanco al principio y al final de la cadena de entrada
+    // Corta los espacios en blanco al principio y al final de la cadena de entrada.
     final trimmedTitle = title.trim();
     
-    // Valida que el título no esté vacío
+    // Valida que el título no esté vacío.
     if (trimmedTitle.isEmpty) {
       failures.add(PageInvalidTitleFailure(
         details: 'Title cannot be empty.',
@@ -42,7 +40,7 @@ class PageTitle {
     // Valida que el título no exceda la longitud máxima
     if(trimmedTitle.length > NotebookConstants.maxPageTitleLength) {
       failures.add(PageTitleTooLongFailure(
-        details: 'Actual Length: ${trimmedTitle.length}, Max Length: ${NotebookConstants.maxNotebookNameLength}',
+        details: 'Actual Length: ${trimmedTitle.length}, Max Length: ${NotebookConstants.maxNotebookNameLength}.',
       ));
     }
     
@@ -51,22 +49,22 @@ class PageTitle {
       final invalidChars = _getInvalidCharacters(trimmedTitle);
       
       failures.add(PageInvalidTitleFailure(
-        details: 'Title contains invalid characters: ${invalidChars.join(', ')}'
+        details: 'Title contains invalid characters: ${invalidChars.join(', ')}.'
       ));
     }
     
-    // Si hay errores, devuelve una lista de fallos
+    // Si hay errores, devuelve una lista de fallos.
     if (failures.isNotEmpty) {
       return Result.failure(failures);
     }
     
-    // Si no hay errores, devuelve el título de la página como un éxito
+    // Si no hay errores, devuelve el título de la página como un éxito.
     return Result.success(PageTitle._(trimmedTitle));
   }
   
   /// TitleRegExp: Permite nombres de páginas seguros y expresivos:
-  /// - Letras (incluye acentos y caracteres internacionales): \p{L}
-  /// - Números: \p{N}
+  /// - Letras (incluye acentos y caracteres internacionales).
+  /// - Números.
   /// - Espacios y caracteres comunes: espacio, punto, coma, guion, paréntesis, signos de exclamación, etc.
   /// - Excluye caracteres peligrosos para bases de datos: comillas, %, \, <, >, ;, =, etc.
   /// - Usa bandera 'unicode: true' para soportar caracteres multilenguaje correctamente.
