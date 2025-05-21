@@ -10,7 +10,7 @@ import 'package:commonplace_book/src/shared/core/result.dart';
 
 
 
-abstract class ForPersitingNotebooksPort {
+abstract class ForPersistingNotebooksPort {
   NotebookPersistenceCommands get commands;
   NotebookPersistenceQueries get queries;
   NotebookPersistenceObservers get observers;

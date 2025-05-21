@@ -40,22 +40,22 @@ Future<void> setupDependencies() async {
 Future<void> _setupExternalDependencies() async {
   getIt.registerLazySingleton(() => AppDatabase()); 
   
-  getIt.registerLazySingleton<ForPersitingNotebooksPort>(
+  getIt.registerLazySingleton<ForPersistingNotebooksPort>(
     () => NotebookDriftRepositoryAdapter(getIt<AppDatabase>())
   );
   
   // Casos de uso (Commands)
-  getIt.registerLazySingleton(() => CreateNotebookUseCase(getIt<ForPersitingNotebooksPort>()));
-  getIt.registerLazySingleton(() => UpdateNotebookUsecase(getIt<ForPersitingNotebooksPort>()));
-  getIt.registerLazySingleton(() => HardDeleteNotebookUsecase(getIt<ForPersitingNotebooksPort>()));
+  getIt.registerLazySingleton(() => CreateNotebookUseCase(getIt<ForPersistingNotebooksPort>()));
+  getIt.registerLazySingleton(() => UpdateNotebookUsecase(getIt<ForPersistingNotebooksPort>()));
+  getIt.registerLazySingleton(() => HardDeleteNotebookUsecase(getIt<ForPersistingNotebooksPort>()));
   
   // Casos de uso (Queries)
-  getIt.registerLazySingleton(() => GetAllNotebooksUsecase(getIt<ForPersitingNotebooksPort>()));
-  getIt.registerLazySingleton(() => GetNotebookByIdUseCase(getIt<ForPersitingNotebooksPort>()));
+  getIt.registerLazySingleton(() => GetAllNotebooksUsecase(getIt<ForPersistingNotebooksPort>()));
+  getIt.registerLazySingleton(() => GetNotebookByIdUseCase(getIt<ForPersistingNotebooksPort>()));
   
   // Casos de uso (Observers)
-  getIt.registerLazySingleton(() => WatchAllNotebooksUsecase(getIt<ForPersitingNotebooksPort>()));
-  getIt.registerLazySingleton(() => WatchNotebookByIdUsecase(getIt<ForPersitingNotebooksPort>()));
+  getIt.registerLazySingleton(() => WatchAllNotebooksUsecase(getIt<ForPersistingNotebooksPort>()));
+  getIt.registerLazySingleton(() => WatchNotebookByIdUsecase(getIt<ForPersistingNotebooksPort>()));
   
   // Adaptador de gestión de Notebooks UI (Driver Port) 
     getIt.registerLazySingleton<ForManagingNotebooks>(() => NotebookManagerAdapter(

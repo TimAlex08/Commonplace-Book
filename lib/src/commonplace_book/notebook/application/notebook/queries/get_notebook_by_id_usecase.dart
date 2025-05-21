@@ -10,7 +10,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 class GetNotebookByIdUseCase {
   const GetNotebookByIdUseCase(this._repository);
-  final ForPersitingNotebooksPort _repository;
+  final ForPersistingNotebooksPort _repository;
   
   Future<Result<NotebookDTO, List<Failure>>> execute(String notebookId) async {
     /// Obtiene un notebook por su ID de la base de datos.

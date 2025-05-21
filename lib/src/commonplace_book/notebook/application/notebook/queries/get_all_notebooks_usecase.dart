@@ -10,7 +10,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 class GetAllNotebooksUsecase {
   const GetAllNotebooksUsecase(this._repository);
-  final ForPersitingNotebooksPort _repository;
+  final ForPersistingNotebooksPort _repository;
   
   Future<Result<List<NotebookDTO>, List<Failure>>> execute() async {
     /// Obtiene todos los notebooks de la base de datos.

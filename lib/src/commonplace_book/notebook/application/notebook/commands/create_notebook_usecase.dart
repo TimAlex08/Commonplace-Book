@@ -16,7 +16,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ad
 
 class CreateNotebookUseCase {
   const CreateNotebookUseCase(this._repository);
-  final ForPersitingNotebooksPort _repository;
+  final ForPersistingNotebooksPort _repository;
   
   Future<Result<int, List<Failure>>> execute(NotebookDTO dto) async {
     /// Genera el ID y las fechas de creación y actualización. Luego genera los NotebookParams
