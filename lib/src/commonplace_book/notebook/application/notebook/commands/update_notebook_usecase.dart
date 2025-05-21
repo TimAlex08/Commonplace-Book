@@ -2,21 +2,22 @@
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Infrastructure
+// Domain
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
+
+// Infrastructure
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persiting_notebooks_port.dart';
 
 
 
-class UpdateNotebookUsecase {
-  const UpdateNotebookUsecase(this._repository);
-  
+class UpdateNotebookUseCase {
+  const UpdateNotebookUseCase(this._repository);
   final ForPersistingNotebooksPort _repository;
   
   Future<Result<int, List<Failure>>> execute(NotebookDTO dto) async {
     /// Genera el ID y las fechas de creación y actualización. Luego genera los NotebookParams
-    /// a partir de DTO completo
+    /// a partir del DTO completo
     final completedDto = dto.copyWith(
       updatedAt: DateTime.now(),
     );
@@ -26,10 +27,8 @@ class UpdateNotebookUsecase {
     /// `Result<Notebook, List<DomainFailure>>` que contiene el objeto `Notebook` o una lista de fallos.
     final validateNotebookResult = Notebook.create(notebook);
     
-        // Si hay fallos, retorna el resultado fallido.
     if(validateNotebookResult.isFailure) {
       final failures = validateNotebookResult.getFailure();
-      
       return Result.failure(failures);
     }
     

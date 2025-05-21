@@ -17,37 +17,36 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 
 
-/// NotebookDriftRepositoryAdapter: Adaptador para la persistencia de `Notebook` en DRIFT (Basado en Sqlite).
+/// NotebookDriftRepositoryAdapter: Adaptador para la persistencia de `Notebook` en Drift (Basado en Sqlite).
 class NotebookDriftRepositoryAdapter implements ForPersistingNotebooksPort{
-  const NotebookDriftRepositoryAdapter(this._dbHelper);
-  final AppDatabase _dbHelper;
+  const NotebookDriftRepositoryAdapter(this._db);
+  final AppDatabase _db;
   
   @override
-  NotebookPersistenceCommands get commands => NotebookSQLCommands(_dbHelper);
+  NotebookPersistenceCommands get commands => _NotebookDriftCommands(_db);
 
   @override
-  NotebookPersistenceObservers get observers => NotebookSQLObservers(_dbHelper);
-
+  NotebookPersistenceQueries get queries => _NotebookDriftQueries(_db);
+  
   @override
-  NotebookPersistenceQueries get queries => NotebookSQLQueries(_dbHelper);
+  NotebookPersistenceObservers get observers => _NotebookDriftObservers(_db);
 }
 
 
 
-/// NotebookSQLCommands: Implementación de los comandos para la persistencia de `Notebook` en SQL.
-class NotebookSQLCommands implements NotebookPersistenceCommands {
-  const NotebookSQLCommands(this._dbHelper);
-  final AppDatabase _dbHelper;
+/// NotebookDriftCommands: Implementación de los comandos para la persistencia de `Notebook` en Drift.
+class _NotebookDriftCommands implements NotebookPersistenceCommands {
+  const _NotebookDriftCommands(this._db);
+  final AppDatabase _db;
   
   @override
-  /// Crea un nuevo `Notebook` en la base de datos.
+  /// CreateNotebook: Crea un nuevo `Notebook` en la base de datos.
   Future<Result<int, Failure>> createNotebook(Notebook notebook) async {
     try {
       final NotebookDTO dto = NotebookDomainMapper.fromDomain(notebook);
       final NotebookItemsCompanion notebookCompanion = NotebookDriftMapper.toCompanion(dto);
       
-      final int result = await _dbHelper.into(_dbHelper.notebookItems).insert(notebookCompanion);
-      
+      final int result = await _db.into(_db.notebookItems).insert(notebookCompanion);
       return Result.success(result);
       
     } on SqliteException catch (e) {
@@ -61,13 +60,13 @@ class NotebookSQLCommands implements NotebookPersistenceCommands {
   }
   
   @override
-  /// Actualiza un `Notebook` existente en la base de datos.
+  /// UpdateNotebook: Actualiza un `Notebook` existente en la base de datos.
   Future<Result<int, Failure>> updateNotebook(Notebook notebook) async {
     try {
       final NotebookDTO dto = NotebookDomainMapper.fromDomain(notebook);
       final NotebookItemsCompanion notebookCompanion = NotebookDriftMapper.toCompanion(dto);
     
-      final int result = await (_dbHelper.update(_dbHelper.notebookItems)
+      final int result = await (_db.update(_db.notebookItems)
         ..where((tbl) => tbl.id.equals(dto.id!))
       ).write(notebookCompanion);
       
@@ -89,13 +88,13 @@ class NotebookSQLCommands implements NotebookPersistenceCommands {
   /// Elimina un `Notebook` de la base de datos.
   Future<Result<int, Failure>> hardDeleteNotebook(String id) async {
     try {
-      final int result = await (_dbHelper.delete(_dbHelper.notebookItems)
+      final int result = await (_db.delete(_db.notebookItems)
         ..where((tbl) => tbl.id.equals(id))
       ).go();
       
       return result > 0 
           ? Result.success(result) 
-          : Result.failure(NotebookDeleteFailure(details: 'Notebook not found to update.'));
+          : Result.failure(NotebookDeleteFailure(details: 'Notebook not found to delete.'));
           
     } on SqliteException catch (e) {
         return Result.failure(SqliteFailureMapper.map(e, NotebookDeleteFailure(
@@ -110,16 +109,16 @@ class NotebookSQLCommands implements NotebookPersistenceCommands {
 
 
 
-/// NotebookSQLCommands: Implementación de las consultas para la persistencia de `Notebook` en SQL.
-class NotebookSQLQueries implements NotebookPersistenceQueries {
-  const NotebookSQLQueries(this._dbHelper);
-  final AppDatabase _dbHelper;
+/// NotebookDriftQueries: Implementación de las consultas para la persistencia de `Notebook` en Drift.
+class _NotebookDriftQueries implements NotebookPersistenceQueries {
+  const _NotebookDriftQueries(this._db);
+  final AppDatabase _db;
   
   @override
-  /// Obtiene todos los `Notebook` de la base de datos. Puede devolver una lista vacía si no hay `Notebook`.
+  /// GetAllNotebooks: Obtiene todos los `Notebook` de la base de datos. Puede devolver una lista vacía si no hay `Notebook`.
   Future<Result<List<NotebookDTO>?, Failure>> getAllNotebooks() async {
     try {
-      final query = _dbHelper.select(_dbHelper.notebookItems);
+      final query = _db.select(_db.notebookItems);
       final List<NotebookItem> records = await query.get();
       
       final List<NotebookDTO> result = records.map((records) => NotebookDriftMapper.fromData(records)).toList();
@@ -139,7 +138,7 @@ class NotebookSQLQueries implements NotebookPersistenceQueries {
   /// Obtiene un `Notebook` por su ID de la base de datos. Si no se encuentra, devuelve un error.
   Future<Result<NotebookDTO, Failure>> getNotebookById(String id) async{
     try {
-      final query = _dbHelper.select(_dbHelper.notebookItems)
+      final query = _db.select(_db.notebookItems)
         ..where((tbl) => tbl.id.equals(id));
     
       final NotebookItem? record = await query.getSingleOrNull();
@@ -161,15 +160,15 @@ class NotebookSQLQueries implements NotebookPersistenceQueries {
 
 
 
-/// NotebookSQLCommands: Implementación de los observadores para la persistencia de `Notebook` en SQL.
-class NotebookSQLObservers implements NotebookPersistenceObservers {
-  const NotebookSQLObservers(this._dbHelper);
-  final AppDatabase _dbHelper;
+/// NotebookDriftObservers: Implementación de los observadores para la persistencia de `Notebook` en Drift.
+class _NotebookDriftObservers implements NotebookPersistenceObservers {
+  const _NotebookDriftObservers(this._db);
+  final AppDatabase _db;
   
   @override
   /// Observa todos los `Notebook` en la base de datos. Devuelve un `Stream` de listas de `NotebookDTO`.
   Stream<List<NotebookDTO>> watchAllNotebooks() {
-    final Stream<List<NotebookItem>> stream = _dbHelper.select(_dbHelper.notebookItems).watch();
+    final Stream<List<NotebookItem>> stream = _db.select(_db.notebookItems).watch();
     
     return stream.map(
       (rows) => rows.map(NotebookDriftMapper.fromData).toList()
@@ -179,7 +178,7 @@ class NotebookSQLObservers implements NotebookPersistenceObservers {
   @override
   /// Observa un `Notebook` por su ID en la base de datos. Devuelve un `Stream` de `NotebookDTO`.
   Stream<NotebookDTO> watchNotebookById(String id) {
-    final query = _dbHelper.select(_dbHelper.notebookItems)
+    final query = _db.select(_db.notebookItems)
       ..where((tbl) => tbl.id.equals(id));
       
     final Stream<NotebookItem> stream = query.watchSingle();

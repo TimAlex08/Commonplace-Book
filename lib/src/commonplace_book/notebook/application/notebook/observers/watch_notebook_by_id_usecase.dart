@@ -4,8 +4,8 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 
 
-class WatchNotebookByIdUsecase {
-  const WatchNotebookByIdUsecase(this._repository);
+class WatchNotebookByIdUseCase {
+  const WatchNotebookByIdUseCase(this._repository);
   final ForPersistingNotebooksPort _repository;
   
   Stream<NotebookDTO> execute(String notebookId) {
