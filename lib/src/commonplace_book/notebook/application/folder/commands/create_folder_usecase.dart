@@ -14,8 +14,8 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 
 
-class CreateFolderUserCase {
-  const CreateFolderUserCase(this._repository);
+class CreateFolderUseCase {
+  const CreateFolderUseCase(this._repository);
   final ForPersistingFoldersPort _repository;
   
   Future<Result<int, List<Failure>>> execute (FolderDTO dto) async {

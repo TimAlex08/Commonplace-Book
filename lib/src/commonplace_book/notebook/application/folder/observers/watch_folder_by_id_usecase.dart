@@ -4,8 +4,8 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 
 
-class WatchFolderByIdUsecase {
-  const WatchFolderByIdUsecase(this._repository);
+class WatchFolderByIdUseCase {
+  const WatchFolderByIdUseCase(this._repository);
   final ForPersistingFoldersPort _repository;
   
   Stream<FolderDTO> execute(String folderId) {

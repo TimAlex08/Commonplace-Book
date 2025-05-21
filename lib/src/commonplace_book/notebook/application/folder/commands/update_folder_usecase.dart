@@ -11,8 +11,8 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 
 
-class UpdateFolderUsecase {
-  const UpdateFolderUsecase(this._repository);
+class UpdateFolderUseCase {
+  const UpdateFolderUseCase(this._repository);
   final ForPersistingFoldersPort _repository;
   
   Future<Result<int, List<Failure>>> execute(FolderDTO dto) async {

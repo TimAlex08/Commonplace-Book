@@ -8,8 +8,8 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 
 
-class GetFolderByIdUsecase {
-  const GetFolderByIdUsecase(this._repository);
+class GetFolderByIdUseCase {
+  const GetFolderByIdUseCase(this._repository);
   final ForPersistingFoldersPort _repository;
   
   Future<Result<FolderDTO, List<Failure>>> execute(String folderId) async {

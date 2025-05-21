@@ -7,8 +7,8 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 
 
-class HardDeleteFolderUsecase {
-  const HardDeleteFolderUsecase(this._repository);
+class HardDeleteFolderUseCase {
+  const HardDeleteFolderUseCase(this._repository);
   final ForPersistingFoldersPort _repository;
   
   Future<Result<int, List<Failure>>> execute(String folderId) async {

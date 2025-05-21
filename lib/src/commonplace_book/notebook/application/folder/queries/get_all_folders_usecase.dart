@@ -8,8 +8,8 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 
 
-class GetAllFoldersUsecase {
-  const GetAllFoldersUsecase(this._repository);
+class GetAllFoldersUseCase {
+  const GetAllFoldersUseCase(this._repository);
   final ForPersistingFoldersPort _repository;
   
   Future<Result<List<FolderDTO>, List<Failure>>> execute() async {
