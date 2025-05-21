@@ -10,7 +10,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 class GetPageByIdUseCase {
   const GetPageByIdUseCase(this._repository);
-  final ForPersistingPagePort _repository;
+  final ForPersistingPagesPort _repository;
   
   Future<Result<PageDTO, List<Failure>>> execute(String notebookId) async {
     /// Obtiene un page por su ID de la base de datos.

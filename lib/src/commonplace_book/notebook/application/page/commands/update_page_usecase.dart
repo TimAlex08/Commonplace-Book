@@ -13,7 +13,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 class UpdatePageUseCase {
   const UpdatePageUseCase(this._repository);
-  final ForPersistingPagePort _repository;
+  final ForPersistingPagesPort _repository;
   
   Future<Result<int, List<Failure>>> execute(PageDTO dto) async {
     /// Genera el ID y las fechas de creación y actualización.

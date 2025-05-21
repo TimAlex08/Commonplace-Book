@@ -9,7 +9,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 class HardDeletePageUseCase {
   const HardDeletePageUseCase(this._repository);
-  final ForPersistingPagePort _repository;
+  final ForPersistingPagesPort _repository;
   
   Future<Result<int, List<Failure>>> execute(String pageId) async {
     // Ejecuta el comando de eliminación dura en el repositorio.

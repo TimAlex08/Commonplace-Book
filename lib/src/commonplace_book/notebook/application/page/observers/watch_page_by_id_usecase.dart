@@ -6,7 +6,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 class WatchPageByIdUseCase {
   const WatchPageByIdUseCase(this._repository);
-  final ForPersistingPagePort _repository;
+  final ForPersistingPagesPort _repository;
   
   Stream<PageDTO> execute(String pageId) {
     return _repository.observers.watchPageById(pageId);

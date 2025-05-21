@@ -10,7 +10,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/po
 
 class GetAllPagesUseCase {
   const GetAllPagesUseCase(this._repository);
-  final ForPersistingPagePort _repository;
+  final ForPersistingPagesPort _repository;
   
   Future<Result<List<PageDTO>, List<Failure>>> execute() async {
     /// Obtiene todos los pages de la base de datos.
