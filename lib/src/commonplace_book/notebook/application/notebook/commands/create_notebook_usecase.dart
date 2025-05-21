@@ -10,7 +10,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/n
 
 // Infrastructure
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persiting_notebooks_port.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persisting_notebooks_port.dart';
 
 
 
@@ -19,8 +19,8 @@ class CreateNotebookUseCase {
   final ForPersistingNotebooksPort _repository;
   
   Future<Result<int, List<Failure>>> execute(NotebookDTO dto) async {
-    /// Genera el ID y las fechas de creación y actualización. Luego genera los NotebookParams
-    /// a partir de DTO completo
+    /// Genera el ID y las fechas de creación y actualización. 
+    /// Luego genera los NotebookParams a partir del DTO completo.
     final completedDto = dto.copyWith(
       id: UuidV4().generate(),
       createdAt: DateTime.now(),
@@ -37,7 +37,7 @@ class CreateNotebookUseCase {
       return Result.failure(failures);
     }
     
-    // Si el notebook es válido, proceder con la creación
+    // Si el notebook es válido, proceder con la creación.
     final validNotebook = validateNotebookResult.getSuccess();
     final result = await _repository.commands.createNotebook(validNotebook);
 

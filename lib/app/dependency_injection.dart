@@ -7,7 +7,7 @@ import 'package:get_it/get_it.dart';
 // Internal Imports
 import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/drivens/notebook_drift_repository_adapter.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persiting_notebooks_port.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persisting_notebooks_port.dart';
 
 // UseCases
 import '../src/commonplace_book/notebook/application/notebook/commands/create_notebook_usecase.dart';
