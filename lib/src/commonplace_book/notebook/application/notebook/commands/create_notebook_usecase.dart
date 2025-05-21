@@ -6,11 +6,11 @@ import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
 // Domain
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persiting_notebooks_port.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
 
 // Infrastructure
-import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persiting_notebooks_port.dart';
 
 
 
@@ -32,7 +32,6 @@ class CreateNotebookUseCase {
     /// `Result<Notebook, List<DomainFailure>>` que contiene el objeto `Notebook` o una lista de fallos.
     final validateNotebookResult = Notebook.create(notebook);
     
-    // Si hay fallos, retorna el resultado fallido.
     if(validateNotebookResult.isFailure) {
       final failures = validateNotebookResult.getFailure();
       return Result.failure(failures);
