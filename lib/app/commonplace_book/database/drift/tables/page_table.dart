@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 
 
 
-class Page extends Table {
+class PageItems extends Table {
   // ID  de la tabla
   TextColumn get id => text()();
   

@@ -576,12 +576,12 @@ class NotebookItemsCompanion extends UpdateCompanion<NotebookItem> {
   }
 }
 
-class $NotebookContentTableTable extends NotebookContentTable
-    with TableInfo<$NotebookContentTableTable, NotebookContentTableData> {
+class $NotebookStructureItemsTable extends NotebookStructureItems
+    with TableInfo<$NotebookStructureItemsTable, NotebookStructureItem> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $NotebookContentTableTable(this.attachedDatabase, [this._alias]);
+  $NotebookStructureItemsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -636,10 +636,10 @@ class $NotebookContentTableTable extends NotebookContentTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'notebook_content_table';
+  static const String $name = 'notebook_structure_items';
   @override
   VerificationContext validateIntegrity(
-      Insertable<NotebookContentTableData> instance,
+      Insertable<NotebookStructureItem> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -686,10 +686,9 @@ class $NotebookContentTableTable extends NotebookContentTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  NotebookContentTableData map(Map<String, dynamic> data,
-      {String? tablePrefix}) {
+  NotebookStructureItem map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return NotebookContentTableData(
+    return NotebookStructureItem(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       notebookId: attachedDatabase.typeMapping
@@ -708,13 +707,13 @@ class $NotebookContentTableTable extends NotebookContentTable
   }
 
   @override
-  $NotebookContentTableTable createAlias(String alias) {
-    return $NotebookContentTableTable(attachedDatabase, alias);
+  $NotebookStructureItemsTable createAlias(String alias) {
+    return $NotebookStructureItemsTable(attachedDatabase, alias);
   }
 }
 
-class NotebookContentTableData extends DataClass
-    implements Insertable<NotebookContentTableData> {
+class NotebookStructureItem extends DataClass
+    implements Insertable<NotebookStructureItem> {
   final String id;
   final String notebookId;
   final String? parentId;
@@ -722,7 +721,7 @@ class NotebookContentTableData extends DataClass
   final int depth;
   final String? folderId;
   final String? pageId;
-  const NotebookContentTableData(
+  const NotebookStructureItem(
       {required this.id,
       required this.notebookId,
       this.parentId,
@@ -749,8 +748,8 @@ class NotebookContentTableData extends DataClass
     return map;
   }
 
-  NotebookContentTableCompanion toCompanion(bool nullToAbsent) {
-    return NotebookContentTableCompanion(
+  NotebookStructureItemsCompanion toCompanion(bool nullToAbsent) {
+    return NotebookStructureItemsCompanion(
       id: Value(id),
       notebookId: Value(notebookId),
       parentId: parentId == null && nullToAbsent
@@ -766,10 +765,10 @@ class NotebookContentTableData extends DataClass
     );
   }
 
-  factory NotebookContentTableData.fromJson(Map<String, dynamic> json,
+  factory NotebookStructureItem.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return NotebookContentTableData(
+    return NotebookStructureItem(
       id: serializer.fromJson<String>(json['id']),
       notebookId: serializer.fromJson<String>(json['notebookId']),
       parentId: serializer.fromJson<String?>(json['parentId']),
@@ -793,7 +792,7 @@ class NotebookContentTableData extends DataClass
     };
   }
 
-  NotebookContentTableData copyWith(
+  NotebookStructureItem copyWith(
           {String? id,
           String? notebookId,
           Value<String?> parentId = const Value.absent(),
@@ -801,7 +800,7 @@ class NotebookContentTableData extends DataClass
           int? depth,
           Value<String?> folderId = const Value.absent(),
           Value<String?> pageId = const Value.absent()}) =>
-      NotebookContentTableData(
+      NotebookStructureItem(
         id: id ?? this.id,
         notebookId: notebookId ?? this.notebookId,
         parentId: parentId.present ? parentId.value : this.parentId,
@@ -810,9 +809,9 @@ class NotebookContentTableData extends DataClass
         folderId: folderId.present ? folderId.value : this.folderId,
         pageId: pageId.present ? pageId.value : this.pageId,
       );
-  NotebookContentTableData copyWithCompanion(
-      NotebookContentTableCompanion data) {
-    return NotebookContentTableData(
+  NotebookStructureItem copyWithCompanion(
+      NotebookStructureItemsCompanion data) {
+    return NotebookStructureItem(
       id: data.id.present ? data.id.value : this.id,
       notebookId:
           data.notebookId.present ? data.notebookId.value : this.notebookId,
@@ -826,7 +825,7 @@ class NotebookContentTableData extends DataClass
 
   @override
   String toString() {
-    return (StringBuffer('NotebookContentTableData(')
+    return (StringBuffer('NotebookStructureItem(')
           ..write('id: $id, ')
           ..write('notebookId: $notebookId, ')
           ..write('parentId: $parentId, ')
@@ -844,7 +843,7 @@ class NotebookContentTableData extends DataClass
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is NotebookContentTableData &&
+      (other is NotebookStructureItem &&
           other.id == this.id &&
           other.notebookId == this.notebookId &&
           other.parentId == this.parentId &&
@@ -854,8 +853,8 @@ class NotebookContentTableData extends DataClass
           other.pageId == this.pageId);
 }
 
-class NotebookContentTableCompanion
-    extends UpdateCompanion<NotebookContentTableData> {
+class NotebookStructureItemsCompanion
+    extends UpdateCompanion<NotebookStructureItem> {
   final Value<String> id;
   final Value<String> notebookId;
   final Value<String?> parentId;
@@ -864,7 +863,7 @@ class NotebookContentTableCompanion
   final Value<String?> folderId;
   final Value<String?> pageId;
   final Value<int> rowid;
-  const NotebookContentTableCompanion({
+  const NotebookStructureItemsCompanion({
     this.id = const Value.absent(),
     this.notebookId = const Value.absent(),
     this.parentId = const Value.absent(),
@@ -874,7 +873,7 @@ class NotebookContentTableCompanion
     this.pageId = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  NotebookContentTableCompanion.insert({
+  NotebookStructureItemsCompanion.insert({
     required String id,
     required String notebookId,
     this.parentId = const Value.absent(),
@@ -887,7 +886,7 @@ class NotebookContentTableCompanion
         notebookId = Value(notebookId),
         position = Value(position),
         depth = Value(depth);
-  static Insertable<NotebookContentTableData> custom({
+  static Insertable<NotebookStructureItem> custom({
     Expression<String>? id,
     Expression<String>? notebookId,
     Expression<String>? parentId,
@@ -909,7 +908,7 @@ class NotebookContentTableCompanion
     });
   }
 
-  NotebookContentTableCompanion copyWith(
+  NotebookStructureItemsCompanion copyWith(
       {Value<String>? id,
       Value<String>? notebookId,
       Value<String?>? parentId,
@@ -918,7 +917,7 @@ class NotebookContentTableCompanion
       Value<String?>? folderId,
       Value<String?>? pageId,
       Value<int>? rowid}) {
-    return NotebookContentTableCompanion(
+    return NotebookStructureItemsCompanion(
       id: id ?? this.id,
       notebookId: notebookId ?? this.notebookId,
       parentId: parentId ?? this.parentId,
@@ -962,7 +961,7 @@ class NotebookContentTableCompanion
 
   @override
   String toString() {
-    return (StringBuffer('NotebookContentTableCompanion(')
+    return (StringBuffer('NotebookStructureItemsCompanion(')
           ..write('id: $id, ')
           ..write('notebookId: $notebookId, ')
           ..write('parentId: $parentId, ')
@@ -976,11 +975,12 @@ class NotebookContentTableCompanion
   }
 }
 
-class $FoldersTable extends Folders with TableInfo<$FoldersTable, Folder> {
+class $FolderItemsTable extends FolderItems
+    with TableInfo<$FolderItemsTable, FolderItem> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FoldersTable(this.attachedDatabase, [this._alias]);
+  $FolderItemsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -991,27 +991,15 @@ class $FoldersTable extends Folders with TableInfo<$FoldersTable, Folder> {
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
       'title', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
   @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _updatedAtMeta =
-      const VerificationMeta('updatedAt');
-  @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-      'updated_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [id, title, createdAt, updatedAt];
+  List<GeneratedColumn> get $columns => [id, title];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'folders';
+  static const String $name = 'folder_items';
   @override
-  VerificationContext validateIntegrity(Insertable<Folder> instance,
+  VerificationContext validateIntegrity(Insertable<FolderItem> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1026,81 +1014,53 @@ class $FoldersTable extends Folders with TableInfo<$FoldersTable, Folder> {
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
-    if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
-    } else if (isInserting) {
-      context.missing(_updatedAtMeta);
-    }
     return context;
   }
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Folder map(Map<String, dynamic> data, {String? tablePrefix}) {
+  FolderItem map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Folder(
+    return FolderItem(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       title: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      updatedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
     );
   }
 
   @override
-  $FoldersTable createAlias(String alias) {
-    return $FoldersTable(attachedDatabase, alias);
+  $FolderItemsTable createAlias(String alias) {
+    return $FolderItemsTable(attachedDatabase, alias);
   }
 }
 
-class Folder extends DataClass implements Insertable<Folder> {
+class FolderItem extends DataClass implements Insertable<FolderItem> {
   final String id;
   final String title;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  const Folder(
-      {required this.id,
-      required this.title,
-      required this.createdAt,
-      required this.updatedAt});
+  const FolderItem({required this.id, required this.title});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['title'] = Variable<String>(title);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
   }
 
-  FoldersCompanion toCompanion(bool nullToAbsent) {
-    return FoldersCompanion(
+  FolderItemsCompanion toCompanion(bool nullToAbsent) {
+    return FolderItemsCompanion(
       id: Value(id),
       title: Value(title),
-      createdAt: Value(createdAt),
-      updatedAt: Value(updatedAt),
     );
   }
 
-  factory Folder.fromJson(Map<String, dynamic> json,
+  factory FolderItem.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Folder(
+    return FolderItem(
       id: serializer.fromJson<String>(json['id']),
       title: serializer.fromJson<String>(json['title']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
   @override
@@ -1109,104 +1069,69 @@ class Folder extends DataClass implements Insertable<Folder> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'title': serializer.toJson<String>(title),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
 
-  Folder copyWith(
-          {String? id,
-          String? title,
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
-      Folder(
+  FolderItem copyWith({String? id, String? title}) => FolderItem(
         id: id ?? this.id,
         title: title ?? this.title,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
       );
-  Folder copyWithCompanion(FoldersCompanion data) {
-    return Folder(
+  FolderItem copyWithCompanion(FolderItemsCompanion data) {
+    return FolderItem(
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('Folder(')
+    return (StringBuffer('FolderItem(')
           ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('title: $title')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, title, createdAt, updatedAt);
+  int get hashCode => Object.hash(id, title);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Folder &&
-          other.id == this.id &&
-          other.title == this.title &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt);
+      (other is FolderItem && other.id == this.id && other.title == this.title);
 }
 
-class FoldersCompanion extends UpdateCompanion<Folder> {
+class FolderItemsCompanion extends UpdateCompanion<FolderItem> {
   final Value<String> id;
   final Value<String> title;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> updatedAt;
   final Value<int> rowid;
-  const FoldersCompanion({
+  const FolderItemsCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  FoldersCompanion.insert({
+  FolderItemsCompanion.insert({
     required String id,
     required String title,
-    required DateTime createdAt,
-    required DateTime updatedAt,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
-        title = Value(title),
-        createdAt = Value(createdAt),
-        updatedAt = Value(updatedAt);
-  static Insertable<Folder> custom({
+        title = Value(title);
+  static Insertable<FolderItem> custom({
     Expression<String>? id,
     Expression<String>? title,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? updatedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (title != null) 'title': title,
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
-  FoldersCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? title,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt,
-      Value<int>? rowid}) {
-    return FoldersCompanion(
+  FolderItemsCompanion copyWith(
+      {Value<String>? id, Value<String>? title, Value<int>? rowid}) {
+    return FolderItemsCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1220,12 +1145,6 @@ class FoldersCompanion extends UpdateCompanion<Folder> {
     if (title.present) {
       map['title'] = Variable<String>(title.value);
     }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1234,22 +1153,21 @@ class FoldersCompanion extends UpdateCompanion<Folder> {
 
   @override
   String toString() {
-    return (StringBuffer('FoldersCompanion(')
+    return (StringBuffer('FolderItemsCompanion(')
           ..write('id: $id, ')
           ..write('title: $title, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
 }
 
-class $PageTable extends Page with TableInfo<$PageTable, PageData> {
+class $PageItemsTable extends PageItems
+    with TableInfo<$PageItemsTable, PageItem> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $PageTable(this.attachedDatabase, [this._alias]);
+  $PageItemsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -1278,9 +1196,9 @@ class $PageTable extends Page with TableInfo<$PageTable, PageData> {
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'page';
+  static const String $name = 'page_items';
   @override
-  VerificationContext validateIntegrity(Insertable<PageData> instance,
+  VerificationContext validateIntegrity(Insertable<PageItem> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1313,9 +1231,9 @@ class $PageTable extends Page with TableInfo<$PageTable, PageData> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  PageData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  PageItem map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return PageData(
+    return PageItem(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       title: attachedDatabase.typeMapping
@@ -1328,17 +1246,17 @@ class $PageTable extends Page with TableInfo<$PageTable, PageData> {
   }
 
   @override
-  $PageTable createAlias(String alias) {
-    return $PageTable(attachedDatabase, alias);
+  $PageItemsTable createAlias(String alias) {
+    return $PageItemsTable(attachedDatabase, alias);
   }
 }
 
-class PageData extends DataClass implements Insertable<PageData> {
+class PageItem extends DataClass implements Insertable<PageItem> {
   final String id;
   final String title;
   final DateTime createdAt;
   final DateTime updatedAt;
-  const PageData(
+  const PageItem(
       {required this.id,
       required this.title,
       required this.createdAt,
@@ -1353,8 +1271,8 @@ class PageData extends DataClass implements Insertable<PageData> {
     return map;
   }
 
-  PageCompanion toCompanion(bool nullToAbsent) {
-    return PageCompanion(
+  PageItemsCompanion toCompanion(bool nullToAbsent) {
+    return PageItemsCompanion(
       id: Value(id),
       title: Value(title),
       createdAt: Value(createdAt),
@@ -1362,10 +1280,10 @@ class PageData extends DataClass implements Insertable<PageData> {
     );
   }
 
-  factory PageData.fromJson(Map<String, dynamic> json,
+  factory PageItem.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return PageData(
+    return PageItem(
       id: serializer.fromJson<String>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -1383,19 +1301,19 @@ class PageData extends DataClass implements Insertable<PageData> {
     };
   }
 
-  PageData copyWith(
+  PageItem copyWith(
           {String? id,
           String? title,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
-      PageData(
+      PageItem(
         id: id ?? this.id,
         title: title ?? this.title,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
       );
-  PageData copyWithCompanion(PageCompanion data) {
-    return PageData(
+  PageItem copyWithCompanion(PageItemsCompanion data) {
+    return PageItem(
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
@@ -1405,7 +1323,7 @@ class PageData extends DataClass implements Insertable<PageData> {
 
   @override
   String toString() {
-    return (StringBuffer('PageData(')
+    return (StringBuffer('PageItem(')
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('createdAt: $createdAt, ')
@@ -1419,27 +1337,27 @@ class PageData extends DataClass implements Insertable<PageData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is PageData &&
+      (other is PageItem &&
           other.id == this.id &&
           other.title == this.title &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
 
-class PageCompanion extends UpdateCompanion<PageData> {
+class PageItemsCompanion extends UpdateCompanion<PageItem> {
   final Value<String> id;
   final Value<String> title;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<int> rowid;
-  const PageCompanion({
+  const PageItemsCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  PageCompanion.insert({
+  PageItemsCompanion.insert({
     required String id,
     required String title,
     required DateTime createdAt,
@@ -1449,7 +1367,7 @@ class PageCompanion extends UpdateCompanion<PageData> {
         title = Value(title),
         createdAt = Value(createdAt),
         updatedAt = Value(updatedAt);
-  static Insertable<PageData> custom({
+  static Insertable<PageItem> custom({
     Expression<String>? id,
     Expression<String>? title,
     Expression<DateTime>? createdAt,
@@ -1465,13 +1383,13 @@ class PageCompanion extends UpdateCompanion<PageData> {
     });
   }
 
-  PageCompanion copyWith(
+  PageItemsCompanion copyWith(
       {Value<String>? id,
       Value<String>? title,
       Value<DateTime>? createdAt,
       Value<DateTime>? updatedAt,
       Value<int>? rowid}) {
-    return PageCompanion(
+    return PageItemsCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
       createdAt: createdAt ?? this.createdAt,
@@ -1503,7 +1421,7 @@ class PageCompanion extends UpdateCompanion<PageData> {
 
   @override
   String toString() {
-    return (StringBuffer('PageCompanion(')
+    return (StringBuffer('PageItemsCompanion(')
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('createdAt: $createdAt, ')
@@ -1518,16 +1436,16 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $NotebookItemsTable notebookItems = $NotebookItemsTable(this);
-  late final $NotebookContentTableTable notebookContentTable =
-      $NotebookContentTableTable(this);
-  late final $FoldersTable folders = $FoldersTable(this);
-  late final $PageTable page = $PageTable(this);
+  late final $NotebookStructureItemsTable notebookStructureItems =
+      $NotebookStructureItemsTable(this);
+  late final $FolderItemsTable folderItems = $FolderItemsTable(this);
+  late final $PageItemsTable pageItems = $PageItemsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [notebookItems, notebookContentTable, folders, page];
+      [notebookItems, notebookStructureItems, folderItems, pageItems];
 }
 
 typedef $$NotebookItemsTableCreateCompanionBuilder = NotebookItemsCompanion
@@ -1797,8 +1715,8 @@ typedef $$NotebookItemsTableProcessedTableManager = ProcessedTableManager<
     ),
     NotebookItem,
     PrefetchHooks Function()>;
-typedef $$NotebookContentTableTableCreateCompanionBuilder
-    = NotebookContentTableCompanion Function({
+typedef $$NotebookStructureItemsTableCreateCompanionBuilder
+    = NotebookStructureItemsCompanion Function({
   required String id,
   required String notebookId,
   Value<String?> parentId,
@@ -1808,8 +1726,8 @@ typedef $$NotebookContentTableTableCreateCompanionBuilder
   Value<String?> pageId,
   Value<int> rowid,
 });
-typedef $$NotebookContentTableTableUpdateCompanionBuilder
-    = NotebookContentTableCompanion Function({
+typedef $$NotebookStructureItemsTableUpdateCompanionBuilder
+    = NotebookStructureItemsCompanion Function({
   Value<String> id,
   Value<String> notebookId,
   Value<String?> parentId,
@@ -1820,9 +1738,9 @@ typedef $$NotebookContentTableTableUpdateCompanionBuilder
   Value<int> rowid,
 });
 
-class $$NotebookContentTableTableFilterComposer
-    extends Composer<_$AppDatabase, $NotebookContentTableTable> {
-  $$NotebookContentTableTableFilterComposer({
+class $$NotebookStructureItemsTableFilterComposer
+    extends Composer<_$AppDatabase, $NotebookStructureItemsTable> {
+  $$NotebookStructureItemsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1851,9 +1769,9 @@ class $$NotebookContentTableTableFilterComposer
       column: $table.pageId, builder: (column) => ColumnFilters(column));
 }
 
-class $$NotebookContentTableTableOrderingComposer
-    extends Composer<_$AppDatabase, $NotebookContentTableTable> {
-  $$NotebookContentTableTableOrderingComposer({
+class $$NotebookStructureItemsTableOrderingComposer
+    extends Composer<_$AppDatabase, $NotebookStructureItemsTable> {
+  $$NotebookStructureItemsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1882,9 +1800,9 @@ class $$NotebookContentTableTableOrderingComposer
       column: $table.pageId, builder: (column) => ColumnOrderings(column));
 }
 
-class $$NotebookContentTableTableAnnotationComposer
-    extends Composer<_$AppDatabase, $NotebookContentTableTable> {
-  $$NotebookContentTableTableAnnotationComposer({
+class $$NotebookStructureItemsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $NotebookStructureItemsTable> {
+  $$NotebookStructureItemsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -1913,34 +1831,35 @@ class $$NotebookContentTableTableAnnotationComposer
       $composableBuilder(column: $table.pageId, builder: (column) => column);
 }
 
-class $$NotebookContentTableTableTableManager extends RootTableManager<
+class $$NotebookStructureItemsTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $NotebookContentTableTable,
-    NotebookContentTableData,
-    $$NotebookContentTableTableFilterComposer,
-    $$NotebookContentTableTableOrderingComposer,
-    $$NotebookContentTableTableAnnotationComposer,
-    $$NotebookContentTableTableCreateCompanionBuilder,
-    $$NotebookContentTableTableUpdateCompanionBuilder,
+    $NotebookStructureItemsTable,
+    NotebookStructureItem,
+    $$NotebookStructureItemsTableFilterComposer,
+    $$NotebookStructureItemsTableOrderingComposer,
+    $$NotebookStructureItemsTableAnnotationComposer,
+    $$NotebookStructureItemsTableCreateCompanionBuilder,
+    $$NotebookStructureItemsTableUpdateCompanionBuilder,
     (
-      NotebookContentTableData,
-      BaseReferences<_$AppDatabase, $NotebookContentTableTable,
-          NotebookContentTableData>
+      NotebookStructureItem,
+      BaseReferences<_$AppDatabase, $NotebookStructureItemsTable,
+          NotebookStructureItem>
     ),
-    NotebookContentTableData,
+    NotebookStructureItem,
     PrefetchHooks Function()> {
-  $$NotebookContentTableTableTableManager(
-      _$AppDatabase db, $NotebookContentTableTable table)
+  $$NotebookStructureItemsTableTableManager(
+      _$AppDatabase db, $NotebookStructureItemsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$NotebookContentTableTableFilterComposer($db: db, $table: table),
+              $$NotebookStructureItemsTableFilterComposer(
+                  $db: db, $table: table),
           createOrderingComposer: () =>
-              $$NotebookContentTableTableOrderingComposer(
+              $$NotebookStructureItemsTableOrderingComposer(
                   $db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$NotebookContentTableTableAnnotationComposer(
+              $$NotebookStructureItemsTableAnnotationComposer(
                   $db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
@@ -1952,7 +1871,7 @@ class $$NotebookContentTableTableTableManager extends RootTableManager<
             Value<String?> pageId = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
-              NotebookContentTableCompanion(
+              NotebookStructureItemsCompanion(
             id: id,
             notebookId: notebookId,
             parentId: parentId,
@@ -1972,7 +1891,7 @@ class $$NotebookContentTableTableTableManager extends RootTableManager<
             Value<String?> pageId = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
-              NotebookContentTableCompanion.insert(
+              NotebookStructureItemsCompanion.insert(
             id: id,
             notebookId: notebookId,
             parentId: parentId,
@@ -1989,41 +1908,39 @@ class $$NotebookContentTableTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$NotebookContentTableTableProcessedTableManager
+typedef $$NotebookStructureItemsTableProcessedTableManager
     = ProcessedTableManager<
         _$AppDatabase,
-        $NotebookContentTableTable,
-        NotebookContentTableData,
-        $$NotebookContentTableTableFilterComposer,
-        $$NotebookContentTableTableOrderingComposer,
-        $$NotebookContentTableTableAnnotationComposer,
-        $$NotebookContentTableTableCreateCompanionBuilder,
-        $$NotebookContentTableTableUpdateCompanionBuilder,
+        $NotebookStructureItemsTable,
+        NotebookStructureItem,
+        $$NotebookStructureItemsTableFilterComposer,
+        $$NotebookStructureItemsTableOrderingComposer,
+        $$NotebookStructureItemsTableAnnotationComposer,
+        $$NotebookStructureItemsTableCreateCompanionBuilder,
+        $$NotebookStructureItemsTableUpdateCompanionBuilder,
         (
-          NotebookContentTableData,
-          BaseReferences<_$AppDatabase, $NotebookContentTableTable,
-              NotebookContentTableData>
+          NotebookStructureItem,
+          BaseReferences<_$AppDatabase, $NotebookStructureItemsTable,
+              NotebookStructureItem>
         ),
-        NotebookContentTableData,
+        NotebookStructureItem,
         PrefetchHooks Function()>;
-typedef $$FoldersTableCreateCompanionBuilder = FoldersCompanion Function({
+typedef $$FolderItemsTableCreateCompanionBuilder = FolderItemsCompanion
+    Function({
   required String id,
   required String title,
-  required DateTime createdAt,
-  required DateTime updatedAt,
   Value<int> rowid,
 });
-typedef $$FoldersTableUpdateCompanionBuilder = FoldersCompanion Function({
+typedef $$FolderItemsTableUpdateCompanionBuilder = FolderItemsCompanion
+    Function({
   Value<String> id,
   Value<String> title,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
   Value<int> rowid,
 });
 
-class $$FoldersTableFilterComposer
-    extends Composer<_$AppDatabase, $FoldersTable> {
-  $$FoldersTableFilterComposer({
+class $$FolderItemsTableFilterComposer
+    extends Composer<_$AppDatabase, $FolderItemsTable> {
+  $$FolderItemsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2035,17 +1952,11 @@ class $$FoldersTableFilterComposer
 
   ColumnFilters<String> get title => $composableBuilder(
       column: $table.title, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
 }
 
-class $$FoldersTableOrderingComposer
-    extends Composer<_$AppDatabase, $FoldersTable> {
-  $$FoldersTableOrderingComposer({
+class $$FolderItemsTableOrderingComposer
+    extends Composer<_$AppDatabase, $FolderItemsTable> {
+  $$FolderItemsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2057,17 +1968,11 @@ class $$FoldersTableOrderingComposer
 
   ColumnOrderings<String> get title => $composableBuilder(
       column: $table.title, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
 }
 
-class $$FoldersTableAnnotationComposer
-    extends Composer<_$AppDatabase, $FoldersTable> {
-  $$FoldersTableAnnotationComposer({
+class $$FolderItemsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FolderItemsTable> {
+  $$FolderItemsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2079,62 +1984,48 @@ class $$FoldersTableAnnotationComposer
 
   GeneratedColumn<String> get title =>
       $composableBuilder(column: $table.title, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get updatedAt =>
-      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$FoldersTableTableManager extends RootTableManager<
+class $$FolderItemsTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $FoldersTable,
-    Folder,
-    $$FoldersTableFilterComposer,
-    $$FoldersTableOrderingComposer,
-    $$FoldersTableAnnotationComposer,
-    $$FoldersTableCreateCompanionBuilder,
-    $$FoldersTableUpdateCompanionBuilder,
-    (Folder, BaseReferences<_$AppDatabase, $FoldersTable, Folder>),
-    Folder,
+    $FolderItemsTable,
+    FolderItem,
+    $$FolderItemsTableFilterComposer,
+    $$FolderItemsTableOrderingComposer,
+    $$FolderItemsTableAnnotationComposer,
+    $$FolderItemsTableCreateCompanionBuilder,
+    $$FolderItemsTableUpdateCompanionBuilder,
+    (FolderItem, BaseReferences<_$AppDatabase, $FolderItemsTable, FolderItem>),
+    FolderItem,
     PrefetchHooks Function()> {
-  $$FoldersTableTableManager(_$AppDatabase db, $FoldersTable table)
+  $$FolderItemsTableTableManager(_$AppDatabase db, $FolderItemsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$FoldersTableFilterComposer($db: db, $table: table),
+              $$FolderItemsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$FoldersTableOrderingComposer($db: db, $table: table),
+              $$FolderItemsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$FoldersTableAnnotationComposer($db: db, $table: table),
+              $$FolderItemsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> title = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> updatedAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
-              FoldersCompanion(
+              FolderItemsCompanion(
             id: id,
             title: title,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
             rowid: rowid,
           ),
           createCompanionCallback: ({
             required String id,
             required String title,
-            required DateTime createdAt,
-            required DateTime updatedAt,
             Value<int> rowid = const Value.absent(),
           }) =>
-              FoldersCompanion.insert(
+              FolderItemsCompanion.insert(
             id: id,
             title: title,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
@@ -2144,26 +2035,26 @@ class $$FoldersTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$FoldersTableProcessedTableManager = ProcessedTableManager<
+typedef $$FolderItemsTableProcessedTableManager = ProcessedTableManager<
     _$AppDatabase,
-    $FoldersTable,
-    Folder,
-    $$FoldersTableFilterComposer,
-    $$FoldersTableOrderingComposer,
-    $$FoldersTableAnnotationComposer,
-    $$FoldersTableCreateCompanionBuilder,
-    $$FoldersTableUpdateCompanionBuilder,
-    (Folder, BaseReferences<_$AppDatabase, $FoldersTable, Folder>),
-    Folder,
+    $FolderItemsTable,
+    FolderItem,
+    $$FolderItemsTableFilterComposer,
+    $$FolderItemsTableOrderingComposer,
+    $$FolderItemsTableAnnotationComposer,
+    $$FolderItemsTableCreateCompanionBuilder,
+    $$FolderItemsTableUpdateCompanionBuilder,
+    (FolderItem, BaseReferences<_$AppDatabase, $FolderItemsTable, FolderItem>),
+    FolderItem,
     PrefetchHooks Function()>;
-typedef $$PageTableCreateCompanionBuilder = PageCompanion Function({
+typedef $$PageItemsTableCreateCompanionBuilder = PageItemsCompanion Function({
   required String id,
   required String title,
   required DateTime createdAt,
   required DateTime updatedAt,
   Value<int> rowid,
 });
-typedef $$PageTableUpdateCompanionBuilder = PageCompanion Function({
+typedef $$PageItemsTableUpdateCompanionBuilder = PageItemsCompanion Function({
   Value<String> id,
   Value<String> title,
   Value<DateTime> createdAt,
@@ -2171,8 +2062,9 @@ typedef $$PageTableUpdateCompanionBuilder = PageCompanion Function({
   Value<int> rowid,
 });
 
-class $$PageTableFilterComposer extends Composer<_$AppDatabase, $PageTable> {
-  $$PageTableFilterComposer({
+class $$PageItemsTableFilterComposer
+    extends Composer<_$AppDatabase, $PageItemsTable> {
+  $$PageItemsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2192,8 +2084,9 @@ class $$PageTableFilterComposer extends Composer<_$AppDatabase, $PageTable> {
       column: $table.updatedAt, builder: (column) => ColumnFilters(column));
 }
 
-class $$PageTableOrderingComposer extends Composer<_$AppDatabase, $PageTable> {
-  $$PageTableOrderingComposer({
+class $$PageItemsTableOrderingComposer
+    extends Composer<_$AppDatabase, $PageItemsTable> {
+  $$PageItemsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2213,9 +2106,9 @@ class $$PageTableOrderingComposer extends Composer<_$AppDatabase, $PageTable> {
       column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
 }
 
-class $$PageTableAnnotationComposer
-    extends Composer<_$AppDatabase, $PageTable> {
-  $$PageTableAnnotationComposer({
+class $$PageItemsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PageItemsTable> {
+  $$PageItemsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2235,28 +2128,28 @@ class $$PageTableAnnotationComposer
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
-class $$PageTableTableManager extends RootTableManager<
+class $$PageItemsTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $PageTable,
-    PageData,
-    $$PageTableFilterComposer,
-    $$PageTableOrderingComposer,
-    $$PageTableAnnotationComposer,
-    $$PageTableCreateCompanionBuilder,
-    $$PageTableUpdateCompanionBuilder,
-    (PageData, BaseReferences<_$AppDatabase, $PageTable, PageData>),
-    PageData,
+    $PageItemsTable,
+    PageItem,
+    $$PageItemsTableFilterComposer,
+    $$PageItemsTableOrderingComposer,
+    $$PageItemsTableAnnotationComposer,
+    $$PageItemsTableCreateCompanionBuilder,
+    $$PageItemsTableUpdateCompanionBuilder,
+    (PageItem, BaseReferences<_$AppDatabase, $PageItemsTable, PageItem>),
+    PageItem,
     PrefetchHooks Function()> {
-  $$PageTableTableManager(_$AppDatabase db, $PageTable table)
+  $$PageItemsTableTableManager(_$AppDatabase db, $PageItemsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$PageTableFilterComposer($db: db, $table: table),
+              $$PageItemsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$PageTableOrderingComposer($db: db, $table: table),
+              $$PageItemsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$PageTableAnnotationComposer($db: db, $table: table),
+              $$PageItemsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> title = const Value.absent(),
@@ -2264,7 +2157,7 @@ class $$PageTableTableManager extends RootTableManager<
             Value<DateTime> updatedAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
-              PageCompanion(
+              PageItemsCompanion(
             id: id,
             title: title,
             createdAt: createdAt,
@@ -2278,7 +2171,7 @@ class $$PageTableTableManager extends RootTableManager<
             required DateTime updatedAt,
             Value<int> rowid = const Value.absent(),
           }) =>
-              PageCompanion.insert(
+              PageItemsCompanion.insert(
             id: id,
             title: title,
             createdAt: createdAt,
@@ -2292,17 +2185,17 @@ class $$PageTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$PageTableProcessedTableManager = ProcessedTableManager<
+typedef $$PageItemsTableProcessedTableManager = ProcessedTableManager<
     _$AppDatabase,
-    $PageTable,
-    PageData,
-    $$PageTableFilterComposer,
-    $$PageTableOrderingComposer,
-    $$PageTableAnnotationComposer,
-    $$PageTableCreateCompanionBuilder,
-    $$PageTableUpdateCompanionBuilder,
-    (PageData, BaseReferences<_$AppDatabase, $PageTable, PageData>),
-    PageData,
+    $PageItemsTable,
+    PageItem,
+    $$PageItemsTableFilterComposer,
+    $$PageItemsTableOrderingComposer,
+    $$PageItemsTableAnnotationComposer,
+    $$PageItemsTableCreateCompanionBuilder,
+    $$PageItemsTableUpdateCompanionBuilder,
+    (PageItem, BaseReferences<_$AppDatabase, $PageItemsTable, PageItem>),
+    PageItem,
     PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
@@ -2310,9 +2203,11 @@ class $AppDatabaseManager {
   $AppDatabaseManager(this._db);
   $$NotebookItemsTableTableManager get notebookItems =>
       $$NotebookItemsTableTableManager(_db, _db.notebookItems);
-  $$NotebookContentTableTableTableManager get notebookContentTable =>
-      $$NotebookContentTableTableTableManager(_db, _db.notebookContentTable);
-  $$FoldersTableTableManager get folders =>
-      $$FoldersTableTableManager(_db, _db.folders);
-  $$PageTableTableManager get page => $$PageTableTableManager(_db, _db.page);
+  $$NotebookStructureItemsTableTableManager get notebookStructureItems =>
+      $$NotebookStructureItemsTableTableManager(
+          _db, _db.notebookStructureItems);
+  $$FolderItemsTableTableManager get folderItems =>
+      $$FolderItemsTableTableManager(_db, _db.folderItems);
+  $$PageItemsTableTableManager get pageItems =>
+      $$PageItemsTableTableManager(_db, _db.pageItems);
 }
