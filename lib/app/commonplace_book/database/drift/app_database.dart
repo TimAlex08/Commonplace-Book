@@ -12,7 +12,7 @@ part 'app_database.g.dart';
 
 
 
-@DriftDatabase(tables: [NotebookItems, NotebookContentTable, Folders, Page])
+@DriftDatabase(tables: [NotebookItems, NotebookStructureItems, FolderItems, PageItems])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
   

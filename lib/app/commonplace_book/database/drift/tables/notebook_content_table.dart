@@ -3,7 +3,7 @@ import 'package:drift/drift.dart';
 
 
 
-class NotebookContentTable extends Table {
+class NotebookStructureItems extends Table {
   // ID de la tabla
   TextColumn get id => text()();
   
