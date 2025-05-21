@@ -4,7 +4,7 @@ import 'package:commonplace_book/src/shared/core/failures.dart';
 
 
 
-/// ----- Errores de Conexión ----- ///
+// ----- Errores de Conexión ----- //
 class NotebookDBConnectionFailure extends InfrastructureFailure {
   NotebookDBConnectionFailure({super.details}) : super(
     code : NotebookErrorCode.dbConnectionFailed,
@@ -21,7 +21,7 @@ class NotebookDBInitializationFailure extends InfrastructureFailure {
 
 
 
-/// ----- Errores CRUD ----- ///
+// ----- Errores CRUD ----- //
 class NotebookInsertFailure extends InfrastructureFailure {
   NotebookInsertFailure({super.details}) : super(
     code: NotebookErrorCode.insertFailed,

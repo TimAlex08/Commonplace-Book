@@ -7,9 +7,9 @@ import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/n
 
 
 
-/// Objeto de transferencia de datos (DTO) para la entidad Notebook
+/// NotebookDTO: Objeto de transferencia de datos (DTO) para la entidad Notebook
 class NotebookDTO {
-  NotebookDTO({
+  const NotebookDTO({
     this.id,
     required this.name,
     required this.description,
@@ -66,7 +66,7 @@ class NotebookDTO {
 
 
 
-/// Clase de mapeo entre NotebookDTO y las entidades del dominio
+/// NotebookDomainMapper: Clase de mapeo entre NotebookDTO y las entidades del dominio
 /// 
 /// Responsable de la transformación bidireccional entre los objetos DTO 
 /// y los objetos del dominio (Notebook y NotebookParams)
@@ -106,7 +106,7 @@ class NotebookDomainMapper {
 
 
 
-/// Clase de mapeo entre NotebookDTO y las entidades de la capa de persistencia Drift.
+/// NotebookDriftMapper: Clase de mapeo entre NotebookDTO y las entidades de la capa de persistencia Drift.
 /// 
 /// Responsable de la transformación bidireccional entre los objetos DTO y los objetos de
 /// la clase de la base de datos (NotebookItemsCompanion y NotebookItem).

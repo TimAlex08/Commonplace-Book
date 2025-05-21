@@ -7,8 +7,7 @@ import 'package:commonplace_book/src/shared/core/result.dart';
 
 
 
-/// NotebookId: Objeto de valor que representa el ID de un `Notebook`.
-/// - Valida que el nombre no esté vacío, no exceda la longitud máxima y contenga solo caracteres permitidos.
+/// NotebookId: Objeto de valor que valida que el ID de la libreta sea correcto.
 class NotebookId {
   const NotebookId._(this.value);
   final String value;

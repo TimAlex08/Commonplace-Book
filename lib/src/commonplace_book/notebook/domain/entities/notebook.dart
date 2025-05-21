@@ -1,5 +1,4 @@
 // Failures
-import 'package:commonplace_book/src/commonplace_book/notebook/domain/value_objects/notebook/notebook_id.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 
 // Result
@@ -10,7 +9,7 @@ import 'package:commonplace_book/src/commonplace_book/notebook/domain/value_obje
 
 
 
-/// Notebook: Representa la entidad de un cuaderno en la aplicación.
+/// Notebook: Representa la entidad de una libreta en la aplicación.
 class Notebook {
   const Notebook._({
     required this.id,
@@ -31,11 +30,11 @@ class Notebook {
   static Result<Notebook, List<DomainFailure>> create(NotebookParams params) {
     final failures = <DomainFailure>[];
     
-    // ----- Validaciones de parametros ----- //
+    // ----- Validaciones de parámetros ----- //
     final idResult = NotebookId.validate(params.id);
     final nameResult = NotebookName.validate(params.name);
     final descriptionResult = NotebookDescription.validate(params.description);
-    final timestamtpResult = NotebookTimestamp.validate(params.createdAt, params.updatedAt);
+    final timestamtpResult = NotebookTimestamp.validate(createdAt: params.createdAt, updatedAt: params.updatedAt);
     
     final appearenceResult = NotebookAppearence.validate(
       color: params.color ?? NotebookAppearence.defaultAppearance.color,
@@ -50,6 +49,7 @@ class Notebook {
     );
     
     // ----- Acumular errores si hay fallos en la validaciones ----- //
+    if (idResult.isFailure) failures.addAll(idResult.getFailure());
     if (nameResult.isFailure) failures.addAll(nameResult.getFailure());
     if (descriptionResult.isFailure) failures.addAll(descriptionResult.getFailure());
     if (timestamtpResult.isFailure) failures.addAll(timestamtpResult.getFailure());
@@ -74,7 +74,7 @@ class Notebook {
 
 
 /// NotebookParams: Clase que representa los parámetros necesarios para crear un `Notebook`.
-class NotebookParams{
+class NotebookParams {
   const NotebookParams({
     this.id,
     this.name,

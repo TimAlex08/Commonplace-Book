@@ -1,14 +1,15 @@
+// Failures
+import 'package:commonplace_book/src/shared/core/failures.dart';
+
 // Result
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Failures
-import 'package:commonplace_book/src/shared/core/failures.dart';
 
 
 
 /// NotebookTimestamp: Objeto de valor que representa las fechas de creación y actualización de un `Notebook`.
-/// - Valida que las fechas no sean nulas yque la fecha de creacion no sea posterior a la de actaualización
+/// - Valida que las fechas no sean nulas yque la fecha de creacion no sea posterior a la de actualización
 class NotebookTimestamp {
   const NotebookTimestamp._({
     required this.createdAt, 
@@ -19,7 +20,7 @@ class NotebookTimestamp {
   final DateTime updatedAt;
   
   /// Valida los valores `NotebookTimestampt` (`CreatedAt `y `UpdatedAt`).
-  static Result<NotebookTimestamp, List<DomainFailure>> validate(DateTime? createdAt, DateTime? updatedAt) {
+  static Result<NotebookTimestamp, List<DomainFailure>> validate({DateTime? createdAt, DateTime? updatedAt}) {
     final failures = <DomainFailure>[];
     
     // Valida que la fecha de creación no sea nula
@@ -37,9 +38,7 @@ class NotebookTimestamp {
     }
     
     // Si alguna fecha es nula, no podemos hacer más validaciones
-    if (failures.isNotEmpty) {
-      return Result.failure(failures);
-    }
+    if (failures.isNotEmpty) return Result.failure(failures);
     
     // Valida que la fecha de creación no sea posterior a la fecha de actualización
     if(updatedAt!.isBefore(createdAt!)) {
