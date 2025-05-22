@@ -4,9 +4,8 @@ import 'package:commonplace_book/src/shared/core/notebook_constants.dart';
 
 
 class NotebookErrorCode {
-  // Prefijos para identificar la capa de error
+  // Prefijos para identificar la capa de error.
   static const String _domainPrefix = 'NB_DOM';
-  // static const String _applicationPrefix = 'NB_APP';
   static const String _infrastructurePrefix = 'NB_INF';
   
   // ----- Errores de Dominio ----- //
@@ -14,7 +13,7 @@ class NotebookErrorCode {
   static const String invalidId = '${_domainPrefix}_001';
   
   // Validaciones de nombre
-  static const String invalidName = '${_domainPrefix}_002';   // Sirve para el nombre vacío, nulo o caracteres inválidos
+  static const String invalidName = '${_domainPrefix}_002';   // Sirve para el nombre vacío, nulo o caracteres inválidos.
   static const String nameTooLong = '${_domainPrefix}_003';
   
   // Validaciones de descripción
@@ -39,11 +38,11 @@ class NotebookErrorCode {
   
   
   // ----- Errores de Infrastructura ----- //
-  // Errores de conexión
+  // Errores de conexión.
   static const String dbConnectionFailed = '${_infrastructurePrefix}_001';
   static const String dbInitializationFailed = '${_infrastructurePrefix}_002';
   
-  // Errores CRUD
+  // Errores CRUD.
   static const String insertFailed = '${_infrastructurePrefix}_003';
   static const String updateFailed = '${_infrastructurePrefix}_004';
   static const String deleteFailed = '${_infrastructurePrefix}_005';
@@ -57,24 +56,24 @@ class NotebookErrorMessages {
   static String getMessage(String code) {
     final messages = {
       // ----- Errores de Dominio ----- // 
-      // Validaciones básicas
+      // Validaciones básicas.
       NotebookErrorCode.invalidId: 'The notebook ID is invalid.',
       NotebookErrorCode.invalidName: 'The notebook name is invalid.',
       NotebookErrorCode.nameTooLong: 'The notebook name must have a maximum of ${NotebookConstants.maxNotebookNameLength} characters.',
       NotebookErrorCode.descriptionTooLong: 'The notebook description must have a maximum of ${NotebookConstants.maxNotebookDescriptionLength} characters.',
       
-      // Validaciones de fechas
+      // Validaciones de fechas.
       NotebookErrorCode.invalidCreatedAt: 'The creation date is invalid.',
       NotebookErrorCode.invalidUpdatedAt: 'The update date is invalid.',
       NotebookErrorCode.updatedBeforeCreated: 'The update date cannot be before the creation date.',
       
-      // Validaciones de apariencia
+      // Validaciones de apariencia.
       NotebookErrorCode.invalidColor: 'The notebook color is invalid.',
       NotebookErrorCode.invalidColorFormat: 'The color format is invalid.',
       NotebookErrorCode.invalidCoverImage: 'The cover image has an invalid format.',
       NotebookErrorCode.invalidBackCoverImage: 'The back cover image has an invalid format.',
       
-      // Validaciones de estado
+      // Validaciones de estado.
       NotebookErrorCode.invalidFavoriteValue: 'The favorite value is invalid.',
       NotebookErrorCode.invalidArchivedValue: 'The archived value is invalid.',
       NotebookErrorCode.invalidLockedValue: 'The locked value is invalid.',
@@ -82,11 +81,11 @@ class NotebookErrorMessages {
       
       
       // ----- Errores de Infrastructura ----- //
-      // Errores de conexión
+      // Errores de conexión.
       NotebookErrorCode.dbConnectionFailed: 'Failed to connect to the database.',
       NotebookErrorCode.dbInitializationFailed: 'Failed to initialize the database.',
       
-      // Errores CRUD
+      // Errores CRUD.
       NotebookErrorCode.insertFailed: 'Failed to insert the notebook.',
       NotebookErrorCode.updateFailed: 'Failed to update the notebook.',
       NotebookErrorCode.deleteFailed: 'Failed to delete the notebook.',

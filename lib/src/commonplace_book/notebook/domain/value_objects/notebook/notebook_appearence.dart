@@ -1,8 +1,6 @@
-// Failures
+// Failures / Result
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
-
-// Result
 import 'package:commonplace_book/src/shared/core/result.dart';
 
 
@@ -27,12 +25,11 @@ class NotebookAppearence {
     backCoverImagePath: '',
   );
   
-  
   /// Método que valida `NotebookAppearence` (`Color`, `CoverImageUrl` y `BackCoverImageUrl`).
   static Result<NotebookAppearence, List<DomainFailure>> validate({String? color, String? coverImagePath, String? backCoverImagePath}) {
     final failures = <DomainFailure>[];
     
-    /// ----- Validaciones de nulabilidad ----- ///
+    // ----- Validaciones de nulabilidad ----- //
     if(color == null || coverImagePath == null || backCoverImagePath == null) {
       if(color == null) {
         failures.add(NotebookInvalidColorFailure(details: 'Color cannot be null.'));
@@ -47,27 +44,27 @@ class NotebookAppearence {
       return Result.failure(failures);
     }
 
-    // Variables formateados
+    // Variables formateados.
     final trimmedColor = color.trim();
     final trimmedCoverImageUrl = coverImagePath.trim();
     final trimmedBackCoverImageUrl = backCoverImagePath.trim();
     
-    // Valida que el color no esté vacío
+    // Valida que el color no esté vacío.
     if(trimmedColor.isEmpty) {
       failures.add(NotebookInvalidColorFailure(details: 'Color cannot be empty.'));
       return Result.failure(failures);
     }
     
-    // Valida que el código de color sea correcto
+    // Valida que el código de color sea correcto.
     if(colorRegex.hasMatch(trimmedColor) == false) {
-      // Valida que el color sea un código hexadecimal válido
+      // Valida que el color sea un código hexadecimal válido.
       failures.add(NotebookColorFormatFailure(
         details: 'Color must be a valid hex color code with a #RRGGBB format.',
       ));
       return Result.failure(failures);
     }
     
-    // Si no hay errores, devuelve el objeto NotebookAppearence como un éxito
+    // Si no hay errores, devuelve el objeto NotebookAppearence como un éxito.
     return Result.success(NotebookAppearence._(
       color: trimmedColor, 
       coverImagePath:  trimmedCoverImageUrl, 

@@ -1,7 +1,6 @@
 // Notebook Id Value Object
 export 'package:commonplace_book/src/commonplace_book/notebook/domain/value_objects/notebook/notebook_id.dart';
-
-// Notebook Name Value Object
+// NotebookName Value Object
 export 'package:commonplace_book/src/commonplace_book/notebook/domain/value_objects/notebook/notebook_name.dart';
 
 // Notebook Description Value Object
