@@ -1,11 +1,9 @@
 // Constants
 import 'package:commonplace_book/src/shared/core/notebook_constants.dart';
 
-// Failures
+// Failures / Result
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
-
-// Result
 import 'package:commonplace_book/src/shared/core/result.dart';
 
 
@@ -16,11 +14,11 @@ class NotebookName {
   const NotebookName._(this.value);
   final String value;
   
-  /// Método que valida `NotebookName`
+  /// Método que valida `NotebookName`.
   static Result<NotebookName, List<DomainFailure>> validate(String? name) {
     final failures = <DomainFailure>[];
     
-    // Valida que el nombre no sea nulo
+    // Valida que el nombre no sea nulo.
     if (name == null) {
       failures.add(NotebookInvalidNameFailure(
         details: 'Name cannot be null.',
@@ -28,7 +26,7 @@ class NotebookName {
       return Result.failure(failures);
     }
     
-    // Corta los espacios en blanco al principio y al final de la cadena de entrada
+    // Corta los espacios en blanco al principio y al final de la cadena de entrada.
     final trimmedName = name.trim();
     
     // Valida que el nombre no esté vacío
@@ -42,31 +40,29 @@ class NotebookName {
     // Valida que el nombre no exceda la longitud máxima
     if(trimmedName.length > NotebookConstants.maxNotebookNameLength) {
       failures.add(NotebookNameTooLongFailure(
-        details: 'Actual Length: ${trimmedName.length}, Max Length: ${NotebookConstants.maxNotebookNameLength}',
+        details: 'Actual Length: ${trimmedName.length}, Max Length: ${NotebookConstants.maxNotebookNameLength}.',
       ));
     }
     
-    // Valida que el nombre contenga solo caracteres permitidos
+    // Valida que el nombre contenga solo caracteres permitidos.
     if(_isValidName(trimmedName) == false) {
       final invalidChars = _getInvalidCharacters(trimmedName);
       
       failures.add(NotebookInvalidNameFailure(
-        details: 'Name contains invalid characters: ${invalidChars.join(', ')}'
+        details: 'Name contains invalid characters: ${invalidChars.join(', ')}.'
       ));
     }
     
-    // Si hay errores, devuelve una lista de fallos
-    if (failures.isNotEmpty) {
-      return Result.failure(failures);
-    }
+    // Si hay errores, devuelve una lista de fallos.
+    if (failures.isNotEmpty) return Result.failure(failures);
     
-    // Si no hay errores, devuelve el nombre de la libreta como un éxito
+    // Si no hay errores, devuelve el nombre de la libreta como un éxito.
     return Result.success(NotebookName._(trimmedName));
   }
   
   /// NameRegExp: Permite nombres de libretas seguros y expresivos:
-  /// - Letras (incluye acentos y caracteres internacionales): \p{L}
-  /// - Números: \p{N}
+  /// - Letras (incluye acentos y caracteres internacionales).
+  /// - Números.
   /// - Espacios y caracteres comunes: espacio, punto, coma, guion, paréntesis, signos de exclamación, etc.
   /// - Excluye caracteres peligrosos para bases de datos: comillas, %, \, <, >, ;, =, etc.
   /// - Usa bandera 'unicode: true' para soportar caracteres multilenguaje correctamente.
