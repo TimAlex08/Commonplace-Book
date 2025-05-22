@@ -22,6 +22,8 @@ class NotebookId {
       return Result.failure(failures);
     }
     
+    final trimmedId = id.trim();
+    
     // Valida que el ID no sea vacío.
     if(trimmedId.isEmpty) {
       failures.add(NotebookInvalidIdFailure(

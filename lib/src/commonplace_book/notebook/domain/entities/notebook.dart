@@ -32,7 +32,7 @@ class Notebook {
     final idResult = NotebookId.validate(params.id);
     final nameResult = NotebookName.validate(params.name);
     final descriptionResult = NotebookDescription.validate(params.description);
-    final timestamtpResult = NotebookTimestamp.validate(params.createdAt, params.updatedAt);
+    final timestamtpResult = NotebookTimestamp.validate(createdAt: params.createdAt, updatedAt: params.updatedAt);
     
     final appearenceResult = NotebookAppearence.validate(
       color: params.color ?? NotebookAppearence.defaultAppearance.color,
