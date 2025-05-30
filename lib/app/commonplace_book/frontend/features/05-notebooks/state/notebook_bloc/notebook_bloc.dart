@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:commonplace_book/app/commonplace_book/frontend/features/shared/error_handling/user_error_mapper.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_notebooks_port.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/drivers/notebook_manager_adapter.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../shared/models/models.dart';
@@ -12,11 +11,11 @@ part 'notebook_event.dart';
 part 'notebook_state.dart';
 
 class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
-  final ForManagingNotebooksPort _notebookPort;
-  StreamSubscription<List<NotebookDTO>>? _notebookSubscription;
-  StreamSubscription<NotebookDTO>? _selectedNotebookSubscription;
+  final NotebookManagerAdapter _notebookAdapter;
+  StreamSubscription<List<NotebookUiModel>>? _notebookSubscription;
+  StreamSubscription<NotebookUiModel>? _selectedNotebookSubscription;
   
-  NotebookBloc(this._notebookPort) : super(NotebookState()) {
+  NotebookBloc(this._notebookAdapter) : super(NotebookState()) {
     // Eventos de comandos
     on<CreateNotebook>(_onCreateNotebook);
     on<UpdateNotebook>(_onUpdateNotebook);
@@ -40,7 +39,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
   Future<void> _onCreateNotebook(CreateNotebook event, Emitter<NotebookState> emit) async {
     emit(state.copyWith(status: NotebookStatus.loading));
     
-    final result = await _notebookPort.command.createNotebook(event.notebook.toDto());
+    final result = await _notebookAdapter.createNotebook(event.notebook);
     
     result.fold(
       (rowId) {
@@ -65,7 +64,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
   Future<void> _onUpdateNotebook(UpdateNotebook event, Emitter<NotebookState> emit) async {
     emit(state.copyWith(status: NotebookStatus.loading));
     
-    final result = await _notebookPort.command.updateNotebook(event.notebook.toDto());
+    final result = await _notebookAdapter.updateNotebook(event.notebook);
     
     result.fold(
       (rowId) {
@@ -90,7 +89,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
   Future<void> _onHardDeleteNotebook(HardDeleteNotebook event, Emitter<NotebookState> emit) async {
     emit(state.copyWith(status: NotebookStatus.loading));
     
-    final result = await _notebookPort.command.hardDeleteNotebook(event.notebookId);
+    final result = await _notebookAdapter.hardDeleteNotebook(event.notebookId);
     
     result.fold(
       (rowId) {
@@ -119,14 +118,13 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
   Future<void> _onLoadAllNotebooks(LoadAllNotebooks event, Emitter<NotebookState> emit) async {
     emit(state.copyWith(status: NotebookStatus.loading));
     
-    final result = await _notebookPort.query.getAllNotebooks();
+    final result = await _notebookAdapter.getAllNotebooks();
     
     result.fold(
       (allNotebooksDto) {
-        final notebooks = allNotebooksDto.map((dto) => NotebookUiModel.fromDto(dto)).toList(); 
         emit(state.copyWith(
           status: NotebookStatus.success,
-          notebooks: notebooks
+          notebooks: allNotebooksDto
         ));
       },
        
@@ -144,14 +142,13 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
   Future<void> _onLoadNotebookById(LoadNotebookById event, Emitter<NotebookState> emit) async {
     emit(state.copyWith(status: NotebookStatus.loading));
     
-    final result = await _notebookPort.query.getNotebookById(event.notebookId);
+    final result = await _notebookAdapter.getNotebookById(event.notebookId);
       
     result.fold(
       (notebookDto) {
-        final notebook = NotebookUiModel.fromDto(notebookDto);
         emit(state.copyWith(
           status: NotebookStatus.failure,
-          selectedNotebook: notebook
+          selectedNotebook: notebookDto
         ));
       },
       
@@ -173,12 +170,10 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     _notebookSubscription?.cancel();
     
     // Obtener el stream de libretas
-    final allNotebookStream = _notebookPort.observer.watchAllNotebooks();
+    final allNotebookStream = _notebookAdapter.watchAllNotebooks();
     
     // Crear la suscripción con un callback más simple
-    _notebookSubscription = allNotebookStream.listen((notebookListDto) {
-      final notebooks = notebookListDto.map((dto) => NotebookUiModel.fromDto(dto)).toList();
-      
+    _notebookSubscription = allNotebookStream.listen((notebooks) {
       add(NotebooksUpdated(notebooks));
     });
   }
@@ -187,11 +182,9 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     _selectedNotebookSubscription?.cancel();
     
     // Obtener el stream de la libreta seleccionada
-    final notebookStream = _notebookPort.observer.watchNotebookById(event.notebookId);
+    final notebookStream = _notebookAdapter.watchNotebookById(event.notebookId);
     
-    _selectedNotebookSubscription = notebookStream.listen((notebookDto) {
-      final notebook = NotebookUiModel.fromDto(notebookDto);
-      
+    _selectedNotebookSubscription = notebookStream.listen((notebook) {
       add(SelectedNotebookUpdated(notebook));
     });
   }

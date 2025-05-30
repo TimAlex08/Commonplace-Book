@@ -2,7 +2,7 @@
 import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:drift/native.dart';
 
-// Failure / Result
+// Failures / Result
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_infrastructure_failures.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_sqlite_failure_mapper.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
@@ -51,11 +51,11 @@ class _NotebookDriftCommands implements NotebookPersistenceCommands {
       
     } on SqliteException catch (e) {
         return Result.failure(NotebookSqliteFailureMapper.map(e, NotebookInsertFailure(
-          details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
+          details: 'SQLITE(${e.extendedResultCode}): ${e.message}.'
         )));
         
     } catch (e) {
-        return Result.failure(NotebookInsertFailure(details: 'UNEXPECTED ERROR ${e.toString()}'));
+        return Result.failure(NotebookInsertFailure(details: 'UNEXPECTED ERROR ${e.toString()}.'));
     }
   }
   
@@ -76,11 +76,11 @@ class _NotebookDriftCommands implements NotebookPersistenceCommands {
           
     } on SqliteException catch (e) {
         return Result.failure(NotebookSqliteFailureMapper.map(e, NotebookUpdateFailure(
-          details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
+          details: 'SQLITE(${e.extendedResultCode}): ${e.message}.'
         )));
         
     } catch (e) {
-        return Result.failure(NotebookUpdateFailure(details: 'UNEXPECTED ERROR ${e.toString()}'));
+        return Result.failure(NotebookUpdateFailure(details: 'UNEXPECTED ERROR ${e.toString()}.'));
     }
   }
   
@@ -98,11 +98,11 @@ class _NotebookDriftCommands implements NotebookPersistenceCommands {
           
     } on SqliteException catch (e) {
         return Result.failure(NotebookSqliteFailureMapper.map(e, NotebookDeleteFailure(
-          details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
+          details: 'SQLITE(${e.extendedResultCode}): ${e.message}.'
         )));
         
     } catch (e) {
-        return Result.failure(NotebookDeleteFailure(details: 'UNEXPECTED ERROR ${e.toString()}'));
+        return Result.failure(NotebookDeleteFailure(details: 'UNEXPECTED ERROR ${e.toString()}.'));
     }
   }
 }
@@ -126,11 +126,11 @@ class _NotebookDriftQueries implements NotebookPersistenceQueries {
       
     } on SqliteException catch (e) {
         return Result.failure(NotebookSqliteFailureMapper.map(e, NotebookReadFailure(
-          details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
+          details: 'SQLITE(${e.extendedResultCode}): ${e.message}.'
         )));
         
     } catch (e) {
-        return Result.failure(NotebookReadFailure(details: 'UNEXPECTED ERROR ${e.toString()}'));
+        return Result.failure(NotebookReadFailure(details: 'UNEXPECTED ERROR ${e.toString()}.'));
     }
   }
   
@@ -149,11 +149,11 @@ class _NotebookDriftQueries implements NotebookPersistenceQueries {
           
     } on SqliteException catch (e) {
         return Result.failure(NotebookSqliteFailureMapper.map(e, NotebookReadFailure(
-          details: 'SQLITE(${e.extendedResultCode}): ${e.message}'
+          details: 'SQLITE(${e.extendedResultCode}): ${e.message}.'
         )));
         
     } catch (e) {
-        return Result.failure(NotebookReadFailure(details: 'UNEXPECTED ERROR ${e.toString()}'));
+        return Result.failure(NotebookReadFailure(details: 'UNEXPECTED ERROR ${e.toString()}.'));
     }
   }
 }

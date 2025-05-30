@@ -19,15 +19,15 @@ abstract class ForPersistingNotebooksPort {
 abstract class NotebookPersistenceCommands {
   Future<Result<int, Failure>> createNotebook(Notebook notebook);
   Future<Result<int, Failure>> updateNotebook(Notebook notebook);
-  Future<Result<int, Failure>> hardDeleteNotebook(String id);
+  Future<Result<int, Failure>> hardDeleteNotebook(String notebookId);
 }
 
 abstract class NotebookPersistenceQueries {
   Future<Result<List<NotebookDTO>?, Failure>> getAllNotebooks();
-  Future<Result<NotebookDTO?, Failure>> getNotebookById(String id);
+  Future<Result<NotebookDTO?, Failure>> getNotebookById(String notebookId);
 }
 
 abstract class NotebookPersistenceObservers {
   Stream<List<NotebookDTO>> watchAllNotebooks();
-  Stream<NotebookDTO> watchNotebookById(String id);
+  Stream<NotebookDTO> watchNotebookById(String notebookId);
 }
