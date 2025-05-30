@@ -1,13 +1,13 @@
 // External Imports
+import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:drift/drift.dart';
 
-// Database Imports
-import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
+// Domain
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
 
 
 
-/// NotebookDTO: Objeto de transferencia de datos (DTO) para la entidad Notebook
+/// NotebookDTO: Objeto de transferencia de datos (DTO) para la entidad Notebook.
 class NotebookDTO {
   const NotebookDTO({
     this.id,
@@ -69,7 +69,7 @@ class NotebookDTO {
 /// NotebookDomainMapper: Clase de mapeo entre NotebookDTO y las entidades del dominio
 /// 
 /// Responsable de la transformación bidireccional entre los objetos DTO 
-/// y los objetos del dominio (Notebook y NotebookParams)
+/// y los objetos del dominio (Notebook y NotebookParams).
 class NotebookDomainMapper {
   static NotebookParams toParams(NotebookDTO dto) {
     return NotebookParams(
@@ -116,13 +116,13 @@ class NotebookDriftMapper {
     
     // Verificar que todos los campos necesarios estén presentes
     if(dto.id == null) {
-      throw ArgumentError('ID must be present to persist in the database');
+      throw ArgumentError('ID must be present to persist in the database.');
     }
     if (dto.createdAt == null) {
-      throw ArgumentError('The creation date must be present to persist');
+      throw ArgumentError('The creation date must be present to persist.');
     }
     if (dto.updatedAt == null) {
-      throw ArgumentError('The update date must be present to persist');
+      throw ArgumentError('The update date must be present to persist.');
     }
     
     return NotebookItemsCompanion(
