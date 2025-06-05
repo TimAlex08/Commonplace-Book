@@ -12,6 +12,13 @@ class StructureInvalidIdFailure extends DomainFailure {
   );
 }
 
+class StructureNotebookIdReferenceFailure extends DomainFailure {
+  StructureNotebookIdReferenceFailure({super.details}) : super(
+    code: StructureErrorCode.invalidNotebookIdReference,
+    message: StructureErrorMessages.getMessage(StructureErrorCode.invalidNotebookIdReference),
+  );
+}
+
 class StructureInvalidParentIdFailure extends DomainFailure {
   StructureInvalidParentIdFailure({super.details}) : super(
     code: StructureErrorCode.invalidParentId,
@@ -19,34 +26,34 @@ class StructureInvalidParentIdFailure extends DomainFailure {
   );
 }
 
-class StructureNotebookReferenceFailure extends DomainFailure {
-  StructureNotebookReferenceFailure({super.details}) : super(
-    code: StructureErrorCode.invalidNotebookReference,
-    message: StructureErrorMessages.getMessage(StructureErrorCode.invalidNotebookReference),
+class StructureInvalidTypeFailure extends DomainFailure {
+  StructureInvalidTypeFailure({super.details}) : super(
+    code: StructureErrorCode.invalidStructureType,
+    message: StructureErrorMessages.getMessage(StructureErrorCode.invalidStructureType)
   );
 }
 
-class StructureFolderReferenceFailure extends DomainFailure {
-  StructureFolderReferenceFailure({super.details}) : super(
-    code: StructureErrorCode.invalidFolderReference,
-    message: StructureErrorMessages.getMessage(StructureErrorCode.invalidFolderReference)
+class StructureFolderIdReferenceFailure extends DomainFailure {
+  StructureFolderIdReferenceFailure({super.details}) : super(
+    code: StructureErrorCode.invalidFolderIdReference,
+    message: StructureErrorMessages.getMessage(StructureErrorCode.invalidFolderIdReference)
   );
 }
 
-class StructurePageReferenceFailure extends DomainFailure {
-  StructurePageReferenceFailure({super.details}) : super(
-    code: StructureErrorCode.invalidPageReference,
-    message: StructureErrorMessages.getMessage(StructureErrorCode.invalidPageReference)
+class StructurePageIdReferenceFailure extends DomainFailure {
+  StructurePageIdReferenceFailure({super.details}) : super(
+    code: StructureErrorCode.invalidPageIdReference,
+    message: StructureErrorMessages.getMessage(StructureErrorCode.invalidPageIdReference)
   );
 }
 
 
 
 // ----- Errores de Estructura ----- //
-class StructureMissingContentReferenceFailure extends DomainFailure {
-  StructureMissingContentReferenceFailure({super.details}) : super(
-    code: StructureErrorCode.missingContentReference,
-    message: StructureErrorMessages.getMessage(StructureErrorCode.missingContentReference)
+class StructureInconsistentContentReferenceFailure extends DomainFailure {
+  StructureInconsistentContentReferenceFailure({super.details}) : super(
+    code: StructureErrorCode.inconsistentContentReference,
+    message: StructureErrorMessages.getMessage(StructureErrorCode.inconsistentContentReference)
   );
 }
 

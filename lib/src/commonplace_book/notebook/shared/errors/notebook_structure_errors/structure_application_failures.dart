@@ -6,15 +6,15 @@ import 'package:commonplace_book/src/shared/core/failures.dart';
 
 class StructureNotebookNotFoundFailure extends ApplicationFailure {
   StructureNotebookNotFoundFailure({super.details}) : super(
-    code: StructureErrorCode.notebookNotFound,
-    message: StructureErrorMessages.getMessage(StructureErrorCode.notebookNotFound)
+    code: StructureErrorCode.notebookIdNotFound,
+    message: StructureErrorMessages.getMessage(StructureErrorCode.notebookIdNotFound)
   );
 }
 
-class StructureAlreadyExistsFailure extends ApplicationFailure {
-  StructureAlreadyExistsFailure({super.details}) : super(
-    code: StructureErrorCode.structureAlreadyExists,
-    message: StructureErrorMessages.getMessage(StructureErrorCode.structureAlreadyExists)
+class StructureNotFoundFailure extends ApplicationFailure {
+  StructureNotFoundFailure({super.details}) : super(
+    code: StructureErrorCode.structureIdNotFound,
+    message: StructureErrorMessages.getMessage(StructureErrorCode.structureIdNotFound)
   );
 }
 
@@ -32,9 +32,16 @@ class StructureCircularReferenceFailure extends ApplicationFailure {
   );
 }
 
-class StructureNodeAlreadyExistsFailure extends ApplicationFailure {
-  StructureNodeAlreadyExistsFailure({super.details}) : super(
-    code: StructureErrorCode.nodeAlreadyExists,
-    message: StructureErrorMessages.getMessage(StructureErrorCode.nodeAlreadyExists)
+class StructureReorderFailure extends ApplicationFailure {
+  StructureReorderFailure({super.details}) : super(
+    code: StructureErrorCode.structureReorderFailed,
+    message: StructureErrorMessages.getMessage(StructureErrorCode.structureReorderFailed),
+  );
+}
+
+class StructureMoveFailure extends ApplicationFailure {
+  StructureMoveFailure({super.details}) : super(
+    code: StructureErrorCode.structureMovedFailed,
+    message: StructureErrorMessages.getMessage(StructureErrorCode.structureMovedFailed),
   );
 }
