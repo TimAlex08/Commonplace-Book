@@ -10,7 +10,7 @@ import 'package:commonplace_book/src/shared/core/result.dart';
 
 
 
-enum StructureElementType {folder, page}
+enum StructureItemType {folder, page}
 
 /// StructureDepth: Objeto de valor que valida la profundidad de un elemento en la estructura del libreta
 /// - Valida que no sea nulo ni menor a 0
@@ -25,7 +25,7 @@ class StructureDepth {
     return _validate(
       depth: depth,
       max: maxFolderDepth,
-      label: 'Folder',
+      type: StructureItemType.folder
     );
   }
 
@@ -33,16 +33,17 @@ class StructureDepth {
     return _validate(
       depth: depth,
       max: maxPageDepth,
-      label: 'Page',
+      type: StructureItemType.page
     );
   }
 
   static Result<StructureDepth, List<DomainFailure>> _validate({
     required int? depth,
     required int max,
-    required String label,
+    required StructureItemType type
   }) {
     final failures = <DomainFailure>[];
+    final label = type == StructureItemType.folder ? 'Folder' : 'Page';
 
     if (depth == null) {
       failures.add(StructureInvalidDepthFailure(details: 'Depth cannot be null'));

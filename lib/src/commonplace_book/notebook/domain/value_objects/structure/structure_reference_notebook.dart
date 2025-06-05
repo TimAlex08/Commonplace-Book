@@ -18,7 +18,7 @@ class StructureNotebookReference {
     
     // Valida que el ID no sea nulo
     if(id == null) {
-      failures.add(StructureNotebookReferenceFailure(
+      failures.add(StructureNotebookIdReferenceFailure(
         details: 'Notebook ID reference cannot be null'
       ));
       return Result.failure(failures);
@@ -28,7 +28,7 @@ class StructureNotebookReference {
     final trimmedId = id.trim();
     
     if(trimmedId.isEmpty) {
-      failures.add(StructureNotebookReferenceFailure(
+      failures.add(StructureNotebookIdReferenceFailure(
         details: 'Notebook ID reference cannot be empty'
       ));
       return Result.failure(failures);

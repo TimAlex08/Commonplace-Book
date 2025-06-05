@@ -38,7 +38,7 @@ class StructureElementReference {
     
     // Caso 1: Ambos IDs son nulos
     if(folderId == null && pageId == null) {
-      failures.add(StructureMissingContentReferenceFailure(
+      failures.add(StructureInconsistentContentReferenceFailure(
         details: 'Either folderId or pageId must be provided, but both are null.'
       ));
       return Result.failure(failures);
@@ -46,7 +46,7 @@ class StructureElementReference {
     
     // Caso 2: Ambos IDs están presentes
     if(folderId != null && pageId != null) {
-      failures.add(StructureMissingContentReferenceFailure(
+      failures.add(StructureInconsistentContentReferenceFailure(
         details: 'Only one of folderId or pageId must be provided, but both are presente.'
       ));
       return Result.failure(failures);
@@ -54,7 +54,7 @@ class StructureElementReference {
     
     // Caso 3: folderId presente pero vacío - error específico
     if (folderId != null && folderId.trim().isEmpty) {
-      failures.add(StructureFolderReferenceFailure(
+      failures.add(StructureFolderIdReferenceFailure(
         details: 'FolderId cannot be empty.'
       ));
       return Result.failure(failures);
@@ -62,7 +62,7 @@ class StructureElementReference {
     
     // Caso 4: pageId presente pero vacío - error específico
     if (pageId != null && pageId.trim().isEmpty) {
-      failures.add(StructurePageReferenceFailure(
+      failures.add(StructurePageIdReferenceFailure(
         details: 'PageId cannot be empty.'
       ));
       return Result.failure(failures);
