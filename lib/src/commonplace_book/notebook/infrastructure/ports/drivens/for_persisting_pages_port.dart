@@ -5,7 +5,7 @@ import 'package:commonplace_book/src/shared/core/result.dart';
 // Domain
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/page.dart';
 
-// Infrasrtucture
+// Infrastructure
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/page_dto.dart';
 
 
