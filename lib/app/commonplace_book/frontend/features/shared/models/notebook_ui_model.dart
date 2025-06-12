@@ -1,15 +1,16 @@
+// Infrastructure
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
-// import 'package:intl/intl.dart';
+
 
 
 /// NotebookUiModel: Modelo que representa un cuaderno en la interfaz de usuario.
 class NotebookUiModel {
     const NotebookUiModel({
-             this.id,
+    this.id,
     required this.name,
     required this.description,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
     required this.color,
     required this.coverImagePath,
     required this.backCoverImagePath,

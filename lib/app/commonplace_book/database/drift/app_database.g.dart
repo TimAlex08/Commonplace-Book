@@ -603,17 +603,13 @@ class $NotebookStructureItemsTable extends NotebookStructureItems
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: 'REFERENCES notebook_content(id) ON DELETE CASCADE');
-  static const VerificationMeta _positionMeta =
-      const VerificationMeta('position');
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedColumn<int> position = GeneratedColumn<int>(
-      'position', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _depthMeta = const VerificationMeta('depth');
-  @override
-  late final GeneratedColumn<int> depth = GeneratedColumn<int>(
-      'depth', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'CHECK (type IN (\'folder\', \'page\'))');
   static const VerificationMeta _folderIdMeta =
       const VerificationMeta('folderId');
   @override
@@ -629,9 +625,20 @@ class $NotebookStructureItemsTable extends NotebookStructureItems
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: 'REFERENCES notebook_content(id) ON DELETE CASCADE');
+  static const VerificationMeta _positionMeta =
+      const VerificationMeta('position');
+  @override
+  late final GeneratedColumn<int> position = GeneratedColumn<int>(
+      'position', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _depthMeta = const VerificationMeta('depth');
+  @override
+  late final GeneratedColumn<int> depth = GeneratedColumn<int>(
+      'depth', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, notebookId, parentId, position, depth, folderId, pageId];
+      [id, notebookId, parentId, type, folderId, pageId, position, depth];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -660,6 +667,20 @@ class $NotebookStructureItemsTable extends NotebookStructureItems
       context.handle(_parentIdMeta,
           parentId.isAcceptableOrUnknown(data['parent_id']!, _parentIdMeta));
     }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('folder_id')) {
+      context.handle(_folderIdMeta,
+          folderId.isAcceptableOrUnknown(data['folder_id']!, _folderIdMeta));
+    }
+    if (data.containsKey('page_id')) {
+      context.handle(_pageIdMeta,
+          pageId.isAcceptableOrUnknown(data['page_id']!, _pageIdMeta));
+    }
     if (data.containsKey('position')) {
       context.handle(_positionMeta,
           position.isAcceptableOrUnknown(data['position']!, _positionMeta));
@@ -671,14 +692,6 @@ class $NotebookStructureItemsTable extends NotebookStructureItems
           _depthMeta, depth.isAcceptableOrUnknown(data['depth']!, _depthMeta));
     } else if (isInserting) {
       context.missing(_depthMeta);
-    }
-    if (data.containsKey('folder_id')) {
-      context.handle(_folderIdMeta,
-          folderId.isAcceptableOrUnknown(data['folder_id']!, _folderIdMeta));
-    }
-    if (data.containsKey('page_id')) {
-      context.handle(_pageIdMeta,
-          pageId.isAcceptableOrUnknown(data['page_id']!, _pageIdMeta));
     }
     return context;
   }
@@ -695,14 +708,16 @@ class $NotebookStructureItemsTable extends NotebookStructureItems
           .read(DriftSqlType.string, data['${effectivePrefix}notebook_id'])!,
       parentId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}parent_id']),
-      position: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}position'])!,
-      depth: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}depth'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
       folderId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}folder_id']),
       pageId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}page_id']),
+      position: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}position'])!,
+      depth: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}depth'])!,
     );
   }
 
@@ -717,18 +732,20 @@ class NotebookStructureItem extends DataClass
   final String id;
   final String notebookId;
   final String? parentId;
-  final int position;
-  final int depth;
+  final String type;
   final String? folderId;
   final String? pageId;
+  final int position;
+  final int depth;
   const NotebookStructureItem(
       {required this.id,
       required this.notebookId,
       this.parentId,
-      required this.position,
-      required this.depth,
+      required this.type,
       this.folderId,
-      this.pageId});
+      this.pageId,
+      required this.position,
+      required this.depth});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -737,14 +754,15 @@ class NotebookStructureItem extends DataClass
     if (!nullToAbsent || parentId != null) {
       map['parent_id'] = Variable<String>(parentId);
     }
-    map['position'] = Variable<int>(position);
-    map['depth'] = Variable<int>(depth);
+    map['type'] = Variable<String>(type);
     if (!nullToAbsent || folderId != null) {
       map['folder_id'] = Variable<String>(folderId);
     }
     if (!nullToAbsent || pageId != null) {
       map['page_id'] = Variable<String>(pageId);
     }
+    map['position'] = Variable<int>(position);
+    map['depth'] = Variable<int>(depth);
     return map;
   }
 
@@ -755,13 +773,14 @@ class NotebookStructureItem extends DataClass
       parentId: parentId == null && nullToAbsent
           ? const Value.absent()
           : Value(parentId),
-      position: Value(position),
-      depth: Value(depth),
+      type: Value(type),
       folderId: folderId == null && nullToAbsent
           ? const Value.absent()
           : Value(folderId),
       pageId:
           pageId == null && nullToAbsent ? const Value.absent() : Value(pageId),
+      position: Value(position),
+      depth: Value(depth),
     );
   }
 
@@ -772,10 +791,11 @@ class NotebookStructureItem extends DataClass
       id: serializer.fromJson<String>(json['id']),
       notebookId: serializer.fromJson<String>(json['notebookId']),
       parentId: serializer.fromJson<String?>(json['parentId']),
-      position: serializer.fromJson<int>(json['position']),
-      depth: serializer.fromJson<int>(json['depth']),
+      type: serializer.fromJson<String>(json['type']),
       folderId: serializer.fromJson<String?>(json['folderId']),
       pageId: serializer.fromJson<String?>(json['pageId']),
+      position: serializer.fromJson<int>(json['position']),
+      depth: serializer.fromJson<int>(json['depth']),
     );
   }
   @override
@@ -785,10 +805,11 @@ class NotebookStructureItem extends DataClass
       'id': serializer.toJson<String>(id),
       'notebookId': serializer.toJson<String>(notebookId),
       'parentId': serializer.toJson<String?>(parentId),
-      'position': serializer.toJson<int>(position),
-      'depth': serializer.toJson<int>(depth),
+      'type': serializer.toJson<String>(type),
       'folderId': serializer.toJson<String?>(folderId),
       'pageId': serializer.toJson<String?>(pageId),
+      'position': serializer.toJson<int>(position),
+      'depth': serializer.toJson<int>(depth),
     };
   }
 
@@ -796,18 +817,20 @@ class NotebookStructureItem extends DataClass
           {String? id,
           String? notebookId,
           Value<String?> parentId = const Value.absent(),
-          int? position,
-          int? depth,
+          String? type,
           Value<String?> folderId = const Value.absent(),
-          Value<String?> pageId = const Value.absent()}) =>
+          Value<String?> pageId = const Value.absent(),
+          int? position,
+          int? depth}) =>
       NotebookStructureItem(
         id: id ?? this.id,
         notebookId: notebookId ?? this.notebookId,
         parentId: parentId.present ? parentId.value : this.parentId,
-        position: position ?? this.position,
-        depth: depth ?? this.depth,
+        type: type ?? this.type,
         folderId: folderId.present ? folderId.value : this.folderId,
         pageId: pageId.present ? pageId.value : this.pageId,
+        position: position ?? this.position,
+        depth: depth ?? this.depth,
       );
   NotebookStructureItem copyWithCompanion(
       NotebookStructureItemsCompanion data) {
@@ -816,10 +839,11 @@ class NotebookStructureItem extends DataClass
       notebookId:
           data.notebookId.present ? data.notebookId.value : this.notebookId,
       parentId: data.parentId.present ? data.parentId.value : this.parentId,
-      position: data.position.present ? data.position.value : this.position,
-      depth: data.depth.present ? data.depth.value : this.depth,
+      type: data.type.present ? data.type.value : this.type,
       folderId: data.folderId.present ? data.folderId.value : this.folderId,
       pageId: data.pageId.present ? data.pageId.value : this.pageId,
+      position: data.position.present ? data.position.value : this.position,
+      depth: data.depth.present ? data.depth.value : this.depth,
     );
   }
 
@@ -829,17 +853,18 @@ class NotebookStructureItem extends DataClass
           ..write('id: $id, ')
           ..write('notebookId: $notebookId, ')
           ..write('parentId: $parentId, ')
-          ..write('position: $position, ')
-          ..write('depth: $depth, ')
+          ..write('type: $type, ')
           ..write('folderId: $folderId, ')
-          ..write('pageId: $pageId')
+          ..write('pageId: $pageId, ')
+          ..write('position: $position, ')
+          ..write('depth: $depth')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, notebookId, parentId, position, depth, folderId, pageId);
+  int get hashCode => Object.hash(
+      id, notebookId, parentId, type, folderId, pageId, position, depth);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -847,10 +872,11 @@ class NotebookStructureItem extends DataClass
           other.id == this.id &&
           other.notebookId == this.notebookId &&
           other.parentId == this.parentId &&
-          other.position == this.position &&
-          other.depth == this.depth &&
+          other.type == this.type &&
           other.folderId == this.folderId &&
-          other.pageId == this.pageId);
+          other.pageId == this.pageId &&
+          other.position == this.position &&
+          other.depth == this.depth);
 }
 
 class NotebookStructureItemsCompanion
@@ -858,52 +884,58 @@ class NotebookStructureItemsCompanion
   final Value<String> id;
   final Value<String> notebookId;
   final Value<String?> parentId;
-  final Value<int> position;
-  final Value<int> depth;
+  final Value<String> type;
   final Value<String?> folderId;
   final Value<String?> pageId;
+  final Value<int> position;
+  final Value<int> depth;
   final Value<int> rowid;
   const NotebookStructureItemsCompanion({
     this.id = const Value.absent(),
     this.notebookId = const Value.absent(),
     this.parentId = const Value.absent(),
-    this.position = const Value.absent(),
-    this.depth = const Value.absent(),
+    this.type = const Value.absent(),
     this.folderId = const Value.absent(),
     this.pageId = const Value.absent(),
+    this.position = const Value.absent(),
+    this.depth = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   NotebookStructureItemsCompanion.insert({
     required String id,
     required String notebookId,
     this.parentId = const Value.absent(),
-    required int position,
-    required int depth,
+    required String type,
     this.folderId = const Value.absent(),
     this.pageId = const Value.absent(),
+    required int position,
+    required int depth,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         notebookId = Value(notebookId),
+        type = Value(type),
         position = Value(position),
         depth = Value(depth);
   static Insertable<NotebookStructureItem> custom({
     Expression<String>? id,
     Expression<String>? notebookId,
     Expression<String>? parentId,
-    Expression<int>? position,
-    Expression<int>? depth,
+    Expression<String>? type,
     Expression<String>? folderId,
     Expression<String>? pageId,
+    Expression<int>? position,
+    Expression<int>? depth,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (notebookId != null) 'notebook_id': notebookId,
       if (parentId != null) 'parent_id': parentId,
-      if (position != null) 'position': position,
-      if (depth != null) 'depth': depth,
+      if (type != null) 'type': type,
       if (folderId != null) 'folder_id': folderId,
       if (pageId != null) 'page_id': pageId,
+      if (position != null) 'position': position,
+      if (depth != null) 'depth': depth,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -912,19 +944,21 @@ class NotebookStructureItemsCompanion
       {Value<String>? id,
       Value<String>? notebookId,
       Value<String?>? parentId,
-      Value<int>? position,
-      Value<int>? depth,
+      Value<String>? type,
       Value<String?>? folderId,
       Value<String?>? pageId,
+      Value<int>? position,
+      Value<int>? depth,
       Value<int>? rowid}) {
     return NotebookStructureItemsCompanion(
       id: id ?? this.id,
       notebookId: notebookId ?? this.notebookId,
       parentId: parentId ?? this.parentId,
-      position: position ?? this.position,
-      depth: depth ?? this.depth,
+      type: type ?? this.type,
       folderId: folderId ?? this.folderId,
       pageId: pageId ?? this.pageId,
+      position: position ?? this.position,
+      depth: depth ?? this.depth,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -941,17 +975,20 @@ class NotebookStructureItemsCompanion
     if (parentId.present) {
       map['parent_id'] = Variable<String>(parentId.value);
     }
-    if (position.present) {
-      map['position'] = Variable<int>(position.value);
-    }
-    if (depth.present) {
-      map['depth'] = Variable<int>(depth.value);
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
     }
     if (folderId.present) {
       map['folder_id'] = Variable<String>(folderId.value);
     }
     if (pageId.present) {
       map['page_id'] = Variable<String>(pageId.value);
+    }
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
+    }
+    if (depth.present) {
+      map['depth'] = Variable<int>(depth.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -965,10 +1002,11 @@ class NotebookStructureItemsCompanion
           ..write('id: $id, ')
           ..write('notebookId: $notebookId, ')
           ..write('parentId: $parentId, ')
-          ..write('position: $position, ')
-          ..write('depth: $depth, ')
+          ..write('type: $type, ')
           ..write('folderId: $folderId, ')
           ..write('pageId: $pageId, ')
+          ..write('position: $position, ')
+          ..write('depth: $depth, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1720,10 +1758,11 @@ typedef $$NotebookStructureItemsTableCreateCompanionBuilder
   required String id,
   required String notebookId,
   Value<String?> parentId,
-  required int position,
-  required int depth,
+  required String type,
   Value<String?> folderId,
   Value<String?> pageId,
+  required int position,
+  required int depth,
   Value<int> rowid,
 });
 typedef $$NotebookStructureItemsTableUpdateCompanionBuilder
@@ -1731,10 +1770,11 @@ typedef $$NotebookStructureItemsTableUpdateCompanionBuilder
   Value<String> id,
   Value<String> notebookId,
   Value<String?> parentId,
-  Value<int> position,
-  Value<int> depth,
+  Value<String> type,
   Value<String?> folderId,
   Value<String?> pageId,
+  Value<int> position,
+  Value<int> depth,
   Value<int> rowid,
 });
 
@@ -1756,17 +1796,20 @@ class $$NotebookStructureItemsTableFilterComposer
   ColumnFilters<String> get parentId => $composableBuilder(
       column: $table.parentId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get position => $composableBuilder(
-      column: $table.position, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<int> get depth => $composableBuilder(
-      column: $table.depth, builder: (column) => ColumnFilters(column));
+  ColumnFilters<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get folderId => $composableBuilder(
       column: $table.folderId, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get pageId => $composableBuilder(
       column: $table.pageId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get position => $composableBuilder(
+      column: $table.position, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get depth => $composableBuilder(
+      column: $table.depth, builder: (column) => ColumnFilters(column));
 }
 
 class $$NotebookStructureItemsTableOrderingComposer
@@ -1787,17 +1830,20 @@ class $$NotebookStructureItemsTableOrderingComposer
   ColumnOrderings<String> get parentId => $composableBuilder(
       column: $table.parentId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get position => $composableBuilder(
-      column: $table.position, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<int> get depth => $composableBuilder(
-      column: $table.depth, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get folderId => $composableBuilder(
       column: $table.folderId, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get pageId => $composableBuilder(
       column: $table.pageId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get position => $composableBuilder(
+      column: $table.position, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get depth => $composableBuilder(
+      column: $table.depth, builder: (column) => ColumnOrderings(column));
 }
 
 class $$NotebookStructureItemsTableAnnotationComposer
@@ -1818,17 +1864,20 @@ class $$NotebookStructureItemsTableAnnotationComposer
   GeneratedColumn<String> get parentId =>
       $composableBuilder(column: $table.parentId, builder: (column) => column);
 
-  GeneratedColumn<int> get position =>
-      $composableBuilder(column: $table.position, builder: (column) => column);
-
-  GeneratedColumn<int> get depth =>
-      $composableBuilder(column: $table.depth, builder: (column) => column);
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
 
   GeneratedColumn<String> get folderId =>
       $composableBuilder(column: $table.folderId, builder: (column) => column);
 
   GeneratedColumn<String> get pageId =>
       $composableBuilder(column: $table.pageId, builder: (column) => column);
+
+  GeneratedColumn<int> get position =>
+      $composableBuilder(column: $table.position, builder: (column) => column);
+
+  GeneratedColumn<int> get depth =>
+      $composableBuilder(column: $table.depth, builder: (column) => column);
 }
 
 class $$NotebookStructureItemsTableTableManager extends RootTableManager<
@@ -1865,40 +1914,44 @@ class $$NotebookStructureItemsTableTableManager extends RootTableManager<
             Value<String> id = const Value.absent(),
             Value<String> notebookId = const Value.absent(),
             Value<String?> parentId = const Value.absent(),
-            Value<int> position = const Value.absent(),
-            Value<int> depth = const Value.absent(),
+            Value<String> type = const Value.absent(),
             Value<String?> folderId = const Value.absent(),
             Value<String?> pageId = const Value.absent(),
+            Value<int> position = const Value.absent(),
+            Value<int> depth = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               NotebookStructureItemsCompanion(
             id: id,
             notebookId: notebookId,
             parentId: parentId,
-            position: position,
-            depth: depth,
+            type: type,
             folderId: folderId,
             pageId: pageId,
+            position: position,
+            depth: depth,
             rowid: rowid,
           ),
           createCompanionCallback: ({
             required String id,
             required String notebookId,
             Value<String?> parentId = const Value.absent(),
-            required int position,
-            required int depth,
+            required String type,
             Value<String?> folderId = const Value.absent(),
             Value<String?> pageId = const Value.absent(),
+            required int position,
+            required int depth,
             Value<int> rowid = const Value.absent(),
           }) =>
               NotebookStructureItemsCompanion.insert(
             id: id,
             notebookId: notebookId,
             parentId: parentId,
-            position: position,
-            depth: depth,
+            type: type,
             folderId: folderId,
             pageId: pageId,
+            position: position,
+            depth: depth,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0

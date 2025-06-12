@@ -1,13 +1,13 @@
 // External Imports
+import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:drift/drift.dart';
 
-// Database Imports
-import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
+// Domain
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/folder.dart';
 
 
 
-/// FolderDTO: Objecto de transferencia de datos (DTO) para la entidad Folder
+/// FolderDTO: Objecto de transferencia de datos (DTO) para la entidad Folder.
 class FolderDTO {
   const FolderDTO({
     this.id,
@@ -27,10 +27,10 @@ class FolderDTO {
 
 
 
-/// FolderDomainMapper: Clase de mapeo entre FolderDTO y las entidades del dominio
+/// FolderDomainMapper: Clase de mapeo entre FolderDTO y las entidades del dominio.
 /// 
 /// Responsable de la transformación bidireccional entre los objetos DTO 
-/// y los objetos del dominio (Folder y FolderParams)
+/// y los objetos del dominio (Folder y FolderParams).
 class FolderDomainMapper {
   static FolderParams toParams(FolderDTO dto) {
     return FolderParams(
@@ -53,12 +53,12 @@ class FolderDomainMapper {
 /// 
 /// Responsable de la transformación bidireccional entre los objetos DTO y los objetos de
 /// la clase de la base de datos (FolderItemsCompanion y FolderItem).
-/// Incluye validaciones para asegurar que los datos son apropiados para la persistencia
+/// Incluye validaciones para asegurar que los datos son apropiados para la persistencia.
 class FolderDriftMapper {
   static FolderItemsCompanion toCompanion(FolderDTO dto) {
-    // Verificar que todos los campos necesarios estén presentes
+    // Verificar que todos los campos necesarios estén presentes.
     if(dto.id == null) {
-      throw ArgumentError('ID must be present to persist in the database');
+      throw ArgumentError('ID must be present to persist in the database.');
     }
     
     return FolderItemsCompanion(

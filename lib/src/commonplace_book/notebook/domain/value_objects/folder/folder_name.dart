@@ -36,7 +36,7 @@ class FolderName {
       failures.add(FolderInvalidNameFailure(
         details: 'Name cannot be empty.',
       ));
-      
+      return Result.failure(failures);
     }
     
     // Valida que el nombre no exceda la longitud máxima.

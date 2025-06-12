@@ -1,10 +1,14 @@
-
-
-// Infrastructure
+// External Imports
 import 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/models.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_notebooks_port.dart';
+
+// Failures / Result
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
+
+// Infrastructure
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_notebooks_port.dart';
+
+
 
 class NotebookManagerAdapter {
   const NotebookManagerAdapter(this._port);
@@ -18,7 +22,7 @@ class NotebookManagerAdapter {
     
     return result.fold(
       (row) => Result.success(row),
-      (failures) => Result.failure(failures) 
+      (failures) => Result.failure(failures)
     );
   }
   

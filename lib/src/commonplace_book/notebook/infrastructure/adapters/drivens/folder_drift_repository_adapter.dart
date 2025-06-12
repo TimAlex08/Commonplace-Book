@@ -135,7 +135,7 @@ class _FolderDriftQueries implements FolderPersistenceQueries {
 
   @override
   /// GetFolderById: Obtiene un `Folder` por su ID.
-  Future<Result<FolderDTO?, Failure>> getFolderById(String id) async{
+  Future<Result<FolderDTO?, Failure>> getFolderById(String id) async {
     try {
       final query = _db.select(_db.folderItems)
         ..where((tbl) => tbl.id.equals(id));
