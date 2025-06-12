@@ -6,6 +6,7 @@ import 'package:commonplace_book/src/shared/core/notebook_constants.dart';
 class FolderErrorCode {
   // Prefijos para identificar la capa de error.
   static const String _domainPrefix = 'FLD_DOM';
+  static const String _applicationPrefix = 'FLD_APP';
   static const String _infrastructurePrefix = 'FLD_INF';
   
   // ----- Errores de Dominio ----- //
@@ -16,6 +17,9 @@ class FolderErrorCode {
   static const String invalidName = '${_domainPrefix}_002';   // Sirve para el nombre vacío, nulo o caracteres inválidos.
   static const String nameTooLong = '${_domainPrefix}_003';
   
+  
+  // ----- Errores de Aplicación ----- //
+  static const String folderNotFound = '${_applicationPrefix}_001';
   
   // ----- Errores de Infrastructura ----- //
   // Errores de conexión.
@@ -40,6 +44,10 @@ class FolderErrorMessages {
       FolderErrorCode.invalidId: 'The folder ID is invalid.',
       FolderErrorCode.invalidName: 'The folder name is invalid.',
       FolderErrorCode.nameTooLong: 'The folder name must have a maximum of ${NotebookConstants.maxFolderNameLength} characters',
+      
+      
+      // ----- Errores de Aplicación ----- //
+      FolderErrorCode.folderNotFound: 'The folder was not found in the database.',
       
       
       // ----- Errores de Infrastructura ----- //
