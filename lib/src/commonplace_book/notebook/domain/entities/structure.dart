@@ -1,17 +1,17 @@
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Value Objects
+// Value Objects.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/value_objects/structure/structure_vo.dart';
 
 
 
-/// NotebookStructure: Representa la estructura de una libreta. 
+/// Structure: Representa la estructura de una libreta. 
 /// La estructura puede contener carpetas y páginas, cada elemento contiene:
-/// - NotebookStructureId: ID único para cada elemento de la estructura.
-/// - ParentID: ID del elemento padre (puede ser nulo si es la raíz).
+/// - Id: ID único para cada elemento de la estructura.
 /// - NotebookID: Referencia a una única libreta.
+/// - ParentID: ID del elemento padre (puede ser nulo si es la raíz).
 /// - ElementID: ID del elemento (puede ser una carpeta o una página).
 /// - Position relativa: Posición del elemento dentro de la libreta.
 /// - Depth: Profundidad del elemento en la estructura.
@@ -38,7 +38,7 @@ class Structure {
   static Result<Structure, List<DomainFailure>> createForFolder(StructureParams params) {
     final failures = <DomainFailure>[];
     
-    // Validaciones específicas para folder.
+    // Validaciones específicas para la carpeta.
     final structureIdResult = StructureId.validate(params.structureId);
     final notebookIdResult = StructureNotebookReference.validate(params.notebookId);
     final parentIdResult = StructureParentId.validate(params.parentId);
@@ -67,11 +67,13 @@ class Structure {
     ));
   }
   
+  
+  
   /// CreateForPage: Crea una estructura para una página.
   static Result<Structure, List<DomainFailure>> createForPage(StructureParams params) {
     final failures = <DomainFailure>[];
     
-    // Validaciones específicas para page
+    // Validaciones específicas para la página.
     final structureIdResult = StructureId.validate(params.structureId);
     final notebookIdResult = StructureNotebookReference.validate(params.notebookId);
     final parentIdResult = StructureParentId.validate(params.parentId);
@@ -80,7 +82,7 @@ class Structure {
     final positionResult = StructurePosition.validate(params.position);
     final depthResult = StructureDepth.validatePage(params.depth);
 
-    // Acumular errores
+    // Acumular errores.
     if (structureIdResult.isFailure) failures.addAll(structureIdResult.getFailure());
     if (notebookIdResult.isFailure) failures.addAll(notebookIdResult.getFailure());
     if (parentIdResult.isFailure) failures.addAll(parentIdResult.getFailure());

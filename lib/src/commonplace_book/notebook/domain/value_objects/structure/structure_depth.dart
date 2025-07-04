@@ -1,19 +1,17 @@
-// Constants
+// Constants.
 import 'package:commonplace_book/src/shared/core/notebook_constants.dart';
 
-// Failures
-import 'package:commonplace_book/src/shared/core/failures.dart';
-
-// Result
+// Failures / Result.
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_structure_errors/structure_domain_failures.dart';
+import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
 
 
 enum StructureItemType {folder, page}
 
-/// StructureDepth: Objeto de valor que valida la profundidad de un elemento en la estructura del libreta
-/// - Valida que no sea nulo ni menor a 0
+/// StructureDepth: Objeto de valor que valida la profundidad de un elemento en la estructura del libreta.
+/// - Valida que no sea nulo ni menor a 0.
 class StructureDepth {
   const StructureDepth._(this.value);
   final int value;
@@ -46,13 +44,13 @@ class StructureDepth {
     final label = type == StructureItemType.folder ? 'Folder' : 'Page';
 
     if (depth == null) {
-      failures.add(StructureInvalidDepthFailure(details: 'Depth cannot be null'));
+      failures.add(StructureInvalidDepthFailure(details: 'Depth cannot be null.'));
     } else {
       if (depth < 0) {
-        failures.add(StructureInvalidDepthFailure(details: '$label depth must be >= 0'));
+        failures.add(StructureInvalidDepthFailure(details: '$label depth must be >= 0.'));
       }
       if (depth > max) {
-        failures.add(StructureInvalidDepthFailure(details: '$label depth must be <= $max'));
+        failures.add(StructureInvalidDepthFailure(details: '$label depth must be <= $max.'));
       }
     }
 
