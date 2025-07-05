@@ -1,7 +1,7 @@
-// Constants
+// Constants.
 import 'package:commonplace_book/src/shared/core/notebook_constants.dart';
 
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
@@ -29,7 +29,7 @@ class NotebookName {
     // Corta los espacios en blanco al principio y al final de la cadena de entrada.
     final trimmedName = name.trim();
     
-    // Valida que el nombre no esté vacío
+    // Valida que el nombre no esté vacío.
     if (trimmedName.isEmpty) {
       failures.add(NotebookInvalidNameFailure(
         details: 'Name cannot be empty.',
@@ -37,7 +37,7 @@ class NotebookName {
       
     }
     
-    // Valida que el nombre no exceda la longitud máxima
+    // Valida que el nombre no exceda la longitud máxima.
     if(trimmedName.length > NotebookConstants.maxNotebookNameLength) {
       failures.add(NotebookNameTooLongFailure(
         details: 'Actual Length: ${trimmedName.length}, Max Length: ${NotebookConstants.maxNotebookNameLength}.',

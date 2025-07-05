@@ -1,8 +1,8 @@
-// External Imports
+// External Imports.
 import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:drift/drift.dart';
 
-// Domain
+// Domain.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
 
 
@@ -66,8 +66,7 @@ class NotebookDTO {
 
 
 
-/// NotebookDomainMapper: Clase de mapeo entre NotebookDTO y las entidades del dominio
-/// 
+/// NotebookDomainMapper: Clase de mapeo entre NotebookDTO y las entidades del dominio.
 /// Responsable de la transformación bidireccional entre los objetos DTO 
 /// y los objetos del dominio (Notebook y NotebookParams).
 class NotebookDomainMapper {
@@ -107,10 +106,9 @@ class NotebookDomainMapper {
 
 
 /// NotebookDriftMapper: Clase de mapeo entre NotebookDTO y las entidades de la capa de persistencia Drift.
-/// 
 /// Responsable de la transformación bidireccional entre los objetos DTO y los objetos de
 /// la clase de la base de datos (NotebookItemsCompanion y NotebookItem).
-/// Incluye validaciones para asegurar que los datos son apropiados para la persistencia
+/// Incluye validaciones para asegurar que los datos son apropiados para la persistencia.
 class NotebookDriftMapper {
   static NotebookItemsCompanion toCompanion(NotebookDTO dto) {
     

@@ -1,7 +1,7 @@
-// Constants
+// Constants.
 import 'package:commonplace_book/src/shared/core/notebook_constants.dart';
 
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
@@ -12,7 +12,6 @@ import 'package:commonplace_book/src/shared/core/result.dart';
 /// - Valida que la descripción no exceda la longitud máxima permitida.
 class NotebookDescription {
   const NotebookDescription._(this.value);
-  
   final String value;  
   
   /// Método que valida `NotebookDescription`.

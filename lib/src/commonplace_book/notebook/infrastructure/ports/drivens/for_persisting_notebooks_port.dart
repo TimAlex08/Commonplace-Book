@@ -1,11 +1,11 @@
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Domain
+// Domain.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
 
-// Infrastructure
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
 
 
@@ -23,7 +23,7 @@ abstract class NotebookPersistenceCommands {
 }
 
 abstract class NotebookPersistenceQueries {
-  Future<Result<List<NotebookDTO>?, Failure>> getAllNotebooks();
+  Future<Result<List<NotebookDTO>, Failure>> getAllNotebooks();
   Future<Result<NotebookDTO?, Failure>> getNotebookById(String notebookId);
 }
 

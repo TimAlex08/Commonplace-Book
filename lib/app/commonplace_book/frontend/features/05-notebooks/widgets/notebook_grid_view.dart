@@ -24,6 +24,7 @@ class NotebookGridView extends StatelessWidget {
     final screenWidthSize = MediaQuery.of(context).size.width;
     
     return PieCanvas(
+      
       theme: PieTheme(
         buttonTheme: PieButtonTheme(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer, 

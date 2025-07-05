@@ -1,17 +1,17 @@
-// External Imports
+// External Imports.
 import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:drift/native.dart';
 
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_infrastructure_failures.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_sqlite_failure_mapper.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Domain
+// Domain.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/notebook.dart';
 
-// Infrastructure
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persisting_notebooks_port.dart';
 
@@ -116,7 +116,7 @@ class _NotebookDriftQueries implements NotebookPersistenceQueries {
   
   @override
   /// GetAllNotebooks: Obtiene todos los `Notebook` de la base de datos. Puede devolver una lista vacía si no hay `Notebook`.
-  Future<Result<List<NotebookDTO>?, Failure>> getAllNotebooks() async {
+  Future<Result<List<NotebookDTO>, Failure>> getAllNotebooks() async {
     try {
       final query = _db.select(_db.notebookItems);
       final List<NotebookItem> records = await query.get();

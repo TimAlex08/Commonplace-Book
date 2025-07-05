@@ -117,7 +117,7 @@ class _NotebookQueriesHandler implements NotebookManagementQueries {
     final result = await _repository.queries.getAllNotebooks();
     
     return result.fold(
-      (notebooks) => Result.success(notebooks!),
+      (notebooks) => Result.success(notebooks),
       (failures) => Result.failure([failures]),
     );
   }

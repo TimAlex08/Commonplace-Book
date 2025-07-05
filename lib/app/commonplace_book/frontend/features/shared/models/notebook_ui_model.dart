@@ -1,4 +1,4 @@
-// Infrastructure
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/notebook_dto.dart';
 
 
@@ -95,7 +95,7 @@ class NotebookUiModel {
     );
   }
   
-  /// Crea un NotebookUiModel a partir de un NotebookDTO
+  /// Crea un NotebookUiModel a partir de un NotebookDTO.
   factory NotebookUiModel.fromDto(NotebookDTO dto) {
     return NotebookUiModel(
       id: dto.id,
