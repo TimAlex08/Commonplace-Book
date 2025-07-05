@@ -1,3 +1,6 @@
+// Folder Ui Model.
+export 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/folder_ui_model.dart';
+
 // Notebook Ui Model.
 export 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/notebook_ui_model.dart';
 
@@ -6,9 +9,6 @@ export 'package:commonplace_book/app/commonplace_book/frontend/features/shared/m
 
 // Structure Form Model.
 export 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/structure_form_model.dart';
-
-// Folder Ui Model.
-export 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/folder_ui_model.dart';
 
 // Page Ui Model.
 export 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/page_ui_model.dart';

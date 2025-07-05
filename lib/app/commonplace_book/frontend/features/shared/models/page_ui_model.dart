@@ -1,6 +1,7 @@
-
-
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/page_dto.dart';
+
+
 
 class PageUiModel {
   const PageUiModel({

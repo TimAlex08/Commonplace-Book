@@ -1,4 +1,4 @@
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/page_errors/page_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
