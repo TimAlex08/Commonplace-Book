@@ -6,7 +6,7 @@ import 'package:commonplace_book/app/commonplace_book/database/drift/app_databas
 import 'package:get_it/get_it.dart';
 
 // Aplication
-import 'package:commonplace_book/src/commonplace_book/notebook/application/notebook/notebook_use_cases.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/application/notebook/notebook_application_services.dart';
 
 // Infrastructure
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/drivers/notebook_manager_adapter.dart';

@@ -112,7 +112,7 @@ class StructureUiModel {
   /// Obtiene el nombre del elemento (carpeta o página).
   String? get displayName {
     if (type == 'folder' && folderData != null) {
-      return folderData!.name;
+      return folderData!.title;
     } else if (type == 'page' && pageData != null) {
       return pageData!.title;
     }
