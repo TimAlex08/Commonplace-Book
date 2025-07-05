@@ -1,16 +1,13 @@
-// Failures / Result
+// Failures / Result.
+import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/folder_errors/folder_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Domain
-import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/folder_errors/folder_domain_failures.dart';
 
 
-
-/// StructureId: Objeto de valor que valida que el ID de la carpeta sea correcto.
+/// FolderId: Objeto de valor que valida que el ID de la carpeta sea correcto.
 class FolderId {
   const FolderId._(this.value);
-  
   final String value;
   
   static Result<FolderId, List<DomainFailure>> validate(String? id) {

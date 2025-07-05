@@ -1,11 +1,11 @@
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Domain
+// Domain.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/folder.dart';
 
-// Infrastructure
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/folder_dto.dart';
 
 

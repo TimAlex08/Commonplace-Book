@@ -1,12 +1,10 @@
-// Constants
+// Constants.
 import 'package:commonplace_book/src/shared/core/notebook_constants.dart';
 
-// Failures / Result
+// Failures / Result.
+import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/folder_errors/folder_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
-
-// Domain
-import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/folder_errors/folder_domain_failures.dart';
 
 
 
@@ -14,7 +12,6 @@ import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/fol
 /// - Valida que el nombre no esté vacío, no exceda la longitud máxima y contenga solo caracteres permitidos.
 class FolderName {
   const FolderName._(this.value);
-  
   final String value;
   
   static Result<FolderName, List<DomainFailure>> validate(String? name) {

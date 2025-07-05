@@ -1,8 +1,8 @@
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Value Objects
+// Value Objects.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/value_objects/folder/folder_vo.dart';
 
 
@@ -22,7 +22,7 @@ class Folder {
     
     // ----- Validaciones de parámetros ----- //
     final idResult = FolderId.validate(params.id);
-    final nameResult = FolderName.validate(params.id);
+    final nameResult = FolderName.validate(params.name);
     
     // ----- Acumular errores si hay fallos en la validaciones ----- //
     if (idResult.isFailure) failures.addAll(idResult.getFailure());
