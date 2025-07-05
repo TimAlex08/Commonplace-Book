@@ -1,9 +1,9 @@
-// External Imports
+// External Imports.
 import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_structure_errors/structure_application_failures.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_structure_errors/structure_domain_failures.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_structure_errors/structure_infrastructure_failures.dart';
@@ -11,19 +11,22 @@ import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/not
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Domain
+// Domain.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/structure.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/folder.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/page.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/domain/value_objects/structure/structure_vo.dart';
 
-// Infrastructure
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persisting_structures_port.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/structure_dto.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/folder_dto.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/page_dto.dart';
 
 
+
+// Constantes.
+const folderType = 'folder';
+const pageType = 'page';
 
 class StructureDriftRepositoryAdapter implements ForPersistingStructuresPort {
   const StructureDriftRepositoryAdapter(this._db);
@@ -36,9 +39,8 @@ class StructureDriftRepositoryAdapter implements ForPersistingStructuresPort {
   StructurePersistenceQueries get queries => _StructureDriftQueries(_db);
   
   @override
-  StructurePersistenceObservers get observers => throw UnimplementedError();
+  StructurePersistenceObservers get observers => _StructureDriftObservers(_db);
 }
-
 
 
 
@@ -175,7 +177,7 @@ class _StructureDriftCommands implements StructurePersistenceCommands {
           // Crea consulta que solo selecciona columnas específicas (no todas).
           final countQuery = _db.selectOnly(_db.notebookStructureItems);
           
-          // Especificar qué columnas queremos
+          // Especificar qué columnas queremos.
           countQuery.addColumns([_db.notebookStructureItems.id.count()]);
           
           // Agrega condicion WHERE para filtrar por parentId, equalsNullable maneja tanto valores null como no-null.
@@ -217,7 +219,7 @@ class _StructureDriftCommands implements StructurePersistenceCommands {
           }
         } 
         
-        // OldPosition > NewPosition
+        // OldPosition > NewPosition.
         else {
           // Obtener elementos que necesitan actualización.
           final elementsToUpdate = await (_db.select(_db.notebookStructureItems)
@@ -276,18 +278,37 @@ class _StructureDriftQueries implements StructurePersistenceQueries {
     try {
       // 1.- Obtenemos variables principales.
       final structureTable = _db.notebookStructureItems;
+      final folderTable = _db.folderItems;
+      final pageTable = _db.pageItems;
       
       // 2.- Creamos el query select.
-      final selectQuery = _db.select(structureTable)
-        ..where((tbl) => tbl.notebookId.equals(notebookId))
+      final selectQuery = _db.select(structureTable).join([
+        leftOuterJoin(
+          folderTable,
+          folderTable.id.equalsExp(structureTable.folderId) &
+          structureTable.type.equals(folderType)
+        ),
+        leftOuterJoin(
+          pageTable, 
+          pageTable.id.equalsExp(structureTable.pageId) & 
+          structureTable.type.equals(pageType)
+        ),
+      ])
+        ..where(structureTable.notebookId.equals(notebookId))
         ..orderBy([
-          (tbl) => OrderingTerm(expression: tbl.depth),
-          (tbl) => OrderingTerm(expression: tbl.position),
+          OrderingTerm(expression: structureTable.depth),
+          OrderingTerm(expression: structureTable.position),
         ]);
         
       // 3.- Ejecutamos el query y convertimos a StructureDTO.
       final rows = await selectQuery.get();
-      final structureList = rows.map((row) => StructureDriftMapper.fromData(row)).toList();
+      final structureList = rows.map((row) {
+        final structure = row.readTable(structureTable);
+        final folder = row.readTableOrNull(folderTable);
+        final page = row.readTableOrNull(pageTable);
+        
+        return StructureDriftMapper.fromData(structure, folder, page);
+      }).toList();
       
       return Result.success(structureList);
     
@@ -306,15 +327,32 @@ class _StructureDriftQueries implements StructurePersistenceQueries {
     try {
       // 1.- Obtenemos variables principales.
       final structureTable = _db.notebookStructureItems;
-      
+      final folderTable = _db.folderItems;
+      final pageTable = _db.pageItems;
+    
       // 2.- Creamos el query select.
-      final query = _db.select(structureTable)
-        ..where((tbl) => tbl.id.equals(structureId));
+      final query = _db.select(structureTable).join([
+        leftOuterJoin(
+          folderTable, 
+          folderTable.id.equalsExp(structureTable.folderId) & 
+          structureTable.type.equals(folderType)
+        ),
+        leftOuterJoin(
+          pageTable, 
+          pageTable.id.equalsExp(structureTable.pageId) & 
+          structureTable.type.equals(pageType)
+        ),
+      ])
+      ..where(structureTable.type.equals(structureId));
       
       // 3.- Ejecutamos query y convertimos a StructureDTO (puede ser null).
       final row = await query.getSingleOrNull();
       final structureDTO = row != null
-        ? StructureDriftMapper.fromData(row)
+        ? StructureDriftMapper.fromData(
+            row.readTable(structureTable),
+            row.readTableOrNull(folderTable),
+            row.readTableOrNull(pageTable),
+        )
         : null;
         
       return Result.success(structureDTO);
@@ -469,25 +507,36 @@ class _StructureDriftQueries implements StructurePersistenceQueries {
     try {
       // 1.- Obtenemos variables principales.
       final structureTable = _db.notebookStructureItems;
+      final folderTable = _db.folderItems;
       
       // 2.- Creamos el query select.
-      final selectQuery = _db.select(structureTable);
+      final selectQuery = _db.select(structureTable).join([
+        leftOuterJoin(
+          folderTable,
+          folderTable.id.equalsExp(structureTable.folderId),
+        )
+      ]);
       
       // Filtro: Mismo NotebookId y solo elementos tipo "folder".
-      selectQuery.where((tbl) =>
-        tbl.notebookId.equals(notebookId) &
-        tbl.type.equals(StructureElementType.folderType.value)
+      selectQuery.where(
+        structureTable.notebookId.equals(notebookId) &
+        structureTable.type.equals(folderType)
       );
       
       // Criterio de Orden: Por profundidad y posición.
       selectQuery.orderBy([
-        (tbl) => OrderingTerm(expression: tbl.depth),
-        (tbl) => OrderingTerm(expression: tbl.position),
+        OrderingTerm(expression: structureTable.depth),
+        OrderingTerm(expression: structureTable.position),
       ]);
       
       // 3.- Ejecutamos el query y convertimos a StructureDTO.
       final rows = await selectQuery.get();
-      final folderList = rows.map((row) => StructureDriftMapper.fromData(row)).toList();
+      final folderList = rows.map((row) {
+        final structure = row.readTable(structureTable);
+        final folder = row.readTableOrNull(folderTable);
+        
+        return StructureDriftMapper.fromData(structure, folder, null);
+      }).toList();
       
       return Result.success(folderList);
     
@@ -505,25 +554,36 @@ class _StructureDriftQueries implements StructurePersistenceQueries {
     try {
       // 1.- Obtenemos variables principales.
       final structureTable = _db.notebookStructureItems;
+      final pageTable = _db.pageItems;
       
       // 2.- Creamos el query select.
-      final selectQuery = _db.select(structureTable);
+      final selectQuery = _db.select(structureTable).join([
+        leftOuterJoin(
+          pageTable,
+          pageTable.id.equalsExp(structureTable.folderId)
+        ),
+      ]);
       
       // Filtro: Mismo NotebookId y solo elementos tipo "page".
-      selectQuery.where((tbl) =>
-        tbl.notebookId.equals(notebookId) &
-        tbl.type.equals(StructureElementType.pageType.value)
+      selectQuery.where(
+        structureTable.notebookId.equals(notebookId) &
+        structureTable.type.equals(pageType)
       );
       
       // Criterio de Orden: Por profundidad y posición.
       selectQuery.orderBy([
-        (tbl) => OrderingTerm(expression: tbl.depth),
-        (tbl) => OrderingTerm(expression: tbl.position),
+        OrderingTerm(expression: structureTable.depth),
+        OrderingTerm(expression: structureTable.position),
       ]);
       
       // 3.- Ejecutamos el query y convertimos a StructureDTO.
       final rows = await selectQuery.get();
-      final pageList = rows.map((row) => StructureDriftMapper.fromData(row)).toList();
+      final pageList = rows.map((row) {
+        final structure = row.readTable(structureTable);
+        final page = row.readTableOrNull(pageTable);
+        
+        return StructureDriftMapper.fromData(structure, null, page);
+      }).toList();
       
       return Result.success(pageList);
   
@@ -541,5 +601,78 @@ class _StructureDriftQueries implements StructurePersistenceQueries {
   Future<Result<List<StructureDTO>, Failure>> getChildrenOf({required String notebookId, required String? parentId}) {
     // TODO: implement getChildrenOf
     throw UnimplementedError();
+  }
+}
+
+
+
+class _StructureDriftObservers implements StructurePersistenceObservers {
+  const _StructureDriftObservers(this._db);
+  final AppDatabase _db;
+  
+  @override
+  Stream<List<StructureDTO>> watchNotebookStructure(String notebookId) {
+    final structureTable = _db.notebookStructureItems;
+    final folderTable = _db.folderItems;
+    final pageTable = _db.pageItems;
+    
+    final query = _db.select(structureTable).join([
+      leftOuterJoin(
+        folderTable, 
+        folderTable.id.equalsExp(structureTable.folderId) & 
+        structureTable.type.equals(folderType)
+      ),
+      leftOuterJoin(
+        pageTable, 
+        pageTable.id.equalsExp(structureTable.pageId) & 
+        structureTable.type.equals(pageType)
+      )
+    ])
+    ..where(structureTable.notebookId.equals(notebookId))
+    ..orderBy([
+      OrderingTerm(expression: structureTable.depth),
+      OrderingTerm(expression: structureTable.position)
+    ]);
+    
+    return query.watch().map(
+      (rows) => rows.map((row) {
+        final structure = row.readTable(structureTable);
+        final folder = row.readTableOrNull(folderTable);
+        final page = row.readTableOrNull(pageTable);
+        
+        return StructureDriftMapper.fromData(structure, folder, page);
+      }).toList()
+    );
+  }
+  
+  @override
+  Stream<StructureDTO?> watchStructureItem(String structureId) {
+    final structureTable = _db.notebookStructureItems;
+    final folderTable = _db.folderItems;
+    final pageTable = _db.pageItems;
+    
+    final query = _db.select(structureTable).join([
+      leftOuterJoin(
+        folderTable, 
+        folderTable.id.equalsExp(structureTable.folderId) & 
+        structureTable.type.equals(folderType)
+      ),
+      leftOuterJoin(
+        pageTable, 
+        pageTable.id.equalsExp(structureTable.pageId) & 
+        structureTable.type.equals(pageType)
+      ),
+    ])
+    ..where(structureTable.id.equals(structureId));
+    
+    return query.watchSingleOrNull().map(
+      (row) => row != null
+        ? StructureDriftMapper.fromData(
+            row.readTable(structureTable),
+            row.readTableOrNull(folderTable),
+            row.readTableOrNull(pageTable),
+          )
+        : null
+    );
   }
 }

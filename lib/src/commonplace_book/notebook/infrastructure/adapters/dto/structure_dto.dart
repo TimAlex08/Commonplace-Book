@@ -1,9 +1,13 @@
-// External Imports
+// External Imports.
 import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:drift/drift.dart';
 
-// Domain
+// Domain.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/structure.dart';
+
+// Infrastructure.
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/page_dto.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/folder_dto.dart';
 
 
 
@@ -18,6 +22,8 @@ class StructureDTO {
     this.pageId,
     this.position,
     this.depth,
+    this.folderData,
+    this.pageData,
   });
   
   final String? structureId;
@@ -29,6 +35,9 @@ class StructureDTO {
   final int? position;
   final int? depth;
   
+  final FolderDTO? folderData;
+  final PageDTO? pageData;
+  
   StructureDTO copyWith({
     String? structureId,
     String? notebookId,
@@ -38,6 +47,8 @@ class StructureDTO {
     String? pageId,
     int? position,
     int? depth,
+    FolderDTO? folderData,
+    PageDTO? pageData,
   }) {
     return StructureDTO(
       structureId: structureId ?? this.structureId,
@@ -48,6 +59,8 @@ class StructureDTO {
       pageId: pageId ?? this.pageId,
       position: position ?? this.position,
       depth: depth ?? this.depth,
+      folderData: folderData ?? this.folderData,
+      pageData: pageData ?? this.pageData,
     );
   }
 }
@@ -55,7 +68,6 @@ class StructureDTO {
 
 
 /// StructureDomainMapper: Clase de mapeo entre StructureDTO y las entidades del dominio.
-/// 
 /// Responsable de la transformación bidireccional entre los objetos DTO 
 /// y los objetos del dominio (Structure y StructureParams).
 class StructureDomainMapper {
@@ -89,7 +101,6 @@ class StructureDomainMapper {
 
 
 /// StructureDriftMapper: Clase de mapeo entre StructureDTO y las entidades de la capa de persistencia Drift.
-/// 
 /// Responsable de la transformación bidireccional entre los objetos DTO y los objetos de
 /// la clase de la base de datos (StructureItemsCompanion y StructureItem).
 /// Incluye validaciones para asegurar que los datos son apropiados para la persistencia.
@@ -118,16 +129,26 @@ class StructureDriftMapper {
     );
   }
   
-  static StructureDTO fromData(NotebookStructureItem data) {
+  static StructureDTO fromData(
+    NotebookStructureItem structure,
+    FolderItem? folder,
+    PageItem? page,
+  ) {
     return StructureDTO(
-      structureId: data.id,
-      parentId: data.parentId,
-      notebookId: data.notebookId,
-      type: data.type,
-      folderId: data.folderId,
-      pageId: data.pageId,
-      position: data.position,
-      depth: data.depth,
+      structureId: structure.id,
+      parentId: structure.parentId,
+      notebookId: structure.notebookId,
+      type: structure.type,
+      folderId: structure.folderId,
+      pageId: structure.pageId,
+      position: structure.position,
+      depth: structure.depth,
+      folderData: folder != null 
+        ? FolderDriftMapper.fromData(folder) 
+        : null,
+      pageData: page != null
+        ? PageDriftMapper.fromData(page)
+        : null,
     );
   }
 }

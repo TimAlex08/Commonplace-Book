@@ -1,8 +1,8 @@
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Infrastructure
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/structure_dto.dart';
 
 abstract class ForManagingStructuresPort {
@@ -36,6 +36,6 @@ abstract class StructureManagementQueries {
 }
 
 abstract class StructureManagementObservers {
-  Stream<List<StructureDTO>> watchStructureForNotebook(String notebookId);
-  Stream<StructureDTO> watchStructureItemById(String structureId);
+  Stream<List<StructureDTO>> watchNotebookStructure(String notebookId);
+  Stream<StructureDTO?> watchStructureById(String structureId);
 }

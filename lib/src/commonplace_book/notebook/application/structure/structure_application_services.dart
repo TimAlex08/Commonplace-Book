@@ -1,53 +1,78 @@
-// External Imports
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persisting_folders_port.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persisting_pages_port.dart';
+// External Imports.
 import 'package:uuid/v4.dart';
 
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_structure_errors/structure_application_failures.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_structure_errors/structure_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Domain
+// Domain.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/folder.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/page.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/structure.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/value_objects/structure/structure_element_type.dart';
 
-// Infrastructure
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/folder_dto.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/page_dto.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/structure_dto.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persisting_folders_port.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persisting_notebooks_port.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persisting_pages_port.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persisting_structures_port.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_structures_port.dart';
 
 
 
+// Constantes.
+const kFolder = 'folder';
+const kPage = 'page';
+
 class StructureApplicationServices implements ForManagingStructuresPort {
-  const StructureApplicationServices(this._notebookRepo, this._structureRepo, this._folderRepo, this._pageRepo);
+  const StructureApplicationServices({
+    required ForPersistingNotebooksPort notebookRepo,
+    required ForPersistingStructuresPort structureRepo,
+    required ForPersistingFoldersPort folderRepo,
+    required ForPersistingPagesPort pageRepo,
+  })  : _notebookRepo = notebookRepo,
+        _structureRepo = structureRepo,
+        _folderRepo = folderRepo,
+        _pageRepo = pageRepo;
+  
   final ForPersistingNotebooksPort _notebookRepo;
   final ForPersistingStructuresPort _structureRepo;
   final ForPersistingFoldersPort _folderRepo;
   final ForPersistingPagesPort _pageRepo;
   
   @override
-  StructureManagementCommands get command => _StructureCommandHandler(_notebookRepo, _structureRepo, _folderRepo, _pageRepo);
+  StructureManagementCommands get command => _StructureCommandHandler(
+    notebookRepo: _notebookRepo,
+    structureRepo: _structureRepo,
+    folderRepo: _folderRepo,
+    pageRepo: _pageRepo,
+  );
 
   @override
-  // TODO: implement observer
-  StructureManagementObservers get observer => throw UnimplementedError();
+  StructureManagementQueries get query => _StructureQueriesHandler(_structureRepo);
 
   @override
-  // TODO: implement query
-  StructureManagementQueries get query => throw UnimplementedError();
+  StructureManagementObservers get observer => _StructureObserverHandler(_structureRepo);
 }
 
 
 
 class _StructureCommandHandler implements StructureManagementCommands {
-  const _StructureCommandHandler(this._notebookRepo, this._structureRepo, this._folderRepo, this._pageRepo);
+  const _StructureCommandHandler({
+    required ForPersistingNotebooksPort notebookRepo,
+    required ForPersistingStructuresPort structureRepo,
+    required ForPersistingFoldersPort folderRepo,
+    required ForPersistingPagesPort pageRepo,
+  })  : _notebookRepo = notebookRepo,
+        _structureRepo = structureRepo,
+        _folderRepo = folderRepo,
+        _pageRepo = pageRepo;
+  
   final ForPersistingStructuresPort _structureRepo;
   final ForPersistingNotebooksPort _notebookRepo;
   final ForPersistingFoldersPort _folderRepo;
@@ -66,7 +91,7 @@ class _StructureCommandHandler implements StructureManagementCommands {
     
     if (notebookResult.isFailure) {
       failures.add(StructureNotebookNotFoundFailure(
-        details: 'No notebook found with id $notebookId',
+        details: 'No notebook found with id $notebookId.',
       ));
       return Result.failure(failures);
     }
@@ -81,7 +106,7 @@ class _StructureCommandHandler implements StructureManagementCommands {
       }
       
       final parentType = parentTypeResult.getSuccess();
-      if(parentType != StructureElementType.folderType.value) {
+      if(parentType != kFolder) {
         failures.add(StructureParentCannotBePageFailure(
           details: 'ParentId provided belongs to a Page, but it should be a Folder.',
         ));
@@ -94,30 +119,49 @@ class _StructureCommandHandler implements StructureManagementCommands {
     Page? page;
     String entityId;
     
-    // Validar que type no sea null o vacio.
-    if (type == StructureElementType.folderType.value) {
-      final folderDto = FolderDTO(name: title);
-      final folderParams = FolderDomainMapper.toParams(folderDto);
-      final folderResult = Folder.create(folderParams);
-      if (folderResult.isFailure) {
-        failures.addAll(folderResult.getFailure());
-        return Result.failure(failures);
-      }
-      folder = folderResult.getSuccess();
-      entityId = folder.id.value;
-    } else {
-      final pageDto = PageDTO(title: title);
-      final pageParams = PageDomainMapper.toParams(pageDto);
-      final pageResult = Page.create(pageParams);
-      if (pageResult.isFailure) {
-        failures.addAll(pageResult.getFailure());
-        return Result.failure(failures);
-      }
-      page = pageResult.getSuccess();
-      entityId = page.id.value;
-    }
+    switch(type) {
+      case kFolder:
+        final folderDto = FolderDTO(
+          id: UuidV4().generate(),
+          name: title
+        );
+        final folderParams = FolderDomainMapper.toParams(folderDto);
+        final folderResult = Folder.create(folderParams);
+
+        if (folderResult.isFailure) {
+          failures.addAll(folderResult.getFailure());
+          return Result.failure(failures);
+        }
     
-    // 3.- Obtener recursos para crear un Structure Valido
+        folder = folderResult.getSuccess();
+        entityId = folder.id.value;
+        break;
+        
+      case kPage:
+        final pageDto = PageDTO(
+          id: UuidV4().generate(),
+          title: title,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+        final pageParams = PageDomainMapper.toParams(pageDto);
+        final pageResult = Page.create(pageParams);
+    
+        if (pageResult.isFailure) {
+          failures.addAll(pageResult.getFailure());
+          return Result.failure(failures);
+        }
+    
+        page = pageResult.getSuccess();
+        entityId = page.id.value;
+        break;
+    
+      default:
+        failures.add(StructureInvalidTypeFailure());
+        return Result.failure(failures);
+    }
+
+    // 4.- Obtener recursos para crear un Structure válido.
     final positionResult = await _structureRepo.queries.getNextAvailablePosition(notebookId: notebookId, parentId: parentId);
     final depthResult = await _structureRepo.queries.getDepthForNewStructureItem(notebookId: notebookId, parentId: parentId);
     
@@ -131,7 +175,7 @@ class _StructureCommandHandler implements StructureManagementCommands {
     final position = positionResult.getSuccess();
     final depth = depthResult.getSuccess();
     
-    // 4.- Crear StructureDTO → Params → Entidad
+    // 5.- Crear StructureDTO → Params → Entidad.
     final completedDto = StructureDTO(
       structureId: UuidV4().generate(),
       notebookId: notebookId,
@@ -155,7 +199,7 @@ class _StructureCommandHandler implements StructureManagementCommands {
     if(structureResult.isFailure) failures.addAll(structureResult.getFailure());
     final structure = structureResult.getSuccess();
     
-    // 5.- Persistencia (transacción Folder/Page + Structure).
+    // 6.- Persistencia (transacción Folder/Page + Structure).
     if (type == StructureElementType.folderType.value && folder != null) {
       final result = await _structureRepo.commands.createStructureForFolder(
         structure: structure,
@@ -163,7 +207,7 @@ class _StructureCommandHandler implements StructureManagementCommands {
       );
       
       return result.fold(
-        Result.success,
+        (row) => Result.success(row),
         (failure) => Result.failure([failure]),
       );
       
@@ -174,7 +218,7 @@ class _StructureCommandHandler implements StructureManagementCommands {
       );
       
       return result.fold(
-        Result.success,
+        (row) => Result.success(row),
         (failure) => Result.failure([failure]),
       );
     } else {
@@ -182,6 +226,7 @@ class _StructureCommandHandler implements StructureManagementCommands {
     }
   }
 
+  // TODO: Revisar si eliminar este método.
   @override
   Future<Result<int, List<Failure>>> updateStructureItemTitle({required String structureId, required String newTitle}) async {
     final failures = <Failure>[];
@@ -197,7 +242,7 @@ class _StructureCommandHandler implements StructureManagementCommands {
     
     if(structure == null) {
       failures.add(StructureNotFoundFailure(
-        details: 'No structure item found with id $structureId',
+        details: 'No structure item found with id $structureId.',
       ));
       return Result.failure(failures);
     }
@@ -273,5 +318,46 @@ class _StructureCommandHandler implements StructureManagementCommands {
   Future<Result<void, List<Failure>>> reorderStructureItem({required StructureDTO structureDto, required int newPosition}) {
     // TODO: implement reorderStructureItem
     throw UnimplementedError();
+  }
+}
+
+
+
+class _StructureQueriesHandler implements StructureManagementQueries {
+  const _StructureQueriesHandler(this._structureRepo);
+  final ForPersistingStructuresPort _structureRepo;
+  
+  @override
+  Future<Result<List<StructureDTO>, List<Failure>>> getNotebookStructure(String notebookId) async {
+    // 1.- Obtiene todos los elementos de Structure de la libreta requerida de la base de datos.
+    final result = await _structureRepo.queries.getNotebookStructure(notebookId);
+    
+    return result.fold(
+      (structures) => Result.success(structures),
+      (failures) => Result.failure([failures])
+    );
+  }
+
+  @override
+  Future<Result<StructureDTO?, List<Failure>>> getStructureById(StructureDTO structureDto) {
+    // TODO: implement getStructureById
+    throw UnimplementedError();
+  }
+}
+
+
+
+class _StructureObserverHandler implements StructureManagementObservers {
+  const _StructureObserverHandler(this._structureRepo);
+  final ForPersistingStructuresPort _structureRepo;
+  
+  @override
+  Stream<List<StructureDTO>> watchNotebookStructure(String notebookId) {
+    return _structureRepo.observers.watchNotebookStructure(notebookId);
+  }
+
+  @override
+  Stream<StructureDTO?> watchStructureById(String structureId) {
+    return _structureRepo.observers.watchStructureItem(structureId);
   }
 }

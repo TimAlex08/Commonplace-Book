@@ -1,11 +1,11 @@
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/folder.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/structure.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/page.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/structure.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Infrastructure
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/structure_dto.dart';
 
 
@@ -53,8 +53,8 @@ abstract class StructurePersistenceObservers {
   Stream<StructureDTO?> watchStructureItem(String notebookId);
   
   /// WatchChildrenOf: Observar los hijos de un elemento padre específico. Si `parentId` es `null`, se obtienen los elementos de nivel raíz.
-  Stream<List<StructureDTO>> watchChildrenOf({required String notebookId,required String? parentId});
-  
-  Stream<List<StructureDTO>> watchFolders(String notebookId);
-  Stream<List<StructureDTO>> watchPages(String notebookId);
+  // Stream<List<StructureDTO>> watchChildrenOf({required String notebookId,required String? parentId});
+  // 
+  // Stream<List<StructureDTO>> watchFolders(String notebookId);
+  // Stream<List<StructureDTO>> watchPages(String notebookId);
 }
