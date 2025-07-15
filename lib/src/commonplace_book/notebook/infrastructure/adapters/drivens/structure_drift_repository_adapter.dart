@@ -431,7 +431,7 @@ class _StructureDriftQueries implements StructurePersistenceQueries {
       selectQuery.where(notebookFilter);
       
       // Filtro: Mismo parentId.
-      final parentFilter = structureTable.parentId.equals(parentId);
+      final parentFilter = structureTable.id.equals(parentId);
       selectQuery.where(parentFilter);
       
       // 4.- Ejecutamos el query.
