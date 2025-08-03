@@ -213,7 +213,6 @@ class _BuilReordenableTree extends StatelessWidget {
     
     return ReorderableListView.builder(
       onReorder: (oldIndex, newIndex) {
-        // ... (la lógica de onReorder que definimos arriba va aquí) ...
         if (oldIndex < newIndex) newIndex -= 1;
 
         final draggedFlatNode = flattenedNodes[oldIndex];
