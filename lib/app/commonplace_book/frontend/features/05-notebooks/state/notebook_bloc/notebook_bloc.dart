@@ -48,7 +48,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     
     result.fold(
       (rowId) {
-        final userMessage = UserErrorMapper.mapSuccess('create');
+        final userMessage = UserMessageMapper.mapSuccess('create');
         emit(state.copyWith(
           status: NotebookStatus.success,
           userMessage: userMessage
@@ -73,7 +73,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     
     result.fold(
       (rowId) {
-        final userMessage = UserErrorMapper.mapSuccess('update');
+        final userMessage = UserMessageMapper.mapSuccess('update');
         emit(state.copyWith(
           status: NotebookStatus.success,
           userMessage: userMessage
@@ -98,7 +98,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     
     result.fold(
       (rowId) {
-        final userMessage = UserErrorMapper.mapSuccess('delete');
+        final userMessage = UserMessageMapper.mapSuccess('delete');
         emit(state.copyWith(
           status: NotebookStatus.success,
           userMessage: userMessage,

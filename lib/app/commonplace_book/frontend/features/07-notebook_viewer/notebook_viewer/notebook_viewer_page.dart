@@ -2,11 +2,10 @@
 library;
 
 // Flutter Imports
-import 'package:commonplace_book/app/commonplace_book/frontend/features/07-notebook_viewer/notebook_viewer/components/components.dart';
+import 'package:commonplace_book/app/commonplace_book/frontend/features/07-notebook_viewer/notebook_viewer/components/tree/tree_view.dart';
 import 'package:commonplace_book/app/commonplace_book/frontend/features/07-notebook_viewer/state/folder_cubit/folder_cubit.dart';
 import 'package:commonplace_book/app/commonplace_book/frontend/features/07-notebook_viewer/state/structure_bloc/structure_bloc.dart';
 import 'package:commonplace_book/app/commonplace_book/frontend/features/shared/routes/app_routes.dart';
-import 'package:commonplace_book/app/commonplace_book/frontend/features/shared/utils/utils.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/drivers/structure_manager_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

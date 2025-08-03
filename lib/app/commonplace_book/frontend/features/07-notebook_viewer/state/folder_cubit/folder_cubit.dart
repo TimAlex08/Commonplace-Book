@@ -25,7 +25,7 @@ class FolderCubit extends Cubit<FolderState> {
     // Manejar diferentes estados del StructureBloc basado en tu enum
     switch (structureState.status) {
       case StructureStatus.success:
-        _allStructures = structureState.structures;
+        _allStructures = structureState.rawStructures;
         _updateVisibleStructures();
         break;
       case StructureStatus.loading:

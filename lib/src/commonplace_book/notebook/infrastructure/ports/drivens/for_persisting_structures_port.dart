@@ -22,16 +22,22 @@ abstract class StructurePersistenceCommands {
   Future<Result<int, Failure>> updateStructureItem(Structure structure);
   Future<Result<int, Failure>> hardDeleteStructureItem(String structureId);
   
-  /// ReorderStructureItem: Reordenar un elemento de la estructura dentro de su mismo nivel.
-  Future<Result<void, Failure>> reorderStructureItem({required String structureId, required int newPosition});
+  /// ReorderStructureItem: Realiza la actualización de la posición, padre, y profundidad de un elemento 
+  /// y reajusta las posiciones de los elementos afectados.
+  Future<Result<int, Failure>> reorderStructureItem({
+    required String notebookId,
+    required String draggedItemId,
+    required int newDepth,
+    required String? oldParentId,
+    required String? newParentId,
+    required int oldPosition,
+    required int newPosition,
+  });
 }
 
 abstract class StructurePersistenceQueries {
   Future<Result<List<StructureDTO>, Failure>> getNotebookStructure(String notebookId);
-  Future<Result<StructureDTO?, Failure>> getStructureById(String structureId);
-  
-  /// GetChildrenOf: Obtener los hijos de un elemento padre específico. Si `parentId` es `null`, se obtienen los elementos de nivel raíz.
-  Future<Result<List<StructureDTO>, Failure>> getChildrenOf({required String notebookId, required String? parentId});
+  Future<Result<StructureDTO, Failure>> getStructureById(String structureId);
   
   Future<Result<List<StructureDTO>, Failure>> getNotebookFolders(String notebookId);
   Future<Result<List<StructureDTO>, Failure>> getNotebookPages(String notebookId);
@@ -46,15 +52,12 @@ abstract class StructurePersistenceQueries {
   
   /// GetStructureElementType: Obtener el tipo de un elemento de estructura específico.
   Future<Result<String?, Failure>> getStructureElementType(String structureId);
+  
+  /// GetDescendantStructures: Obtener todos los descendientes de un elemento de estructura.
+  Future<Result<List<StructureDTO>, Failure>> getDescendantStructures(String parentId);
 }
 
 abstract class StructurePersistenceObservers {
   Stream<List<StructureDTO>> watchNotebookStructure(String notebookId);
   Stream<StructureDTO?> watchStructureItem(String notebookId);
-  
-  /// WatchChildrenOf: Observar los hijos de un elemento padre específico. Si `parentId` es `null`, se obtienen los elementos de nivel raíz.
-  // Stream<List<StructureDTO>> watchChildrenOf({required String notebookId,required String? parentId});
-  // 
-  // Stream<List<StructureDTO>> watchFolders(String notebookId);
-  // Stream<List<StructureDTO>> watchPages(String notebookId);
 }

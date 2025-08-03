@@ -30,6 +30,27 @@ class StructureManagerAdapter  {
     );
   }
   
+  Future<Result<int, List<Failure>>> reorderStructureItem({
+    required String notebookId,
+    required String draggedItemId,
+    required String? newParentId,
+    required int newPosition,
+  }) async {
+    final result = await _port.command.reorderStructureItem(
+      notebookId: notebookId,
+      draggedItemId: draggedItemId,
+      newParentId: newParentId,
+      newPosition: newPosition
+    );
+    
+    return result.fold(
+      (rowsAffected) => Result.success(rowsAffected),
+      (failures) {
+        logFailure(failures);
+        return Result.failure(failures);
+      },
+    );
+  }
   
   
   // ---------- Consultas ---------- //

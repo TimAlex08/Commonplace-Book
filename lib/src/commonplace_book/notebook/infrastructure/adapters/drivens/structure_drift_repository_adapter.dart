@@ -146,115 +146,138 @@ class _StructureDriftCommands implements StructurePersistenceCommands {
   }
 
   @override
-  Future<Result<void, Failure>> reorderStructureItem({
-    required String structureId, 
-    required int newPosition
+  Future<Result<int, Failure>> reorderStructureItem({
+    required String notebookId,
+    required String draggedItemId,
+    required int newDepth,
+    required String? oldParentId,
+    required String? newParentId,
+    required int oldPosition,
+    required int newPosition,
   }) async {
     try {
       return await _db.transaction(() async {
-        // 1.- Obtener el item actual.
-        // Crea una consulta SELECT y añade condición WHERE.
-        final selectQuery = _db.select(_db.notebookStructureItems)..where((tbl) => tbl.id.equals(structureId));  
+        int totalRowsAffected = 0;
         
-        // Ejecutar y obtener resultado (puede ser null si no existe).
-        final currentItem = await selectQuery.getSingleOrNull();
+        // 1.- Obtener el item arrastrado para su depth actual.
+        final draggedItemEntry = await (_db.select(_db.notebookStructureItems)
+              ..where((tbl) => tbl.id.equals(draggedItemId)))
+            .getSingleOrNull();
         
-        if (currentItem == null) {
-          return Result.failure(StructureReorderFailure(
-            details: 'Structure item not found for reordering.'
+        if(draggedItemEntry == null) {
+          return Result.failure(StructureNotFoundFailure(
+            details: 'Dragged item with ID $draggedItemId not found.'
           ));
         }
         
-        final int oldPosition = currentItem.position;
-        final String? parentId = currentItem.parentId;
+        final oldDepth = draggedItemEntry.depth;
+        final depthDifference = newDepth - oldDepth;
         
-        // 2.- Si la posición no cambió, no hacer nada.
-        if(oldPosition == newPosition) {
-          return Result.success(null);
-        }
-        
-        // 3.- Verificar que la nueva posición sea válida.
-          // Crea consulta que solo selecciona columnas específicas (no todas).
-          final countQuery = _db.selectOnly(_db.notebookStructureItems);
-          
-          // Especificar qué columnas queremos.
-          countQuery.addColumns([_db.notebookStructureItems.id.count()]);
-          
-          // Agrega condicion WHERE para filtrar por parentId, equalsNullable maneja tanto valores null como no-null.
-          countQuery.where(_db.notebookStructureItems.parentId.equalsNullable(parentId));
-          
-          // Ejecutar y obtener resultado. SiblingCount analiza cuantos registros tienen un mismo padre.
-          final siblingCount = await countQuery.getSingle();
-        
-        // Total de hermanos con un mismo parentId.
-        final int totalSiblings = siblingCount.read(_db.notebookStructureItems.id.count()) ?? 0;
-        
-        // Valida que la nueva posición no sea menor a cero o mayor o igual al total de hermanos. 
-        // - Donde la primera posicion es 0 y la ultima el total - 1.
-        if(newPosition < 0 || newPosition >= totalSiblings) {
-          return Result.failure(StructureReorderFailure(
-            details: 'Invalid position. Must be between 0 and ${totalSiblings -1}.'
-          ));
-        }
-        
-        // 4.- Reordenar elementos según si se mueve hacia arriba o hacia abajo.
-        // Hay que pensar en una lista donde el primer registro esta hasta arriba y el último hasta abajo.
-        if(oldPosition < newPosition) {
-          // Obtener elementos que necesitan actualización.
-          final elementsToUpdate = await (_db.select(_db.notebookStructureItems)
-            ..where((tbl) =>
-              tbl.parentId.equalsNullable(parentId) &             // Actualiza elementos del mismo contenedor padre.
-              tbl.position.isBiggerThanValue(oldPosition) &       // Encuentra elementos que estan DESPUÉS del elemento original.
-              tbl.position.isSmallerOrEqualValue(newPosition) &   // Y menor o igual a la nueva posición de destino.
-              tbl.id.isNotValue(structureId))                     // Excluye el elemento que estamos moviendo.
-          ).get();
-          
-          // Actualizar cada elemento individualmente. (Decrementar su posicion en 1).
-          for(final element in elementsToUpdate) {
+        // 2.- Ajustar posiciones en la antigua lista de hermanos
+        // Si el padre no ha cambiado, o si ha cambiado, necesitamos cerrar el "hueco".
+        if(oldParentId == newParentId) {
+          // Reordenamiento dentro del mismo padre.
+          if(oldPosition < newPosition) {
+            // Se movió hacia abajo: Decrementar posiciones de los elementos entre oldPosition y newPosition.
             await (_db.update(_db.notebookStructureItems)
-              ..where((tbl) => tbl.id.equals(element.id))
-            ).write(NotebookStructureItemsCompanion(
-              position: Value(element.position - 1)
+              ..where((tbl) => oldParentId == null
+                  ? tbl.parentId.isNull()
+                  : tbl.parentId.equals(oldParentId))
+              ..where((tbl) => tbl.notebookId.equals(notebookId))
+              ..where((tbl) => tbl.position.isBetween(
+                    Variable(oldPosition + 1),
+                    Variable(newPosition),
+                  )))
+            .write(NotebookStructureItemsCompanion.custom(
+              position: const CustomExpression<int>('position - 1'),
             ));
-          }
-        } 
-        
-        // OldPosition > NewPosition.
-        else {
-          // Obtener elementos que necesitan actualización.
-          final elementsToUpdate = await (_db.select(_db.notebookStructureItems)
-            ..where((tbl) =>
-              tbl.parentId.equalsNullable(parentId) &             // Actualiza elementos del mismo contenedor padre.
-              tbl.position.isBiggerOrEqualValue(newPosition) &    // Encuentra elementos que estan en la nueva posición o DESPUÉS.
-              tbl.position.isSmallerOrEqualValue(oldPosition) &   // Y menor o igual de la posicion original.
-              tbl.id.isNotValue(structureId))                     // Excluye el elemento que estamos moviendo.
-          ).get();
-          
-          // Actualizar cada elemento individualmente. (Aumentar su posicion en 1).
-          for(final element in elementsToUpdate) {
+          } else if (oldPosition > newPosition) {
+            // Se movió hacia arriba: Incrementar posiciones de los elementos entre newPosition y oldPosition.
             await (_db.update(_db.notebookStructureItems)
-              ..where((tbl) => tbl.id.equals(element.id))
-            ).write(NotebookStructureItemsCompanion(
-              position: Value(element.position + 1)
-            ));
+                ..where((tbl) => oldParentId == null
+                    ? tbl.parentId.isNull()
+                    : tbl.parentId.equals(oldParentId))
+                ..where((tbl) => tbl.notebookId.equals(notebookId))
+                ..where((tbl) => tbl.position.isBetween(
+                      Variable(newPosition),
+                      Variable(oldPosition - 1),
+                    )))
+              .write(NotebookStructureItemsCompanion.custom(
+                position: const CustomExpression<int>('position + 1'),
+              )
+            );
+            
+          } else {
+            // El padre cambió: Decrementar posiciones de los elementos posteriores al draggedItem en la *antigua* lista
+            await (_db.update(_db.notebookStructureItems)
+                ..where((tbl) => oldParentId == null
+                    ? tbl.parentId.isNull()
+                    : tbl.parentId.equals(oldParentId))
+                ..where((tbl) => tbl.position.isBiggerThan(Variable(oldPosition)))
+                ..where((tbl) => tbl.notebookId.equals(notebookId)))
+              .write(NotebookStructureItemsCompanion.custom(
+                position: const CustomExpression<int>('position - 1'),
+              )
+            );
+            
+            // --- Ajustar posiciones en la nueva lista de hermanos para hacer espacio ---
+            // Incrementar posiciones de los elementos en la *nueva* lista a partir de newPosition
+            await (_db.update(_db.notebookStructureItems)
+                ..where((tbl) => newParentId == null
+                    ? tbl.parentId.isNull()
+                    : tbl.parentId.equals(newParentId))
+                ..where((tbl) => tbl.position.isBiggerOrEqual(Variable(newPosition)))
+                ..where((tbl) => tbl.notebookId.equals(notebookId)))
+              .write(NotebookStructureItemsCompanion.custom(
+                position: const CustomExpression<int>('position + 1'),
+              )
+            );
           }
         }
         
-        // 5.- Actualizar la posición del item objetivo.
-        final updateResult = await (_db.update(_db.notebookStructureItems)
-          ..where((tbl) => tbl.id.equals(structureId))
-        ).write(NotebookStructureItemsCompanion(
-          position: Value(newPosition),
-        ));
+        // 3.- Actualizar el elemento arrastrado (parentId, position, depth).
+        totalRowsAffected += await (_db.update(_db.notebookStructureItems)
+          ..where((tbl) => tbl.id.equals(draggedItemId)))
+          .write(NotebookStructureItemsCompanion(
+            parentId: Value(newParentId),
+            position: Value(newPosition),
+            depth: Value(newDepth),
+          )
+        );
         
-        if(updateResult == 0) {
-          return Result.failure(StructureReorderFailure(
-            details: 'Failed to update structure item position.'
-          ));
+        // 4. Actualizar recursivamente la profundidad de todos los descendientes
+        // Se usa una CTE recursiva para seleccionar todos los descendientes del `draggedItemId`.
+        // Luego se actualiza su profundidad sumando `depthDifference`.
+        final descendantIdsAndDepths = await _db.customSelect(
+          'WITH RECURSIVE descendants AS ( '
+          '  SELECT id, depth FROM notebook_structure_items WHERE parent_id = ?1 '
+          '  UNION ALL '
+          '  SELECT n.id, n.depth FROM notebook_structure_items n JOIN descendants d ON n.parent_id = d.id '
+          ') SELECT id, depth FROM descendants;',
+          variables: [Variable(draggedItemId)],
+        ).get();
+        
+          for (final row in descendantIdsAndDepths) {
+            // Lee el id como un String que acepta ser nulo (String?).
+            final id = row.read<String?>('id');
+            
+            if(id == null) {
+              continue;
+            }
+            
+            final currentDepth = row.read<int>('depth');
+            final updatedDescendantDepth = currentDepth + depthDifference;
+    
+            await (_db.update(_db.notebookStructureItems)
+                  ..where((tbl) => tbl.id.equals(id)))
+                .write(NotebookStructureItemsCompanion(
+                  depth: Value(updatedDescendantDepth),
+                ));
+            totalRowsAffected++;
+          }
+          return Result.success(totalRowsAffected);
         }
-      
-        return Result.success(null);
-      });
+      );
       
     } on SqliteException catch (e) {
         return Result.failure(StructureSqliteFailureMapper.map(e, StructureReorderFailure(
@@ -323,7 +346,7 @@ class _StructureDriftQueries implements StructurePersistenceQueries {
   }
 
   @override
-  Future<Result<StructureDTO?, Failure>> getStructureById(String structureId) async {
+  Future<Result<StructureDTO, Failure>> getStructureById(String structureId) async {
     try {
       // 1.- Obtenemos variables principales.
       final structureTable = _db.notebookStructureItems;
@@ -343,17 +366,24 @@ class _StructureDriftQueries implements StructurePersistenceQueries {
           structureTable.type.equals(pageType)
         ),
       ])
-      ..where(structureTable.type.equals(structureId));
+      ..where(structureTable.id.equals(structureId));
       
       // 3.- Ejecutamos query y convertimos a StructureDTO (puede ser null).
       final row = await query.getSingleOrNull();
-      final structureDTO = row != null
-        ? StructureDriftMapper.fromData(
-            row.readTable(structureTable),
-            row.readTableOrNull(folderTable),
-            row.readTableOrNull(pageTable),
-        )
-        : null;
+      
+      // 4.- Verificamos su se encontró el elemento y mapeamos.
+      if (row == null) {
+        // Si no se encontró la estructura, devolvemos un fallo.
+        return Result.failure(StructureNotFoundFailure(
+          details: 'Structure with ID $structureId not found.',
+        ));
+      }
+      
+      final structureDTO = StructureDriftMapper.fromData(
+        row.readTable(structureTable),
+        row.readTableOrNull(folderTable),
+        row.readTableOrNull(pageTable),
+      );
         
       return Result.success(structureDTO);
       
@@ -594,13 +624,53 @@ class _StructureDriftQueries implements StructurePersistenceQueries {
       
     } catch (e) {
       return Result.failure(StructureReadFailure(details: 'UNEXPECTED ERROR: ${e.toString()}.'));
+    }
   }
-}
   
   @override
-  Future<Result<List<StructureDTO>, Failure>> getChildrenOf({required String notebookId, required String? parentId}) {
-    // TODO: implement getChildrenOf
-    throw UnimplementedError();
+  Future<Result<List<StructureDTO>, Failure>> getDescendantStructures(String parentId) async {
+    try {
+      // WITH RECURSIVE descendants AS: Inicia una CTE (Common Table Expression) recursiva, le damos
+      // el nombre de descendants. La parte base obtiene los primeros resultados, la parte recursiva
+      // que sigue explorando a partir de los resultados anteriores.
+      //
+      // SELECT * 
+      // ROM notebook_structure_items 
+      // WHERE parent_id = ?1
+      // Esta es la parte base de la recursión, selecciona todos los registros cuya parentId coinicida
+      // el id que pasamos como parámetros (?1, que es Variable(parentId) en Dart).
+      //
+      // SELECT n.* 
+      // FROM notebook_structure_items n 
+      // JOIN descendants d ON n.parent_id = d.structure_id
+      // Esta es la parte recursiva. Une `JOIN` la tabla `notebook_structure_items` consigo misma de 
+      // manera recursiva. Por cada registro ya encontrado en la CTE `descendants`, busca todos los
+      // elementos que tengan a ese registro como padre (n.parent_id = d.structure_id). Asi encadenando
+      // hijos, nietos, bisnietos, etc. hasta que ya no haya más descendientes.
+      //
+      // SELECT * FROM descendants;
+      // Esta es la consulta principal que retorna los resultados. Después de que la CTE `descendants` se
+      // ha construido con todos los descendientes (de forma recursiva), se seleccionan todos sus registros.
+      final results = await _db.customSelect(
+        'WITH RECURSIVE descendants AS ( '
+        '  SELECT * FROM notebook_structure_items WHERE parent_id = ?1 '
+        '  UNION ALL '
+        '  SELECT n.* FROM notebook_structure_items n JOIN descendants d ON n.parent_id = d.id '
+        ') SELECT * FROM descendants;',
+        variables: [Variable(parentId)],
+      ).get();
+      
+      final List<StructureDTO> dtos = results.map((row) => StructureDriftMapper.fromQueryRow(row)).toList();
+      
+      return Result.success(dtos);
+    } on SqliteException catch (e) {
+      return Result.failure(StructureSqliteFailureMapper.map(e, StructureQueryFailure(
+        details: 'SQLITE(${e.extendedResultCode}): ${e.message}.'
+      )));
+      
+    } catch (e) {
+      return Result.failure(StructureQueryFailure(details: 'UNEXPECTED ERROR: ${e.toString()}.'));
+    }
   }
 }
 

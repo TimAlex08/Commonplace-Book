@@ -24,8 +24,10 @@ abstract class StructureManagementCommands {
   
   Future<Result<void, List<Failure>>> hardDeleteStructureItem(String structureId);
   
-  Future<Result<void, List<Failure>>> reorderStructureItem({
-    required StructureDTO structureDto,
+  Future<Result<int, List<Failure>>> reorderStructureItem({
+    required String notebookId,
+    required String draggedItemId,
+    required String? newParentId,
     required int newPosition,
   });
 }

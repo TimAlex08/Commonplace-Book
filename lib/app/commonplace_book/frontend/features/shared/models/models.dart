@@ -4,6 +4,9 @@ export 'package:commonplace_book/app/commonplace_book/frontend/features/shared/m
 // Notebook Ui Model.
 export 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/notebook_ui_model.dart';
 
+// Tree Node Models.
+export 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/tree_node_models.dart';
+
 // Structure Ui Model.
 export 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/structure_ui_model.dart';
 
