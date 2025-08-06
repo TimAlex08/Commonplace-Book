@@ -1,8 +1,8 @@
-// Failure / Result
+// Failure / Result.
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Infrastructure
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/folder_dto.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_folders_port.dart';
 import 'package:commonplace_book/src/shared/infrastructure/failure_logger.dart';
@@ -16,10 +16,7 @@ class FolderManagerAdapter {
   
   // ----- Comandos ----- //
   Future<Result<int, List<Failure>>> updateFolderTitle({required String folderId, required newTitle}) async {
-    // 1.- Convertir los parámetros a un DTO.
     final dto = FolderDTO(id: folderId, name: newTitle);
-    
-    // 2.- Ejecutar comando de actualización de título de la carpeta.
     final result = await _port.command.updateFolderTitle(dto);
     
     return result.fold(

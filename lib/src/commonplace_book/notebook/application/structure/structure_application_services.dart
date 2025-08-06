@@ -240,13 +240,6 @@ class _StructureCommandHandler implements StructureManagementCommands {
     
     final structure = structureResult.getSuccess();
     
-    if(structure == null) {
-      failures.add(StructureNotFoundFailure(
-        details: 'No structure item found with id $structureId.',
-      ));
-      return Result.failure(failures);
-    }
-    
     // 3.- Validar el nuevo titulo.
     if(structure.type == StructureElementType.folderType.value) {
       final folderId = structure.folderId;
@@ -315,9 +308,97 @@ class _StructureCommandHandler implements StructureManagementCommands {
   }
 
   @override
-  Future<Result<void, List<Failure>>> reorderStructureItem({required StructureDTO structureDto, required int newPosition}) {
-    // TODO: implement reorderStructureItem
-    throw UnimplementedError();
+  Future<Result<int, List<Failure>>> reorderStructureItem({
+    required String notebookId,
+    required String draggedItemId,
+    required String? newParentId,
+    required int newPosition,
+  }) async {
+    final failures = <Failure>[];
+    
+    // 1.- Validar que el `draggedItemId` exista.
+    final draggedItemResult = await _structureRepo.queries.getStructureById(draggedItemId);
+    if(draggedItemResult.isFailure) {
+      failures.add(draggedItemResult.getFailure());
+      return Result.failure(failures);
+    }
+    final draggedItem = draggedItemResult.getSuccess();
+    
+    // 2.- Validar que el `newParentId` (si no es null) exista y sea una carpeta.
+    StructureDTO? newParent;
+    if(newParentId != null) {
+      final newParentResult = await _structureRepo.queries.getStructureById(newParentId);
+      if(newParentResult.isFailure) {
+        failures.add(newParentResult.getFailure());
+        return Result.failure(failures);
+      }
+      
+      newParent = newParentResult.getSuccess();
+      if(newParent.type != kFolder) {
+        failures.add(StructureParentCannotBePageFailure(
+          details: 'New parent must be a folder, but it is a page.'
+        ));
+        return Result.failure(failures);
+      }
+    }
+    
+    // 3.- Prevenir movimientos inválidos (un elemento a sí mismo o a uno de sus descendientes).
+    if(newParentId == draggedItemId) {
+      failures.add(StructureReorderFailure(
+        details: 'Cannot move an item into itself.'
+      ));
+      return Result.failure(failures);
+    }
+    
+    // Si `newParentId` no es nulo, necesitamos obtener todos los descendientes del `draggedItemId`.
+    // para asegurarnos de que `newParentId` no sea uno de ellos.
+    if(newParentId != null) {
+      final descendantsResult = await _structureRepo.queries.getDescendantStructures(draggedItemId);
+      if(descendantsResult.isFailure) {
+        failures.add(descendantsResult.getFailure());
+        return Result.failure(failures);
+      }
+      
+      final descendantIds = descendantsResult.getSuccess().map((dto) => dto.structureId).toSet();
+      if(descendantIds.contains(newParentId)) {
+        failures.add(StructureReorderFailure(
+          details: 'Cannot move an item into its own descendant.'
+        ));
+      }
+    }
+    
+    // 4.- Calcular la nueva profundidad del elemento arrastrado.
+    // La profundidad de un elemento raíz es 0. Si el padre es null, la profundidad es 0.
+    // Si tiene un padre, su profundidad es la del padre + 1.
+    final newDepth = (newParent?.depth ?? -1) + 1;
+    
+    // Verificación explicita para position antes de usarlos, ya que son vitales
+    // en la operación de reordenamiento.
+    if (draggedItem.position == null) {
+      failures.add(StructureReorderFailure(
+        details: 'Dragged item $draggedItemId has no position defined and cannot be reordered.',
+      ));
+      return Result.failure(failures);
+    }
+    
+    final oldPosition = draggedItem.position!;
+    
+    // 5.- Delegar la operación de reordenamiento a la capa de persistencia.
+    // Esta operación se ejecutará como una transacción a nivel de DB.
+    final updateResult = await _structureRepo.commands.reorderStructureItem(
+      notebookId: notebookId,
+      draggedItemId: draggedItemId,
+      newDepth: newDepth,
+      oldParentId: draggedItem.parentId,
+      newParentId: newParentId,
+      oldPosition: oldPosition,
+      newPosition: newPosition
+    );
+    
+    return updateResult.fold(
+      (rowsAffected) => Result.success(rowsAffected),
+      (failure) => Result.failure([failure]),
+    );
   }
 }
 

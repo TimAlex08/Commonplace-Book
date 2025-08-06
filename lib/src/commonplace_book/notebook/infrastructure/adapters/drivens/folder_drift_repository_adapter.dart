@@ -1,17 +1,17 @@
-// External Imports
+// External Imports.
 import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:drift/native.dart';
 
-// Failure / Result
+// Failure / Result.
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/folder_errors/folder_infrastructure_failures.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/folder_errors/folder_sqlite_failure_mapper.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Domain
+// Domain.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/folder.dart';
 
-// Infrastructure
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/folder_dto.dart';
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivens/for_persisting_folders_port.dart';
 

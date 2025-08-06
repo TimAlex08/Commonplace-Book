@@ -6,29 +6,49 @@ final class StructureState extends Equatable {
   const StructureState({
     required this.notebookId,
     this.status = StructureStatus.initial,
-    this.structures = const <StructureUiModel>[],
+    this.rawStructures = const <StructureUiModel>[],
+    this.treeNodes = const <TreeNode<StructureUiModel>>[],
+    this.isReorderMode = false,
+    this.expandedNodes = const {},
     this.userMessage
   });
   
   final String notebookId;
   final StructureStatus status;
-  final List<StructureUiModel> structures;
+  final List<StructureUiModel> rawStructures;
+  final List<TreeNode<StructureUiModel>> treeNodes;
+  final bool isReorderMode;
+  final Map<String, bool> expandedNodes;
   final UserMessage? userMessage;
   
   StructureState copyWith({
     String? notebookId,
     StructureStatus? status,
-    List<StructureUiModel>? structures,
+    List<StructureUiModel>? rawStructures,
+    List<TreeNode<StructureUiModel>>? treeNodes,
+    bool? isReorderMode,
+    Map<String, bool>? expandedNodes,
     UserMessage? userMessage,
   }) {
     return StructureState(
       notebookId: notebookId ?? this.notebookId,
       status: status ?? this.status,
-      structures: structures ?? this.structures,
+      rawStructures: rawStructures ?? this.rawStructures,
+      treeNodes: treeNodes ?? this.treeNodes,
+      isReorderMode: isReorderMode ?? this.isReorderMode,
+      expandedNodes: expandedNodes ?? this.expandedNodes,
       userMessage: userMessage ?? this.userMessage
     );
   }
   
   @override
-  List<Object?> get props => [notebookId, status, structures, userMessage];
+  List<Object?> get props => [
+    notebookId,
+    status,
+    rawStructures,
+    treeNodes,
+    isReorderMode,
+    expandedNodes, 
+    userMessage
+  ];
 }

@@ -1,5 +1,6 @@
 // Flutter Imports
 import 'package:commonplace_book/app/commonplace_book/frontend/features/05-notebooks/state/notebook_bloc/notebook_bloc.dart';
+import 'package:commonplace_book/app/commonplace_book/frontend/features/shared/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -17,8 +18,8 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<NotebookBloc>.value(
-          value: GetIt.instance.get<NotebookBloc>()
-        )
+          value: GetIt.instance.get<NotebookBloc>(),
+        ),
       ], 
       child: AppView()
     );
@@ -34,6 +35,7 @@ class AppView extends StatelessWidget {
       title: 'Commonplace Book',
       debugShowCheckedModeBanner: false,
       home: const MainScreenPage(),
+      routes: AppRoutes.getRoutes(),
     );
   }
 }

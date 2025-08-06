@@ -151,4 +151,17 @@ class StructureDriftMapper {
         : null,
     );
   }
+  
+  static StructureDTO fromQueryRow(QueryRow row) {
+    return StructureDTO(
+      structureId: row.read<String>('structure_id'), // Usa el nombre de la columna en la DB
+      notebookId: row.read<String>('notebook_id'),
+      parentId: row.readNullable<String>('parent_id'),
+      type: row.read<String>('type'),
+      folderId: row.readNullable<String>('folder_id'),
+      pageId: row.readNullable<String>('page_id'),
+      position: row.read<int>('position'),
+      depth: row.read<int>('depth'),
+    );
+  }
 }

@@ -1,8 +1,8 @@
-// External Imports
+// External Imports.
 import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:drift/drift.dart';
 
-// Domain
+// Domain.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/folder.dart';
 
 
@@ -28,7 +28,6 @@ class FolderDTO {
 
 
 /// FolderDomainMapper: Clase de mapeo entre FolderDTO y las entidades del dominio.
-/// 
 /// Responsable de la transformación bidireccional entre los objetos DTO 
 /// y los objetos del dominio (Folder y FolderParams).
 class FolderDomainMapper {
@@ -50,7 +49,6 @@ class FolderDomainMapper {
 
 
 /// FolderDriftMapper: Clase de mapeo entre FolderDTO y las entidades de la capa de persistencia Drift.
-/// 
 /// Responsable de la transformación bidireccional entre los objetos DTO y los objetos de
 /// la clase de la base de datos (FolderItemsCompanion y FolderItem).
 /// Incluye validaciones para asegurar que los datos son apropiados para la persistencia.

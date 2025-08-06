@@ -1,4 +1,5 @@
 // Flutter Imports
+import 'package:commonplace_book/app/commonplace_book/frontend/features/07-notebook_viewer/notebook_viewer/notebook_viewer_page.dart';
 import 'package:flutter/material.dart';
 
 // External Imports
@@ -24,6 +25,7 @@ class NotebookGridView extends StatelessWidget {
     final screenWidthSize = MediaQuery.of(context).size.width;
     
     return PieCanvas(
+      
       theme: PieTheme(
         buttonTheme: PieButtonTheme(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer, 
@@ -44,7 +46,12 @@ class NotebookGridView extends StatelessWidget {
           final notebook = notebooks[index];
           
           return PieMenu(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                NotebookViewerPage.route(notebook: notebook),
+                (route) => route.isFirst,
+              );
+            },
             actions: _pieMenuAction(context, notebook),
             child: SizedBox.expand(
               child: SizedBox(child: NotebookCardDesing(notebook: notebook)),

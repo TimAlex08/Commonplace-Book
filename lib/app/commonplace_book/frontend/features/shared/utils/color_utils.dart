@@ -97,3 +97,13 @@ extension ColorExtensions on Color {
     return colorToHex(this, includeHash: includeHash);
   } 
 }
+
+
+
+// ---------- Obtener color de texto por contraste ---------- //
+Color getContrastingTextColor(Color color) {
+  final double luminance = color.computeLuminance();
+  return luminance > 0.5
+    ? Colors.black87
+    : Colors.white;
+}

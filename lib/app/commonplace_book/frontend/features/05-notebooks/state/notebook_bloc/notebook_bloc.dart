@@ -1,14 +1,19 @@
+// Dart Imports.
 import 'dart:async';
 
+// External Imports.
 import 'package:bloc/bloc.dart';
-import 'package:commonplace_book/app/commonplace_book/frontend/features/shared/error_handling/user_error_mapper.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/drivers/notebook_manager_adapter.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../shared/models/models.dart';
+// Internal Imports.
+import 'package:commonplace_book/app/commonplace_book/frontend/features/shared/error_handling/user_error_mapper.dart';
+import 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/models.dart';
+import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/drivers/notebook_manager_adapter.dart';
 
 part 'notebook_event.dart';
 part 'notebook_state.dart';
+
+
 
 class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
   final NotebookManagerAdapter _notebookAdapter;
@@ -34,8 +39,8 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     on<SelectedNotebookUpdated>(_onSelectedNotebookUpdated);
   }
   
-  // ---------- Eventos de Comandos ---------- //
-  // OnCreateNotebook Event Handler
+  // ---------- Eventos de comandos ---------- //
+  // OnCreateNotebook Event Handler.
   Future<void> _onCreateNotebook(CreateNotebook event, Emitter<NotebookState> emit) async {
     emit(state.copyWith(status: NotebookStatus.loading));
     
@@ -43,7 +48,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     
     result.fold(
       (rowId) {
-        final userMessage = UserErrorMapper.mapSuccess('create');
+        final userMessage = UserMessageMapper.mapSuccess('create');
         emit(state.copyWith(
           status: NotebookStatus.success,
           userMessage: userMessage
@@ -60,7 +65,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     );
   }
   
-  // OnUpdateNotebook Event Handler
+  // OnUpdateNotebook Event Handler.
   Future<void> _onUpdateNotebook(UpdateNotebook event, Emitter<NotebookState> emit) async {
     emit(state.copyWith(status: NotebookStatus.loading));
     
@@ -68,7 +73,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     
     result.fold(
       (rowId) {
-        final userMessage = UserErrorMapper.mapSuccess('update');
+        final userMessage = UserMessageMapper.mapSuccess('update');
         emit(state.copyWith(
           status: NotebookStatus.success,
           userMessage: userMessage
@@ -85,7 +90,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     );
   }
   
-  // OnHardDeleteNotebook Event Handler
+  // OnHardDeleteNotebook Event Handler.
   Future<void> _onHardDeleteNotebook(HardDeleteNotebook event, Emitter<NotebookState> emit) async {
     emit(state.copyWith(status: NotebookStatus.loading));
     
@@ -93,7 +98,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     
     result.fold(
       (rowId) {
-        final userMessage = UserErrorMapper.mapSuccess('delete');
+        final userMessage = UserMessageMapper.mapSuccess('delete');
         emit(state.copyWith(
           status: NotebookStatus.success,
           userMessage: userMessage,
@@ -114,7 +119,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
   
   
   // ---------- Eventos de consultas ---------- //
-  // OnLoadAllNotebooks Event Handler
+  // OnLoadAllNotebooks Event Handler.
   Future<void> _onLoadAllNotebooks(LoadAllNotebooks event, Emitter<NotebookState> emit) async {
     emit(state.copyWith(status: NotebookStatus.loading));
     
@@ -138,7 +143,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
     );
   }
   
-  // OnLoadNotebookById 
+  // OnLoadNotebookById.
   Future<void> _onLoadNotebookById(LoadNotebookById event, Emitter<NotebookState> emit) async {
     emit(state.copyWith(status: NotebookStatus.loading));
     
@@ -165,14 +170,14 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
   
   
   // ---------- Eventos de observadores ---------- //
-  // OnWatchAllNotebooks Event Handler
+  // OnWatchAllNotebooks Event Handler.
   void _onWatchAllNotebooks(WatchAllNotebooks event, Emitter<NotebookState> emit) {
     _notebookSubscription?.cancel();
     
-    // Obtener el stream de libretas
+    // Obtener el stream de libretas.
     final allNotebookStream = _notebookAdapter.watchAllNotebooks();
     
-    // Crear la suscripción con un callback más simple
+    // Crear la suscripción.
     _notebookSubscription = allNotebookStream.listen((notebooks) {
       add(NotebooksUpdated(notebooks));
     });
@@ -181,7 +186,7 @@ class NotebookBloc extends Bloc<NotebookEvent, NotebookState> {
   void _onWatchNotebookById(WatchNotebookById event, Emitter<NotebookState> emit) {
     _selectedNotebookSubscription?.cancel();
     
-    // Obtener el stream de la libreta seleccionada
+    // Obtener el stream de la libreta seleccionada.
     final notebookStream = _notebookAdapter.watchNotebookById(event.notebookId);
     
     _selectedNotebookSubscription = notebookStream.listen((notebook) {

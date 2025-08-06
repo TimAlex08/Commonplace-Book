@@ -1,6 +1,7 @@
-
-
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/adapters/dto/folder_dto.dart';
+
+
 
 class FolderUiModel {
   const FolderUiModel({

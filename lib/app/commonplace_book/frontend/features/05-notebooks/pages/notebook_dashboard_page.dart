@@ -1,8 +1,12 @@
 // Flutter Imports
+import 'package:flutter/material.dart'; 
+
+// External Imports
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Internal Imports
 import 'package:commonplace_book/app/commonplace_book/frontend/features/05-notebooks/state/notebook_bloc/notebook_bloc.dart';
 import 'package:commonplace_book/app/commonplace_book/frontend/features/05-notebooks/widgets/notebook_grid_view.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 

@@ -1,11 +1,11 @@
-// External Imports
+// External Imports.
 import 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/models.dart';
 
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Infrastructure
+// Infrastructure.
 import 'package:commonplace_book/src/commonplace_book/notebook/infrastructure/ports/drivers/for_managing_notebooks_port.dart';
 
 
@@ -45,6 +45,8 @@ class NotebookManagerAdapter {
     );
   }
   
+  
+  
   // ----- Consultas ----- //
   Future<Result<List<NotebookUiModel>, List<Failure>>> getAllNotebooks() async {
     final result = await _port.query.getAllNotebooks();
@@ -69,6 +71,8 @@ class NotebookManagerAdapter {
       (failures) => Result.failure(failures),
     );
   }
+  
+  
   
   // ----- Observadores ----- //
   Stream<List<NotebookUiModel>> watchAllNotebooks() {

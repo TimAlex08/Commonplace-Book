@@ -1,7 +1,7 @@
-// Constants
+// Constants.
 import 'package:commonplace_book/src/shared/core/notebook_constants.dart';
 
-// Failures / Result
+// Failures / Result.
 import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/page_errors/page_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
 import 'package:commonplace_book/src/shared/core/result.dart';
@@ -37,14 +37,14 @@ class PageTitle {
       
     }
     
-    // Valida que el título no exceda la longitud máxima
+    // Valida que el título no exceda la longitud máxima.
     if(trimmedTitle.length > NotebookConstants.maxPageTitleLength) {
       failures.add(PageTitleTooLongFailure(
         details: 'Actual Length: ${trimmedTitle.length}, Max Length: ${NotebookConstants.maxNotebookNameLength}.',
       ));
     }
     
-    // Valida que el título contenga solo caracteres permitidos
+    // Valida que el título contenga solo caracteres permitidos.
     if(_isValidTitle(trimmedTitle) == false) {
       final invalidChars = _getInvalidCharacters(trimmedTitle);
       

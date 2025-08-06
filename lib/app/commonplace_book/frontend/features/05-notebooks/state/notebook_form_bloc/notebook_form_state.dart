@@ -42,7 +42,7 @@ final class NotebookFormState extends Equatable {
     );
   }
   
-  /// NotebookFormState.create: Constructor inicial para creación
+  /// NotebookFormState.create: Constructor inicial para creación.
   factory NotebookFormState.create() {
     return NotebookFormState(
       notebook: NotebookUiModel.empty(),
@@ -51,7 +51,7 @@ final class NotebookFormState extends Equatable {
     );
   }
   
-  /// NotebookFormState.edit: Constructor inicial para edición
+  /// NotebookFormState.edit: Constructor inicial para edición.
   factory NotebookFormState.edit(NotebookUiModel initialNotebook) {
     return NotebookFormState(
       notebook: initialNotebook,
@@ -61,5 +61,5 @@ final class NotebookFormState extends Equatable {
   }
   
   @override
-  List<Object?> get props => [status, initialNotebook, notebook, isValid, errorMessages];
+  List<Object?> get props => [notebook, initialNotebook, status, isValid, errorMessages];
 }

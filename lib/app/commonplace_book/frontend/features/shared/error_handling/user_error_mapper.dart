@@ -43,6 +43,47 @@ class UserMessage {
 
 
 
+/// UserMessageMapper: Clase principal para crear mensajes de usuario
+class UserMessageMapper {
+  /// Crea mensajes de éxito basados en la operación realizada
+  static UserMessage mapSuccess(String operation) {
+    switch(operation) {
+      case 'create':
+        return UserMessage.success(
+          title: 'Libreta creada', 
+          message: 'Tu libreta ha sido creada exitosamente'
+        );
+        
+      case 'update':
+        return UserMessage.success(
+          title: 'Libreta actualizada', 
+          message: 'Los cambios en tu libreta han sido guardados'
+        );
+        
+      case 'delete':
+        return UserMessage.success(
+          title: 'Libreta eliminada', 
+          message: 'La libreta ha sido eliminada correctamente'
+        );
+      
+      case 'reorder':
+        return UserMessage.success(
+          title: 'Orden actualizado', 
+          message: 'El orden de los elementos ha sido actualizado'
+        );
+        
+      default:
+        return UserMessage.success(
+          title: 'Operación completada', 
+          message: 'La operación se realizó correctamente'
+        );
+    }
+  }
+}
+
+
+
+/// UserErrorMapper: Clase para mapear errores a mensajes de usuario.
 class UserErrorMapper {
   static UserMessage mapList(List<Failure> failures) {
     if(failures.isEmpty) {
@@ -81,35 +122,6 @@ class UserErrorMapper {
       title: 'Error inesperado', 
       message: 'Se produjeron distintos tipos de errores. Intenta de nuevo o contacta soporte'
     );
-  }
-  
-  /// MapSuccess: Crea mensajes de éxito basados en la operación realizada
-  static UserMessage mapSuccess(String operation) {
-    switch(operation) {
-      case 'create':
-        return UserMessage.success(
-          title: 'Libreta creada', 
-          message: 'Tu libreta ha sido creada exitosamente'
-        );
-        
-      case 'update':
-        return UserMessage.success(
-          title: 'Libreta actualizada', 
-          message: 'Los cambios en tu libreta han sido guardados'
-        );
-        
-      case 'delete':
-        return UserMessage.success(
-          title: 'Libreta eliminada', 
-          message: 'La libreta ha sido eliminada correctamente'
-        );
-        
-      default:
-        return UserMessage.success(
-          title: 'Operación completada', 
-          message: 'La operación se realizó correctamente'
-        );
-    }
   }
   
   /// MapDomainFailure: Mappea los errores de dominio

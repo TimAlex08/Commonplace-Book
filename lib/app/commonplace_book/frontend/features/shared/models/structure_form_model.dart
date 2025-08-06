@@ -1,9 +1,9 @@
-// Models
+// Models.
 import 'package:commonplace_book/app/commonplace_book/frontend/features/shared/models/models.dart';
 
 
 
-enum StructureItemType { page, folder }
+enum StructureItemType {page, folder}
 
 extension StructureItemTypeX on StructureItemType {
   String get name {

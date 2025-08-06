@@ -1,8 +1,8 @@
-// External Imports
+// External Imports.
 import 'package:commonplace_book/app/commonplace_book/database/drift/app_database.dart';
 import 'package:drift/drift.dart';
 
-// Domain
+// Domain.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/entities/page.dart';
 
 
@@ -39,7 +39,6 @@ class PageDTO {
 
 
 /// PageDomainMapper: Clase de mapeo entre PageDTO y las entidades del dominio.
-/// 
 /// Responsable de la transformación bidireccional entre los objetos DTO 
 /// y los objetos del dominio (Page y PageParams).
 class PageDomainMapper {
@@ -64,7 +63,6 @@ class PageDomainMapper {
 
 
 /// PageDriftMapper: Clase de mapeo entre PageDTO y las entidades de la capa de persistencia Drift.
-/// 
 /// Responsable de la transformación bidireccional entre los objetos DTO y los objetos de
 /// la clase de la base de datos (PageItemsCompanion y PageItem).
 /// Incluye validaciones para asegurar que los datos son apropiados para la persistencia.
