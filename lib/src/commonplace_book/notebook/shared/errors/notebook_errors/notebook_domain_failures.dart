@@ -1,8 +1,10 @@
 // Failures
+import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_error_codes.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
-import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_error_codes.dart';
 
-/// ----- Errores de ID ----- ///
+
+
+// ----- Errores de ID ----- //
 class NotebookInvalidIdFailure extends DomainFailure {
   NotebookInvalidIdFailure({super.details}) : super(
     code: NotebookErrorCode.invalidId,
@@ -12,7 +14,7 @@ class NotebookInvalidIdFailure extends DomainFailure {
 
 
 
-/// ----- Errores de Nombre ----- ///
+// ----- Errores de Nombre ----- //
 class NotebookInvalidNameFailure extends DomainFailure {
   NotebookInvalidNameFailure({super.details}) : super(
     code: NotebookErrorCode.invalidName,
@@ -29,7 +31,7 @@ class NotebookNameTooLongFailure extends DomainFailure {
 
 
 
-/// ----- Errores de Descripción ----- ///
+// ----- Errores de Descripción ----- //
 class NotebookDescriptionTooLongFailure extends DomainFailure {
   NotebookDescriptionTooLongFailure({super.details}) : super(
     code: NotebookErrorCode.descriptionTooLong,
@@ -39,7 +41,7 @@ class NotebookDescriptionTooLongFailure extends DomainFailure {
 
 
 
-/// ----- Errores de Fechas ----- ///
+// ----- Errores de Fechas ----- //
 class NotebookInvalidCreatedAtFailure extends DomainFailure {
   NotebookInvalidCreatedAtFailure({super.details}) : super(
     code: NotebookErrorCode.invalidCreatedAt,
@@ -63,7 +65,7 @@ class NotebookUpdatedBeforeCreatedFailure extends DomainFailure {
 
 
 
-/// ----- Errores de Apariencia ----- ///
+// ----- Errores de Apariencia ----- //
 class NotebookInvalidColorFailure extends DomainFailure {
   NotebookInvalidColorFailure({super.details}) : super(
     code: NotebookErrorCode.invalidColor,
@@ -94,7 +96,7 @@ class NotebookInvalidBackCoverImageFailure extends DomainFailure {
 
 
 
-/// ----- Errores de Estado ----- ///
+// ----- Errores de Estado ----- //
 class NotebookInvalidFavoriteValueFailure extends DomainFailure {
   NotebookInvalidFavoriteValueFailure({super.details}) : super(
     code: NotebookErrorCode.invalidFavoriteValue,

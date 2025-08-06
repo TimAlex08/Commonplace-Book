@@ -1,15 +1,13 @@
-// Failures
+// Failures / Result.
 import 'package:commonplace_book/src/shared/core/failures.dart';
-
-// Result
 import 'package:commonplace_book/src/shared/core/result.dart';
 
-// Value Objects
+// Value Objects.
 import 'package:commonplace_book/src/commonplace_book/notebook/domain/value_objects/notebook/notebook_vo.dart';
 
 
 
-/// Notebook: Representa la entidad de un cuaderno en la aplicación.
+/// Notebook: Representa la entidad de una libreta en la aplicación.
 class Notebook {
   const Notebook._({
     required this.id,
@@ -20,7 +18,7 @@ class Notebook {
     required this.state,
   });
   
-  final String id;
+  final NotebookId id;
   final NotebookName name;
   final NotebookDescription description;
   final NotebookTimestamp timestamp;
@@ -30,10 +28,11 @@ class Notebook {
   static Result<Notebook, List<DomainFailure>> create(NotebookParams params) {
     final failures = <DomainFailure>[];
     
-    /// ----- Validaciones de parametros ----- ///
+    // ----- Validaciones de parámetros ----- //
+    final idResult = NotebookId.validate(params.id);
     final nameResult = NotebookName.validate(params.name);
     final descriptionResult = NotebookDescription.validate(params.description);
-    final timestamtpResult = NotebookTimestamp.createValidTimestamp();
+    final timestamtpResult = NotebookTimestamp.validate(createdAt: params.createdAt, updatedAt: params.updatedAt);
     
     final appearenceResult = NotebookAppearence.validate(
       color: params.color ?? NotebookAppearence.defaultAppearance.color,
@@ -47,21 +46,20 @@ class Notebook {
       isLocked: params.isLocked ?? NotebookState.defaultState.isLocked,
     );
     
-    // Acumular errores si hay fallos en la validaciones
+    // ----- Acumular errores si hay fallos en la validaciones ----- //
+    if (idResult.isFailure) failures.addAll(idResult.getFailure());
     if (nameResult.isFailure) failures.addAll(nameResult.getFailure());
     if (descriptionResult.isFailure) failures.addAll(descriptionResult.getFailure());
     if (timestamtpResult.isFailure) failures.addAll(timestamtpResult.getFailure());
     if (appearenceResult.isFailure) failures.addAll(appearenceResult.getFailure());
     if (stateResult.isFailure) failures.addAll(stateResult.getFailure());
     
-    // Si hay errores, devuelve una lista de fallos
-    if (failures.isNotEmpty) {
-      return Result.failure(failures);
-    }
+    // Si hay errores, devuelve una lista de fallos.
+    if (failures.isNotEmpty) return Result.failure(failures);
     
-    // Si no hay errores, crea el objeto Notebook
+    // Si no hay errores, crea un objeto válido Notebook.
     return Result.success(Notebook._(
-      id: params.id,
+      id: idResult.getSuccess(),
       name: nameResult.getSuccess(),
       description: descriptionResult.getSuccess(),
       timestamp: timestamtpResult.getSuccess(),
@@ -74,26 +72,26 @@ class Notebook {
 
 
 /// NotebookParams: Clase que representa los parámetros necesarios para crear un `Notebook`.
-class NotebookParams{
+class NotebookParams {
   const NotebookParams({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.color,
-    required this.coverImagePath,
-    required this.backCoverImagePath,
-    required this.isFavorite,
-    required this.isArchived,
-    required this.isLocked
+    this.id,
+    this.name,
+    this.description,
+    this.createdAt,
+    this.updatedAt,
+    this.color,
+    this.coverImagePath,
+    this.backCoverImagePath,
+    this.isFavorite,
+    this.isArchived,
+    this.isLocked
   });
   
-  final String id;
+  final String? id;
   final String? name;
   final String? description;
-  final String? createdAt;
-  final String? updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final String? color;
   final String? coverImagePath;
   final String? backCoverImagePath;

@@ -50,7 +50,7 @@ class Result<S, F> {
   /// - [onFailure]: Función a ejecutar si hay fallo (Usa el valor de `failure`).
   /// 
   /// Retorna el valor devuelto por la función correspondiente.
-  R fold<R>(R Function(F failure) onFailure, R Function(S success) onSuccess) {
+  R fold<R>(R Function(S success) onSuccess, R Function(F failure) onFailure) {
     if (isSuccess) {
       return onSuccess(_success as S);
     } else {

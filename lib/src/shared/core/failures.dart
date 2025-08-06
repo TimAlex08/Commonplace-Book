@@ -1,5 +1,3 @@
-import 'package:logger/logger.dart';
-
 abstract class Failure {
   final String code;
   final String message;
@@ -10,19 +8,6 @@ abstract class Failure {
     required this.code, 
              this.details
   });
-  
-  /// Logger para registrar errores
-  static final Logger _logger = Logger();
-  
-  /// Método para registrar el error en la consola
-  void logError() {
-    final String layerPrefix = 
-        this is DomainFailure ? 'DOMAIN' : 
-        this is ApplicationFailure ? 'APPLICATION' :
-        this is InfrastructureFailure ? 'INFRASTRUCTURE' : 'GENERAL';
-    
-    _logger.e('[$layerPrefix] Error ($code): $message. Details: $details');
-  }
   
   @override
   String toString() => '${runtimeType.toString()}: (code: $code): Message: $message, Details: $details)';

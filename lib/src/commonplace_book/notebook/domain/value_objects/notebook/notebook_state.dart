@@ -1,12 +1,14 @@
-// Failures
-import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_domain_failures.dart';
+// Failures / Result.
+import 'package:commonplace_book/src/commonplace_book/notebook/shared/errors/notebook_errors/notebook_domain_failures.dart';
 import 'package:commonplace_book/src/shared/core/failures.dart';
-
-// Result
 import 'package:commonplace_book/src/shared/core/result.dart';
 
 
 
+/// NotebookState: Objeto de valor que representa el estado de una libreta.
+/// - isFavorite: Indica si la libreta es favorita.
+/// - isArchived: Indica si la libreta está archivada.
+/// - isLocked: Indica si la libreta está protegida con contraseña.
 class NotebookState {
   const NotebookState({
     required this.isFavorite, 
@@ -28,7 +30,7 @@ class NotebookState {
   static Result<NotebookState, List<DomainFailure>> validate({bool? isFavorite, bool? isArchived, bool? isLocked}) {
     final failures = <DomainFailure>[];
     
-    /// ----- Validaciones de nulabilidad ----- ///
+    // ----- Validaciones de nulabilidad ----- //
     if(isFavorite == null || isArchived == null || isLocked == null) {
       if(isFavorite == null) {
         failures.add(NotebookInvalidFavoriteValueFailure(
@@ -49,19 +51,15 @@ class NotebookState {
       return Result.failure(failures);
     }
     
-    // Valida que una libreta pueda serr favorita y archivada al mismo tiempo (Estado inválido)
+    // Valida que una libreta pueda serr favorita y archivada al mismo tiempo (Estado inválido).
     if(isFavorite == true && isArchived == true) {
       failures.add(NotebookFavoriteAndArchivedConflictFailure(
         details: 'A notebook cannot be both favorite and archived.',
       ));
-    }
-    
-    // Si hay errores, devuelve una lista de fallos
-    if (failures.isNotEmpty) {
       return Result.failure(failures);
     }
     
-    // Si no hay errores, devuelve el estado de la libreta como un éxito
+    // Si no hay errores, devuelve el estado de la libreta como un éxito.
     return Result.success(NotebookState(
       isFavorite: isFavorite,
       isArchived: isArchived,
