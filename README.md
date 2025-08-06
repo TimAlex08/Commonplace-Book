@@ -87,8 +87,8 @@ Para clonar y ejecutar este proyecto en tu entorno de desarrollo, sigue estos pa
 
 1.  **Clona el repositorio:**
     ```bash
-    git clone [https://github.com/tu-usuario/nombre-del-repo.git](https://github.com/tu-usuario/nombre-del-repo.git)
-    cd nombre-del-repo
+    git clone https://github.com/TimAlex08/Commonplace-Book.git
+    cd Commonplace-Book
     ```
 
 2.  **Obtén las dependencias del proyecto:**
