@@ -21,8 +21,6 @@ _Una aplicación móvil para Android & iOS donde puedes gestionar tu vida en lib
 
 ## 📸 Screenshots
 
-## 📸 Screenshots
-
 | Creación de Libreta | Vista de Libretas | Estructura de Contenido |
 | :---: |:---:|:---:|
 | ![](readme_screenshots/vista_creacion.png) | ![](readme_screenshots/vista_libretas.png) | ![](readme_screenshots/vista_contenido.gif) |
